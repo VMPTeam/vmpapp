@@ -1,0 +1,74 @@
+<ion-view view-title="慧管车" class="bg-default">
+  <ion-content class="user-home-content">
+    <form name="form">
+      <div class="list mini">
+        <!-- end place -->
+        <div class="item item-icon-left item-icon-right">
+          <i class="icon-custom icon-end"></i>
+          <input type="text" style="width: 100%;height: 21px;" ng-model="vm.planEndPlace" required placeholder="目的地"/>
+          <i class="icon-custom icon-map" ui-sref="map({from: 'planEndPlace'})"></i>
+        </div>
+        <!-- begin place -->
+        <div class="item item-icon-left item-icon-right">
+          <i class="icon-custom icon-begin"></i>
+          <input type="text" style="width: 100%;height: 21px;" ng-model="vm.planStartPlace" required placeholder="上车地点"/>
+          <i class="icon-custom icon-map" ui-sref="map({from: 'planStartPlace'})"></i>
+        </div>
+      </div>
+
+      <div class="list mini">
+        <!-- begin time -->
+        <div class="item item-icon-left" ng-click="fnOpen()">
+          <i class="icon-custom icon-clock-begin"></i>
+          <label>开始</label>
+          <input type="text" class="date-picker" pick-a-date="vm.planStartTime" min-date="today"
+                 pick-a-date-options="{ container: 'body', clear: ''}"
+                 style="height: 21px;background-color: transparent;">
+          <input type="text" class="time-picker" pick-a-time="vm.planStartTime"
+                 pick-a-time-options="{ container: 'body', clear: '', format: 'HH:i'}"
+                 style="height: 21px;background-color: transparent;">
+        </div>
+        <!-- end time -->
+        <div class="item item-icon-left">
+          <i class="icon-custom icon-clock-finish"></i>
+          <label>结束</label>
+          <input type="text" class="date-picker" pick-a-date="vm.planEndTime" min-date="today"
+                 pick-a-date-options="{ container: 'body', clear: '' }"
+                 style="height: 21px;background-color: transparent;">
+          <input type="text" class="time-picker" pick-a-time="vm.planEndTime"
+                 pick-a-time-options="{ container: 'body', clear: '', format: 'HH:i'}"
+                 style="height: 21px;background-color: transparent;">
+        </div>
+        <!-- car -->
+        <div class="item item-icon-left item-icon-right">
+          <i class="icon-custom icon-car"></i>
+          <label>用车数量</label>
+          <input type="number" style="display: inline;width: 120px; height: 21px;"
+                 placeholder="请输入用车数量" ng-model="vm.vehicleCount" required ng-change="fnResetCarList()">
+          <i class="icon ion-ios-arrow-right" style="color: #999999;" ui-sref="userCars"></i>
+        </div>
+      </div>
+
+      <div class="list mini">
+        <a class="item item-icon-left" ui-sref="userPeoples">
+          <i class="icon-custom icon-passenger"></i>
+          <label>随车人员</label>
+          <span class="item-note" ng-bind="vm.passengers | concatName"></span>
+        </a>
+
+        <div class="item item-icon-left">
+          <i class="icon-custom icon-order"></i>
+          <label>用车需求</label>
+          <input type="text" style="display: inline-block;width: 100%;height: 21px;" ng-model="vm.description"
+                 placeholder="请输入用车需求"/>
+        </div>
+      </div>
+
+      <div class="padding">
+        <button class="button button-block button-positive" style="background-color: #18beea;"
+                ng-disabled="form.$invalid" ng-click="fnCreateOrder()">提交</button>
+      </div>
+    </form>
+  </ion-content>
+  <vmp-tabs></vmp-tabs>
+</ion-view>

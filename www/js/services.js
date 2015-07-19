@@ -27,10 +27,13 @@ angular.module('starter.services', []).service('ErrorHandle', function() {
   };
   this.permission = function(role) {
     var permission;
-    if (roles.length === 1 && role === 'user' && roles[0] === role) {
-      return true;
+    if (role === 'user') {
+      if (roles.length === 1 && roles[0] === role) {
+        return true;
+      }
+    } else {
+      return permission = indexOf.call(roles, role) >= 0;
     }
-    return permission = indexOf.call(roles, role) >= 0;
   };
 
   /*

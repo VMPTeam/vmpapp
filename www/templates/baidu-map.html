@@ -1,0 +1,13 @@
+<ion-view view-title="慧管车">
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-clear" ng-click="fnConfirm()">
+      确认
+    </button>
+  </ion-nav-buttons>
+  <ion-pane>
+    <baidu-map class="map" lat="vm.lat" lng="vm.lng" address="vm.address"></baidu-map>
+  </ion-pane>
+</ion-view>

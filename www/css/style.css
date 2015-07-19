@@ -81,7 +81,6 @@ ion-content .icon {
 }
 .tabs-striped .tabs {
   background-color: #fff;
-  border-bottom-color: #c8edbb;
 }
 .tabs-striped .tabs .tab-item {
   border-bottom-color: #1e93c2;
@@ -588,8 +587,8 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 .car-info-content .status .dashboard .shisu .point {
   transform: rotateZ(-105deg);
   position: absolute;
-  left: 55px;
-  top: 130px;
+  left: 75px;
+  top: 4.5vh;
   height: 90px;
 }
 .car-info-content .status .dashboard .dianya {

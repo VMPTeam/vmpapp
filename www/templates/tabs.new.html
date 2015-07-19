@@ -7,6 +7,14 @@
     <i class="icon-custom icon-tab-layout"></i>
     任务
   </a>
+  <a class="tab-item" ng-if="::(fnGetPermission('leader') || fnGetPermission('user'))" ui-sref="userHome" ui-sref-active="active">
+    <i class="icon-custom icon-tab-home"></i>
+    用车
+  </a>
+  <a class="tab-item" ng-if="::(fnGetPermission('leader') || fnGetPermission('user'))" ui-sref="userOrders" ui-sref-active="active">
+    <i class="icon-custom icon-tab-trip"></i>
+    行程
+  </a>
   <a class="tab-item" ng-if="::fnGetPermission('vehicle_manager')" ui-sref="car" ui-sref-active="active">
     <i class="icon-custom icon-tab-car"></i>
     车辆

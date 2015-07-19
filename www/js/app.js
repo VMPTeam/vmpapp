@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.services', 'starter.directives', 'angular-md5', 'ngStorage']).constant('BASE_URL', '/Business').constant('CLIENT_TYPE', 'vehicle_manager').constant('KEY_COMPANY', 'VMP_COMPANY').constant('KEY_TOKEN', 'VMP_TOKEN').constant('KEY_ACCOUNT', 'VMP_ACCOUNT').constant('KEY_USERNAME', 'VMP_USERNAME').constant('KEY_PASSWORD', 'VMP_PASSWORD').run(function($rootScope, $ionicPlatform, $ionicScrollDelegate, $location, $localStorage, KEY_COMPANY, KEY_TOKEN) {
+angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.services', 'starter.directives', 'starter.filters', 'angular-md5', 'ngStorage']).constant('BASE_URL', '/Business').constant('CLIENT_TYPE', 'vehicle_manager').constant('KEY_COMPANY', 'VMP_COMPANY').constant('KEY_TOKEN', 'VMP_TOKEN').constant('KEY_ACCOUNT', 'VMP_ACCOUNT').constant('KEY_USERNAME', 'VMP_USERNAME').constant('KEY_PASSWORD', 'VMP_PASSWORD').run(function($rootScope, $ionicPlatform, $ionicScrollDelegate, $location, $localStorage, KEY_COMPANY, KEY_TOKEN) {
   var companyCode, oToken;
   oToken = $localStorage[KEY_TOKEN];
   companyCode = $localStorage[KEY_COMPANY];
@@ -183,6 +183,30 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
     url: '/driverorder/:id',
     templateUrl: 'templates/driver-order-detail.html',
     controller: 'Driver.OrderCtrl'
+  }).state('userHome', {
+    url: '/userhome?from&lat&lng&address',
+    templateUrl: 'templates/user-home.html',
+    controller: 'User.HomeCtrl'
+  }).state('map', {
+    url: '/map?from',
+    templateUrl: 'templates/baidu-map.html',
+    controller: 'User.HomeCtrl'
+  }).state('userCars', {
+    url: '/usercars',
+    templateUrl: 'templates/user-car-list.html',
+    controller: 'User.CarCtrl'
+  }).state('userPeoples', {
+    url: '/userPeoples',
+    templateUrl: 'templates/people-list.html',
+    controller: 'User.PeopleCtrl'
+  }).state('userOrders', {
+    url: '/userorders',
+    templateUrl: 'templates/user-orders.html',
+    controller: 'User.OrderCtrl'
+  }).state('userOrderDetail', {
+    url: '/userorder/:id',
+    templateUrl: 'templates/user-order-detail.html',
+    controller: 'User.OrderDetailCtrl'
   });
   $urlRouterProvider.otherwise('/');
   $httpProvider.interceptors.push('pathInterceptor');

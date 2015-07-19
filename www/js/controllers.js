@@ -348,6 +348,8 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         return $state.go('allot');
       } else if (Account.permission('driver')) {
         return $state.go('mission');
+      } else {
+        return $state.go('userHome');
       }
     }, function(msg) {
       delete $localStorage[KEY_TOKEN];
@@ -379,7 +381,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return item.checked = !item.checked;
     });
   };
-  return $scope.fnMofidyPwd = function(oldPwd, newPwd, confirmPwd) {
+  $scope.fnMofidyPwd = function(oldPwd, newPwd, confirmPwd) {
     var data;
     if (newPwd === confirmPwd) {
       data = {
@@ -400,6 +402,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         title: '两次密码输入不一致'
       });
     }
+  };
+  return $scope.fnGetPermission = function(role) {
+    return Account.permission(role);
   };
 }).controller('AllotDetailCtrl', function($scope, $state, $stateParams, $ionicLoading, $ionicPopup, $localStorage, $ionicModal, Order, Car, Driver, KEY_ACCOUNT) {
   var vm;
@@ -1466,4 +1471,479 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       });
     });
   };
+}).controller('User.HomeCtrl', function($scope, $ionicPopup, $filter, $ionicLoading, $localStorage, $cordovaDatePicker, $cordovaGeolocation, $ionicHistory, $stateParams, Order) {
+  var validate, vm;
+  vm = $scope.vm = {
+    planStartTime: new Date(),
+    planEndTime: new Date(),
+    carList: $localStorage['selectedCar']
+  };
+  $scope.today = new Date();
+  $scope.fnOpen = function() {
+    return $cordovaDatePicker.show({
+      date: vm.today,
+      allowFutureDates: false
+    });
+  };
+  validate = function() {
+    var msg;
+    if (vm.vehicleCount == null) {
+      msg = '用车数量为空';
+    }
+    if (vm.planEndTime == null) {
+      msg = '用车结束时间未选择';
+    }
+    if (vm.planStartTime == null) {
+      msg = '用车起始时间未选择';
+    }
+    if (vm.planStartPlace == null) {
+      msg = '上车地点为空';
+    }
+    if (vm.planEndPlace == null) {
+      msg = '目的地为空';
+    }
+    return $ionicPopup.alert({
+      title: msg
+    });
+  };
+  $scope.fnCreateOrder = function() {
+    var data;
+    if ((vm.planEndPlace != null) && (vm.planStartPlace != null) && (vm.planStartTime != null) && (vm.planEndTime != null)) {
+      if (vm.planStartTime.valueOf() > vm.planEndTime.valueOf()) {
+        $ionicPopup.alert({
+          title: '开始时间不能大于结束时间'
+        });
+      }
+      $ionicLoading.show();
+      data = angular.extend(vm);
+      if (vm.startLocLa != null) {
+        data.startLocLa = String(vm.startLocLa);
+      }
+      if (vm.startLocLo) {
+        data.startLocLo = String(vm.startLocLo);
+      }
+      if (vm.endLocLa) {
+        data.endLocLa = String(vm.endLocLa);
+      }
+      if (vm.endLocLo) {
+        data.endLocLo = String(vm.endLocLo);
+      }
+      if (vm.vehicleCount) {
+        data.vehicleCount = String(vm.vehicleCount);
+      }
+      data.planStartTime = $filter('date')(vm.planStartTime, 'yyyy-MM-dd HH:mm:ss');
+      data.planEndTime = $filter('date')(vm.planEndTime, 'yyyy-MM-dd HH:mm:ss');
+      return Order.create(data).then(function() {
+        $ionicLoading.hide();
+        $ionicPopup.alert({
+          title: '提交成功！'
+        });
+        return $scope.fnResetForm();
+      }, function(msg) {
+        $ionicLoading.hide();
+        return $ionicPopup.alert({
+          title: msg
+        });
+      });
+    } else {
+      return validate();
+    }
+  };
+
+  /*
+  重置表单
+   */
+  $scope.fnResetForm = function() {
+    delete $localStorage['selectedPeople'];
+    delete $localStorage['selectedCar'];
+    delete vm.passengers;
+    delete vm.vehicleCount;
+    delete vm.description;
+    delete vm.planEndPlace;
+    delete vm.endLocLa;
+    return delete vm.endLocLo;
+  };
+  $scope.fnGetLocation = function() {
+    var planEndPlace, planStartPlace;
+    planStartPlace = $localStorage['planStartPlace'];
+    planEndPlace = $localStorage['planEndPlace'];
+    if (planStartPlace != null) {
+      vm.planStartPlace = planStartPlace.address;
+      vm.startLocLa = planStartPlace.lat;
+      vm.startLocLo = planStartPlace.lng;
+      delete $localStorage['planStartPlace'];
+    }
+    if (planEndPlace != null) {
+      vm.planEndPlace = planEndPlace.address;
+      vm.endLocLa = planEndPlace.lat;
+      vm.endLocLo = planEndPlace.lng;
+      return delete $localStorage['planEndPlace'];
+    }
+  };
+  $scope.fnResetCarList = function() {
+    delete $localStorage['selectedCar'];
+    vm.carList = $localStorage['selectedCar'];
+    if (angular.isArray(vm.carList)) {
+      return vm.vehicleCount = vm.carList.length;
+    }
+  };
+  $scope.fnGetSelectedPeople = function() {
+    var list;
+    list = $localStorage['selectedPeople'];
+    if (angular.isArray(list) && list.length > 0) {
+      return vm.passengers = list;
+    } else {
+      return vm.passengers = [];
+    }
+  };
+  $scope.fnConfirm = function() {
+    if (!vm.lat || !vm.lng) {
+      return $ionicPopup.alert({
+        title: '你还未选择地点'
+      });
+    } else {
+      $localStorage[$stateParams.from] = vm;
+      return $ionicHistory.goBack();
+    }
+  };
+  return $scope.$on('$ionicView.enter', function() {
+    $scope.fnGetLocation();
+    $scope.fnGetSelectedPeople();
+    vm.carList = $localStorage['selectedCar'];
+    if (angular.isArray(vm.carList)) {
+      return vm.vehicleCount = vm.carList.length;
+    }
+  });
+}).controller('User.CarCtrl', function($scope, Car, $ionicPopup, $localStorage, $ionicLoading) {
+  var vm;
+  vm = $scope.vm = {
+    list: [],
+    pageStart: 1,
+    pageCount: 50,
+    search: '',
+    hasMore: true
+  };
+  $scope.fnGetList = function(concat) {
+    var data;
+    if (concat == null) {
+      concat = false;
+    }
+    $ionicLoading.show();
+    if (concat === true) {
+      vm.pageStart = 1;
+    }
+    data = {
+      pageCount: vm.pageCount,
+      pageStart: concat === true ? ++vm.pageStart : vm.pageStart,
+      matchLic: vm.search,
+      matchNick: vm.search
+    };
+    return Car.list(data).then(function(res) {
+      $ionicLoading.hide();
+      if (concat === true) {
+        vm.list = vm.list.concat(res.rows);
+      } else {
+        vm.list = res.rows;
+      }
+      if (res.total < vm.pageCount) {
+        return vm.hasMore = false;
+      } else {
+        return vm.hasMore = true;
+      }
+    }, function(msg) {
+      $ionicLoading.hide();
+      vm.hasMore = false;
+      return $ionicPopup.alert({
+        title: msg
+      });
+    })["finally"](function() {
+      $scope.$broadcast('scroll.refreshComplete');
+      return $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
+  };
+
+  /*
+  选择车辆
+   */
+  $scope.fnSelect = function(car) {
+    var obj, ref;
+    if (angular.isArray($localStorage['selectedCar'])) {
+      if (obj = (ref = car.vehicleUid, indexOf.call($localStorage['selectedCar'], ref) >= 0)) {
+        return $ionicPopup.alert({
+          title: '该车辆已选'
+        });
+      } else {
+        return $localStorage['selectedCar'].push(car.vehicleUid);
+      }
+    } else {
+      return $localStorage['selectedCar'] = [car.vehicleUid];
+    }
+  };
+  return $scope.fnIsChecked = function(id) {
+    var obj;
+    if ($localStorage['selectedCar'] != null) {
+      return obj = indexOf.call($localStorage['selectedCar'], id) >= 0;
+    }
+  };
+}).controller('User.PeopleCtrl', function($scope, $filter, $localStorage, $ionicLoading, $ionicPopup, $ionicModal, People) {
+  var vm;
+  vm = $scope.vm = {
+    list: []
+  };
+  $scope.fnGetList = function() {
+    return People.list().then(function(res) {
+      $scope.$broadcast('scroll.refreshComplete');
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+      return vm.list = res.rows;
+    }, function(msg) {
+      $scope.$broadcast('scroll.refreshComplete');
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+      return $ionicPopup.alert({
+        title: msg
+      });
+    });
+  };
+  $ionicModal.fromTemplateUrl('people-modal.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    return vm.modal = modal;
+  });
+  $scope.fnOpenModal = function() {
+    return vm.modal.show();
+  };
+  $scope.fnCloseModal = function() {
+    return vm.modal.hide();
+  };
+  $scope.fnAddPassenger = function(form) {
+    $ionicLoading.show();
+    return People.create(form).then(function() {
+      $ionicLoading.hide();
+      $scope.fnGetList();
+      return $scope.fnCloseModal;
+    }, function(msg) {
+      $ionicLoading.hide();
+      return $ionicPopup.alert({
+        title: msg
+      });
+    });
+  };
+  return $scope.$watch('vm.list', function(list) {
+    $localStorage['selectedPeople'] = $filter('filter')(list, {
+      checked: true
+    });
+    return console.log($localStorage['selectedPeople']);
+  }, true);
+}).controller('User.OrderCtrl', function($scope, $ionicLoading, $ionicPopup, $ionicScrollDelegate, $localStorage, Order, KEY_ACCOUNT) {
+  var getStatusArray, vm;
+  vm = $scope.vm = {
+    account: $localStorage[KEY_ACCOUNT],
+    list: [],
+    tabs: [
+      {
+        id: 1,
+        name: '审批中'
+      }, {
+        id: 2,
+        name: '已配车'
+      }, {
+        id: 3,
+        name: '在途'
+      }, {
+        id: 4,
+        name: '历史'
+      }
+    ],
+    pageStart: 1,
+    pageCount: 50,
+    currentTab: 1,
+    hasMore: true
+  };
+  getStatusArray = function() {
+    var status;
+    status = [];
+    switch (vm.currentTab) {
+      case 1:
+        status.push(1);
+        status.push(2);
+        break;
+      case 2:
+        status.push(3);
+        break;
+      case 3:
+        status.push(4);
+        break;
+      case 4:
+        status.push(5);
+    }
+    return status.join(',');
+  };
+  $scope.fnChangeTab = function(id) {
+    vm.currentTab = id;
+    $ionicScrollDelegate.scrollTop();
+    return $scope.fnGetList();
+  };
+  $scope.fnIsLeader = function() {
+    var role;
+    return role = indexOf.call(vm.account.roles, 'leader') >= 0;
+  };
+  $scope.fnGetList = function(concat) {
+    var data;
+    if (concat == null) {
+      concat = false;
+    }
+    $ionicLoading.show();
+    if (concat === true) {
+      vm.pageStart = 1;
+    }
+    data = {
+      status: getStatusArray(),
+      pageStart: vm.pageStart,
+      pageCount: vm.pageCount
+    };
+    return Order.list(data).then(function(res) {
+      $ionicLoading.hide();
+      if (concat === true) {
+        vm.list = vm.list.concat(res.rows);
+      } else {
+        vm.list = res.rows;
+      }
+      if (res.total < vm.pageCount) {
+        return vm.hasMore = false;
+      } else {
+        return vm.hasMore = true;
+      }
+    }, function(msg) {
+      $ionicLoading.hide();
+      vm.hasMore = false;
+      return $ionicPopup.alert({
+        title: msg
+      });
+    })["finally"](function() {
+      $scope.$broadcast('scroll.refreshComplete');
+      return $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
+  };
+  return $scope.fnAgree = function(item, event) {
+    Order.approve(item.serialNum, '同意用车').then(function() {
+      return $scope.fnGetList();
+    }, function(msg) {
+      return $ionicPopup.alert({
+        title: msg
+      });
+    });
+    return event.stopPropagation();
+  };
+}).controller('User.OrderDetailCtrl', function($scope, $stateParams, $ionicLoading, $ionicPopup, $localStorage, $ionicHistory, $ionicModal, Order, KEY_ACCOUNT) {
+  var vm;
+  vm = $scope.vm = {
+    id: $stateParams.id,
+    order: {},
+    account: $localStorage[KEY_ACCOUNT]
+  };
+  $ionicModal.fromTemplateUrl('feedback-modal.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    return vm.modal = modal;
+  });
+  $scope.fnIsLeader = function() {
+    var role;
+    return role = indexOf.call(vm.account.roles, 'leader') >= 0;
+  };
+  $scope.fnDetail = function() {
+    $ionicLoading.show();
+    return Order.detail(vm.id).then(function(data) {
+      vm.order = data;
+      return $ionicLoading.hide();
+    });
+  };
+  $scope.fnFeedback = function(content) {
+    if (content.trim()) {
+      $ionicLoading.show();
+      return Order.feedback(vm.id, {
+        content: content
+      }).then(function() {
+        $ionicLoading.hide();
+        $scope.fnCloseModal();
+        return vm.order.isFeedback = 1;
+      });
+    }
+  };
+  $scope.fnOpenPopup = function(type) {
+    if (type === 'approve') {
+      vm.comment = '同意用车';
+    } else {
+      vm.comment = '拒绝用车';
+    }
+    return $ionicPopup.show({
+      template: '<input autofocus type="test" ng-model="vm.comment">',
+      title: '审批意见',
+      scope: $scope,
+      buttons: [
+        {
+          text: '确定',
+          type: 'button-positive',
+          onTap: function() {
+            return [type, vm.comment];
+          }
+        }, {
+          text: '取消'
+        }
+      ]
+    }).then(function(arg) {
+      var comment, ref, type;
+      ref = arg != null ? arg : [], type = ref[0], comment = ref[1];
+      if (type === 'approve') {
+        return Order.approve(vm.id, comment).then(function() {
+          return $scope.fnDetail();
+        }, function(msg) {
+          return $ionicPopup.alert({
+            title: msg
+          });
+        });
+      } else if (type === 'reject') {
+        return Order.reject(vm.id, comment).then(function() {
+          return $scope.fnDetail();
+        }, function(msg) {
+          return $ionicPopup.alert({
+            title: msg
+          });
+        });
+      }
+    });
+  };
+  $scope.fnApprove = function() {
+    $ionicLoading.show();
+    return Order.approve(vm.id, vm.comment).then(function() {
+      $ionicLoading.hide();
+      return $ionicHistory.goBack(-1);
+    }, function(msg) {
+      $ionicLoading.hide();
+      return $ionicPopup.alert({
+        title: msg
+      });
+    });
+  };
+  $scope.fnReject = function() {
+    $ionicLoading.show();
+    return Order.reject(vm.id, vm.comment).then(function() {
+      $ionicLoading.hide();
+      return $ionicHistory.goBack(-1);
+    }, function(msg) {
+      $ionicLoading.hide();
+      return $ionicPopup.alert({
+        title: msg
+      });
+    });
+  };
+  $scope.fnOpenModal = function() {
+    return vm.modal.show();
+  };
+  $scope.fnCloseModal = function() {
+    return vm.modal.hide();
+  };
+  return $scope.$on('$destroy', function() {
+    return vm.modal.remove();
+  });
 });

@@ -1,0 +1,63 @@
+<ion-view view-title="慧管车" class="bg-default">
+  <div class="tabs-striped tabs-top tabs-background-stable">
+    <div class="tabs" ng-init="fnGetList()">
+      <div class="tab-item"
+           ng-repeat="tab in ::vm.tabs"
+           ng-bind="::tab.name"
+           ng-class="{active: tab.id === vm.currentTab}"
+           ng-click="fnChangeTab(tab.id)"
+        ></div>
+    </div>
+  </div>
+  <ion-content class="order-content has-header">
+    <ion-refresher
+      pulling-text="下拉刷新..."
+      on-refresh="fnGetList()">
+    </ion-refresher>
+
+    <div class="card" ng-repeat="item in vm.list" ui-sref="orderDetail({id: item.serialNum})">
+      <div class="item item-divider">
+        <div class="user">
+          <i class="icon-custom icon-passenger icon-mini"></i>
+          <span>{{::item.applicant}}</span>
+          <i class="icon-custom icon-phone icon-mini"></i>
+          <span>{{::item.phone}}</span>
+        </div>
+      </div>
+      <div class="item item-text-wrap" ng-class="{uncheck: item.status == 1, checked: item.status != 1}">
+        <div>
+          <div class="place-line" style="color:#24b5ed;"></div>
+          <p>{{item.planStartPlace || '未知位置'}}</p>
+          <p>{{item.planEndPlace || '未知位置'}}</p>
+          <img ng-show="fnIsLeader() && item.status == 1" src="img/fill_agree.png" class="button-agree" ng-click="fnAgree(item, $event)"/>
+          <div class="text-status" ng-hide="fnIsLeader() && item.status == 1" ng-switch="item.status">
+            <span ng-switch-when="1">待审核</span>
+            <span ng-switch-when="2" style="color: #ff9d0b;">待配车</span>
+            <span ng-switch-when="3" style="color: #8ed01f;">已配车</span>
+            <span ng-switch-when="4" style="color: #41c6ef;">在途</span>
+            <span ng-switch-when="5">完成</span>
+            <span ng-switch-when="-1">拒绝</span>
+          </div>
+        </div>
+        <!--<img ng-show="$index % 2" src="img/alpha_agree.png" alt="" class="button-agree"/>-->
+      </div>
+      <div class="item item-divider">
+        <div class="time">
+          <i class="icon-custom icon-car icon-mini"></i>
+          <span>{{::item.vehicleCount}}</span>
+          <i class="icon-custom icon-clock-begin icon-mini"></i>
+          <span>{{::item.planStartTime}}~{{::item.planEndTime}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="empty-list" ng-hide="vm.list.length">
+      暂无数据
+    </div>
+    <ion-infinite-scroll
+      ng-if="vm.hasMore"
+      on-infinite="fnGetList(true)"
+      immediate-check="false">
+    </ion-infinite-scroll>
+  </ion-content>
+  <vmp-tabs></vmp-tabs>
+</ion-view>
