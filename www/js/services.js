@@ -1,3 +1,5 @@
+var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
 angular.module('starter.services', []).service('ErrorHandle', function() {
   var handle;
   return handle = function(status, res, defer) {
@@ -22,6 +24,13 @@ angular.module('starter.services', []).service('ErrorHandle', function() {
    */
   this.roles = function() {
     return roles;
+  };
+  this.permission = function(role) {
+    var permission;
+    if (roles.length === 1 && role === 'user' && roles[0] === role) {
+      return true;
+    }
+    return permission = indexOf.call(roles, role) >= 0;
   };
 
   /*

@@ -3,6 +3,10 @@
     <i class="icon-custom icon-tab-home"></i>
     首页
   </a>
+  <a class="tab-item" ng-if="::fnGetPermission('driver')" ui-sref="mission" ui-sref-active="active">
+    <i class="icon-custom icon-tab-layout"></i>
+    任务
+  </a>
   <a class="tab-item" ng-if="::fnGetPermission('vehicle_manager')" ui-sref="car" ui-sref-active="active">
     <i class="icon-custom icon-tab-car"></i>
     车辆
@@ -14,6 +18,10 @@
   <a class="tab-item" ng-if="::fnGetPermission('vehicle_manager')" ui-sref="report" ui-sref-active="active">
     <i class="icon-custom icon-tab-order"></i>
     统计分析
+  </a>
+  <a class="tab-item" ng-if="::fnGetPermission('driver')" ui-sref="driverOrders" ui-sref-active="active">
+    <i class="icon-custom icon-tab-order"></i>
+    订单
   </a>
   <a class="tab-item" ui-sref="account" ui-sref-active="active">
     <i class="icon-custom icon-tab-gear"></i>

@@ -159,6 +159,30 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
     url: '/areacar',
     templateUrl: 'templates/area-carlist.html',
     controller: 'AreaCtrl'
+  }).state('mission', {
+    url: '/mission',
+    templateUrl: 'templates/mission.html',
+    controller: 'MissionCtrl'
+  }).state('tax', {
+    url: '/tax/:taxId',
+    templateUrl: 'templates/tax-list.html',
+    controller: 'MissionCtrl'
+  }).state('addTax', {
+    url: '/tax/:taxId/add',
+    templateUrl: 'templates/tax.html',
+    controller: 'MissionCtrl'
+  }).state('alarm', {
+    url: '/alarm',
+    templateUrl: 'templates/alarm.html',
+    controller: 'MissionCtrl'
+  }).state('driverOrders', {
+    url: '/driverorders',
+    templateUrl: 'templates/driver-orders.html',
+    controller: 'Driver.OrderCtrl'
+  }).state('driverOrderDetail', {
+    url: '/driverorder/:id',
+    templateUrl: 'templates/driver-order-detail.html',
+    controller: 'Driver.OrderCtrl'
   });
   $urlRouterProvider.otherwise('/');
   $httpProvider.interceptors.push('pathInterceptor');

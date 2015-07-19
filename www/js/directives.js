@@ -1,5 +1,3 @@
-var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
 angular.module('starter.directives', []).directive('vmpTabs', function(Account) {
   var directive;
   directive = {
@@ -7,9 +5,7 @@ angular.module('starter.directives', []).directive('vmpTabs', function(Account) 
     templateUrl: 'templates/tabs.new.html',
     link: function(scope) {
       return scope.fnGetPermission = function(role) {
-        var permission, roles;
-        roles = Account.roles();
-        return permission = indexOf.call(roles, role) >= 0;
+        return Account.permission(role);
       };
     }
   };

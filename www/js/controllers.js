@@ -340,18 +340,14 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     return Account.login(username, password).then(function() {
       return Account.userInfo();
     }).then(function(res) {
-      var role;
       $ionicLoading.hide();
-      if ((res.roles != null) && (role = indexOf.call(res.roles, CLIENT_TYPE) >= 0)) {
-        $localStorage[KEY_USERNAME] = username;
-        $localStorage[KEY_PASSWORD] = password;
-        vm.userInfo = res;
-        return $state.go('tab.allot');
-      } else {
-        delete $localStorage[KEY_TOKEN];
-        return $ionicPopup.alert({
-          title: '你没有权限使用该客户端'
-        });
+      $localStorage[KEY_USERNAME] = username;
+      $localStorage[KEY_PASSWORD] = password;
+      vm.userInfo = res;
+      if (Account.permission('vehicle_manager')) {
+        return $state.go('allot');
+      } else if (Account.permission('driver')) {
+        return $state.go('mission');
       }
     }, function(msg) {
       delete $localStorage[KEY_TOKEN];
@@ -1238,6 +1234,233 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return $state.go('areaList');
     }, function(msg) {
       $ionicLoading.hide();
+      return $ionicPopup.alert({
+        title: msg
+      });
+    });
+  };
+}).controller('MissionCtrl', function($scope, $state, $stateParams, $filter, $ionicLoading, $ionicPopup, Order) {
+  var vm;
+  vm = $scope.vm = {
+    current: null,
+    list: [],
+    isBegin: false,
+    taxId: $stateParams.taxId,
+    tax: {
+      costTime: new Date()
+    }
+  };
+  $scope.fnConcatPeople = function(list) {
+    var _arr, people;
+    if (!angular.isArray(list)) {
+      return '';
+    }
+    _arr = (function() {
+      var j, len, results;
+      results = [];
+      for (j = 0, len = list.length; j < len; j++) {
+        people = list[j];
+        results.push(people.name);
+      }
+      return results;
+    })();
+    return _arr.join(',');
+  };
+
+  /*
+  拼接车牌号
+   */
+  $scope.fnConcatVehicleLic = function(list) {
+    var vehicle, vehicleLicArray;
+    if (angular.isArray(list)) {
+      vehicleLicArray = (function() {
+        var j, len, results;
+        results = [];
+        for (j = 0, len = list.length; j < len; j++) {
+          vehicle = list[j];
+          results.push(vehicle.vehicleLic);
+        }
+        return results;
+      })();
+      return vehicleLicArray.join(',');
+    }
+  };
+
+  /*
+  获取任务订单
+   */
+  $scope.fnGetList = function() {
+    $ionicLoading.show();
+    return Order.list({
+      status: [3, 4].join(',')
+    }).then(function(res) {
+      vm.list = res.rows;
+      vm.current = vm.list.shift();
+      return $ionicLoading.hide();
+    }, function(msg) {
+      $ionicLoading.hide();
+      return $ionicPopup.alert({
+        title: msg
+      });
+    })["finally"](function() {
+      $scope.$broadcast('scroll.refreshComplete');
+      return $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
+  };
+
+  /*
+  开始发车
+   */
+  $scope.fnBegining = function(id, event) {
+    Order.begin(id).then(function() {
+      return vm.current.status = 4;
+    }, function(msg) {
+      return $ionicPopup.alert({
+        title: msg
+      });
+    });
+    return event.stopPropagation();
+  };
+
+  /*
+  完成任务
+   */
+  $scope.fnFinish = function(id, event) {
+    Order.finish(id).then(function() {
+      return $scope.fnGetList();
+    }, function(msg) {
+      return $ionicPopup.alert({
+        title: msg
+      });
+    });
+    return event.stopPropagation();
+  };
+
+  /*
+  查询税费列表
+   */
+  $scope.fnGetTaxList = function() {
+    return Order.taxList(vm.taxId).then(function(res) {
+      return vm.taxList = res.rows;
+    }, function(msg) {
+      return $ionicPopup.alert({
+        title: msg
+      });
+    });
+  };
+
+  /*
+  打开税费管理列表
+   */
+  $scope.fnGotoTaxList = function(id, event) {
+    $state.go('tax', {
+      taxId: id
+    });
+    return event.stopPropagation();
+  };
+
+  /*
+  计算总价格
+   */
+  $scope.fnTaxCount = function() {
+    var cost, j, len, ref, tax;
+    if (angular.isArray(vm.taxList)) {
+      cost = 0;
+      ref = vm.taxList;
+      for (j = 0, len = ref.length; j < len; j++) {
+        tax = ref[j];
+        cost += parseFloat(tax.costAmount);
+      }
+      return cost;
+    } else {
+      return 0;
+    }
+  };
+
+  /*
+  税费提交
+   */
+  $scope.fnAddTax = function(data) {
+    data.costTime = $filter('date')(data.costTime, 'yyyy-MM-dd HH:mm:ss');
+    return Order.addTax(vm.taxId, data).then(function() {
+      return $ionicPopup.alert({
+        title: '税费提交成功'
+      });
+    }, function(msg) {
+      return $ionicPopup.alert({
+        title: msg
+      });
+    });
+  };
+
+  /*
+  事故报警
+   */
+  $scope.fnAlarm = function() {
+    return $ionicPopup.alert({
+      title: '事故报警成功'
+    });
+  };
+}).controller('Driver.OrderCtrl', function($scope, $state, $stateParams, $ionicLoading, $localStorage, $ionicPopup, Order, KEY_ACCOUNT) {
+  var vm;
+  vm = $scope.vm = {
+    id: $stateParams.id,
+    list: [],
+    order: {},
+    account: $localStorage[KEY_ACCOUNT]
+  };
+  $scope.fnGetList = function() {
+    $ionicLoading.show();
+    return Order.list().then(function(res) {
+      vm.list = res.rows;
+      return $ionicLoading.hide();
+    })["finally"](function() {
+      $scope.$broadcast('scroll.refreshComplete');
+      return $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
+  };
+  $scope.fnDetail = function(id) {
+    $ionicLoading.show();
+    return Order.detail(id).then(function(data) {
+      vm.order = data;
+      return $ionicLoading.hide();
+    });
+  };
+  $scope.nameFilter = function(list) {
+    var item, j, len, res;
+    res = [];
+    if (!angular.isArray(list)) {
+      return [];
+    }
+    for (j = 0, len = list.length; j < len; j++) {
+      item = list[j];
+      if (item.driver === vm.account.realName) {
+        res.push(item);
+      }
+    }
+    return res;
+  };
+
+  /*
+  开始发车
+   */
+  $scope.fnBegining = function(id) {
+    return Order.begin(id).then(function() {
+      return vm.order.status = 4;
+    }, function(msg) {
+      return $ionicPopup.alert({
+        title: msg
+      });
+    });
+  };
+
+  /*
+  完成任务
+   */
+  return $scope.fnFinish = function(id) {
+    return Order.finish(id).then(function() {
+      return $state.go('tab.home');
+    }, function(msg) {
       return $ionicPopup.alert({
         title: msg
       });
