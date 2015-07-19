@@ -51,7 +51,7 @@
       <span class="badge badge-assertive">4</span>
     </a>
   </ion-nav-buttons>
-  <ion-content class="order-content has-subheader" ng-init="fnGetList()" style="padding-top: 80px;">
+  <ion-content class="order-content has-subheader" ng-init="fnGetList()" style="padding-top: 0; top: 168px;">
     <ion-refresher on-refresh="fnGetList()" pulling-text="下拉刷新..."></ion-refresher>
 
     <div class="card mini" ng-repeat="item in vm.list" ui-sref="allotDetail({id: item.serialNum})">
@@ -92,4 +92,5 @@
     </div>
     <ion-infinite-scroll immediate-check="false" ng-if="vm.hasMore" on-infinite="fnGetList(true)"></ion-infinite-scroll>
   </ion-content>
+  <vmp-tabs></vmp-tabs>
 </ion-view>

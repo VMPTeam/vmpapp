@@ -1,6 +1,4 @@
-var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
-angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.services', 'angular-md5', 'ngStorage']).constant('BASE_URL', '/Business').constant('CLIENT_TYPE', 'vehicle_manager').constant('KEY_COMPANY', 'VMP_COMPANY').constant('KEY_TOKEN', 'VMP_TOKEN').constant('KEY_ACCOUNT', 'VMP_ACCOUNT').constant('KEY_USERNAME', 'VMP_USERNAME').constant('KEY_PASSWORD', 'VMP_PASSWORD').run(function($rootScope, $ionicPlatform, $ionicScrollDelegate, $location, $localStorage, KEY_COMPANY, KEY_TOKEN) {
+angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.services', 'starter.directives', 'angular-md5', 'ngStorage']).constant('BASE_URL', '/Business').constant('CLIENT_TYPE', 'vehicle_manager').constant('KEY_COMPANY', 'VMP_COMPANY').constant('KEY_TOKEN', 'VMP_TOKEN').constant('KEY_ACCOUNT', 'VMP_ACCOUNT').constant('KEY_USERNAME', 'VMP_USERNAME').constant('KEY_PASSWORD', 'VMP_PASSWORD').run(function($rootScope, $ionicPlatform, $ionicScrollDelegate, $location, $localStorage, KEY_COMPANY, KEY_TOKEN) {
   var companyCode, oToken;
   oToken = $localStorage[KEY_TOKEN];
   companyCode = $localStorage[KEY_COMPANY];
@@ -90,56 +88,25 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
   $ionicConfigProvider.views.transition('none');
   $ionicConfigProvider.tabs.position('bottom');
   $ionicConfigProvider.navBar.alignTitle('center');
-  $stateProvider.state('tab', {
-    url: "",
-    abstract: true,
-    templateUrl: "templates/tabs.html",
-    controller: function($scope, Account) {
-      return $scope.fnGetPermission = function(role) {
-        var permission, roles;
-        roles = Account.roles();
-        return permission = indexOf.call(roles, role) >= 0;
-      };
-    }
-  }).state('tab.allot', {
+  $stateProvider.state('allot', {
     url: '/allots',
-    views: {
-      'tab-allot': {
-        templateUrl: 'templates/allot.html',
-        controller: 'AllotCtrl'
-      }
-    }
-  }).state('tab.car', {
+    templateUrl: 'templates/allot.html',
+    controller: 'AllotCtrl'
+  }).state('car', {
     url: '/car',
-    views: {
-      'tab-car': {
-        templateUrl: 'templates/tab-car.html',
-        controller: 'CarCtrl'
-      }
-    }
-  }).state('tab.report', {
+    templateUrl: 'templates/tab-car.html',
+    controller: 'CarCtrl'
+  }).state('report', {
     url: '/reports',
-    views: {
-      'tab-report': {
-        templateUrl: 'templates/tab-report.html'
-      }
-    }
-  }).state('tab.driver', {
+    templateUrl: 'templates/tab-report.html'
+  }).state('driver', {
     url: '/driver',
-    views: {
-      'tab-driver': {
-        templateUrl: 'templates/tab-driver.html',
-        controller: 'DriverCtrl'
-      }
-    }
-  }).state('tab.account', {
+    templateUrl: 'templates/tab-driver.html',
+    controller: 'DriverCtrl'
+  }).state('account', {
     url: '/account',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/account.html',
-        controller: 'AccountCtrl'
-      }
-    }
+    templateUrl: 'templates/account.html',
+    controller: 'AccountCtrl'
   }).state('password', {
     url: '/password',
     templateUrl: 'templates/setting-password.html',
