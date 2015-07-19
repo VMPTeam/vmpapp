@@ -1,6 +1,6 @@
 var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-angular.module('starter.controllers', []).controller('HomeCtrl', function($scope, $state, $ionicPopup, $filter, $ionicLoading, $localStorage, $cordovaGeolocation, Order) {
+angular.module('starter.controllers', []).controller('AllotCtrl', function($scope, $state, $ionicPopup, $filter, $ionicLoading, $localStorage, $cordovaGeolocation, Order) {
   var vm;
   vm = $scope.vm = {
     list: [],
@@ -346,7 +346,7 @@ angular.module('starter.controllers', []).controller('HomeCtrl', function($scope
         $localStorage[KEY_USERNAME] = username;
         $localStorage[KEY_PASSWORD] = password;
         vm.userInfo = res;
-        return $state.go('tab.home');
+        return $state.go('tab.allot');
       } else {
         delete $localStorage[KEY_TOKEN];
         return $ionicPopup.alert({
@@ -405,7 +405,7 @@ angular.module('starter.controllers', []).controller('HomeCtrl', function($scope
       });
     }
   };
-}).controller('OrderDetailCtrl', function($scope, $state, $stateParams, $ionicLoading, $ionicPopup, $localStorage, $ionicModal, Order, Car, Driver, KEY_ACCOUNT) {
+}).controller('AllotDetailCtrl', function($scope, $state, $stateParams, $ionicLoading, $ionicPopup, $localStorage, $ionicModal, Order, Car, Driver, KEY_ACCOUNT) {
   var vm;
   vm = $scope.vm = {
     id: $stateParams.id,
@@ -512,7 +512,7 @@ angular.module('starter.controllers', []).controller('HomeCtrl', function($scope
         if (vm.nextId) {
           return $scope.fnChangeTab(vm.nextId);
         } else {
-          return $state.go('home');
+          return $state.go('tab.allot');
         }
       });
     }, function(msg) {
@@ -527,7 +527,7 @@ angular.module('starter.controllers', []).controller('HomeCtrl', function($scope
   切换tab
    */
   $scope.fnChangeTab = function(id) {
-    return $state.go('orderDetail', {
+    return $state.go('allotDetail', {
       id: id
     });
   };
@@ -696,7 +696,7 @@ angular.module('starter.controllers', []).controller('HomeCtrl', function($scope
    */
   $scope.fnSelectDriver = function(driver) {
     angular.extend($localStorage[$stateParams.oid], driver);
-    return $state.go('orderDetail', {
+    return $state.go('allotDetail', {
       id: vm.subOrder.serialNum
     });
   };
@@ -1160,10 +1160,12 @@ angular.module('starter.controllers', []).controller('HomeCtrl', function($scope
     _areaMap.addControl(new BMap.NavigationControl());
     _areaMap.addControl(new BMap.ScaleControl());
     areaControl = function() {
-      var lineWidth;
+      var lineWidth, x, y;
       lineWidth = window.innerWidth / 2;
+      x = (window.innerWidth - lineWidth) / 2;
+      y = (window.innerHeight - lineWidth) / 2;
       this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
-      this.defaultOffset = new BMap.Size((window.innerWidth - lineWidth) / 2, (window.innerHeight - lineWidth) / 2);
+      this.defaultOffset = new BMap.Size(x, y);
     };
     areaControl.prototype = new BMap.Control();
     areaControl.prototype.initialize = function(map) {
@@ -1196,7 +1198,7 @@ angular.module('starter.controllers', []).controller('HomeCtrl', function($scope
     return cars;
   };
   $scope.fnGetBounds = function() {
-    var item, lineWidth, pointArray, pointFormat;
+    var item, lb, lineWidth, lt, pointArray, pointFormat, rb, rt;
     pointArray = [];
     pointFormat = function(point) {
       var data;
@@ -1206,10 +1208,14 @@ angular.module('starter.controllers', []).controller('HomeCtrl', function($scope
       };
     };
     lineWidth = window.innerWidth / 2;
-    pointArray.push(_areaMap.pixelToPoint(new BMap.Pixel((window.innerWidth - lineWidth) / 2, (window.innerHeight - lineWidth) / 2)));
-    pointArray.push(_areaMap.pixelToPoint(new BMap.Pixel((window.innerWidth + lineWidth) / 2, (window.innerHeight - lineWidth) / 2)));
-    pointArray.push(_areaMap.pixelToPoint(new BMap.Pixel((window.innerWidth + lineWidth) / 2, (window.innerHeight + lineWidth) / 2)));
-    pointArray.push(_areaMap.pixelToPoint(new BMap.Pixel((window.innerWidth - lineWidth) / 2, (window.innerHeight + lineWidth) / 2)));
+    lt = new BMap.Pixel((window.innerWidth - lineWidth) / 2, (window.innerHeight - lineWidth) / 2);
+    pointArray.push(_areaMap.pixelToPoint(lt));
+    rt = new BMap.Pixel((window.innerWidth + lineWidth) / 2, (window.innerHeight - lineWidth) / 2);
+    pointArray.push(_areaMap.pixelToPoint(rt));
+    rb = new BMap.Pixel((window.innerWidth + lineWidth) / 2, (window.innerHeight + lineWidth) / 2);
+    pointArray.push(_areaMap.pixelToPoint(rb));
+    lb = new BMap.Pixel((window.innerWidth - lineWidth) / 2, (window.innerHeight + lineWidth) / 2);
+    pointArray.push(_areaMap.pixelToPoint());
     $localStorage['AREA_POINTS'] = (function() {
       var j, len, results;
       results = [];

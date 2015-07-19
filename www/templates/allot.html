@@ -54,7 +54,7 @@
   <ion-content class="order-content has-subheader" ng-init="fnGetList()" style="padding-top: 80px;">
     <ion-refresher on-refresh="fnGetList()" pulling-text="下拉刷新..."></ion-refresher>
 
-    <div class="card mini" ng-repeat="item in vm.list" ui-sref="orderDetail({id: item.serialNum})">
+    <div class="card mini" ng-repeat="item in vm.list" ui-sref="allotDetail({id: item.serialNum})">
       <div class="item item-divider">
         <div class="user">
           <i class="icon-custom icon-passenger icon-mini"></i>

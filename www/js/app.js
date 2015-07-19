@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.services', 'angular-md5', 'ngStorage']).constant('BASE_URL', 'http://220.178.67.250:8080/Business').constant('CLIENT_TYPE', 'vehicle_manager').constant('KEY_COMPANY', 'VMP_COMPANY').constant('KEY_TOKEN', 'VMP_TOKEN').constant('KEY_ACCOUNT', 'VMP_ACCOUNT').constant('KEY_USERNAME', 'VMP_USERNAME').constant('KEY_PASSWORD', 'VMP_PASSWORD').run(function($rootScope, $ionicPlatform, $ionicScrollDelegate, $location, $localStorage, KEY_COMPANY, KEY_TOKEN) {
+angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.services', 'angular-md5', 'ngStorage']).constant('BASE_URL', '/Business').constant('CLIENT_TYPE', 'vehicle_manager').constant('KEY_COMPANY', 'VMP_COMPANY').constant('KEY_TOKEN', 'VMP_TOKEN').constant('KEY_ACCOUNT', 'VMP_ACCOUNT').constant('KEY_USERNAME', 'VMP_USERNAME').constant('KEY_PASSWORD', 'VMP_PASSWORD').run(function($rootScope, $ionicPlatform, $ionicScrollDelegate, $location, $localStorage, KEY_COMPANY, KEY_TOKEN) {
   var companyCode, oToken;
   oToken = $localStorage[KEY_TOKEN];
   companyCode = $localStorage[KEY_COMPANY];
@@ -26,7 +26,10 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
   var interceptor;
   interceptor = {
     request: function(config) {
-      if (!/.+(?=\.html$)/.test(config.url) && !/^(?=(http\:|https\:)).*/.test(config.url)) {
+      var exp1, exp2;
+      exp1 = !/.+(?=\.html$)/.test(config.url);
+      exp2 = !/^(?=(http\:|https\:)).*/.test(config.url);
+      if (exp1 && exp2) {
         config.url = BASE_URL + config.url;
         config.timeout = 10000;
       }
@@ -38,10 +41,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
   var interceptor;
   interceptor = {
     request: function(config) {
-      var oToken;
+      var access_token, oToken, token_type;
       oToken = $localStorage[KEY_TOKEN];
+      token_type = oToken != null ? oToken.token_type : '';
+      access_token = oToken != null ? oToken.access_token : '';
       if (oToken != null) {
-        config.headers['Authorization'] = oToken.token_type + oToken.access_token;
+        config.headers['Authorization'] = token_type + access_token;
       }
       return config;
     },
@@ -87,36 +92,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
     url: "",
     abstract: true,
     templateUrl: "templates/tabs.html"
-  }).state('tab.account', {
-    url: '/account',
+  }).state('tab.allot', {
+    url: '/allots',
     views: {
-      'tab-account': {
-        templateUrl: 'templates/account.html',
-        controller: 'AccountCtrl'
-      }
-    }
-  }).state('password', {
-    url: '/password',
-    templateUrl: 'templates/setting-password.html',
-    controller: 'AccountCtrl'
-  }).state('msg-list', {
-    url: '/setting/msgs',
-    templateUrl: 'templates/setting-message.html',
-    controller: 'AccountCtrl'
-  }).state('login', {
-    url: '/login',
-    templateUrl: 'templates/login.html',
-    controller: 'AccountCtrl'
-  }).state('company', {
-    url: '/company',
-    templateUrl: 'templates/setting-company.html',
-    controller: 'AccountCtrl'
-  }).state('tab.home', {
-    url: '/home',
-    views: {
-      'tab-home': {
-        templateUrl: 'templates/home.html',
-        controller: 'HomeCtrl'
+      'tab-allot': {
+        templateUrl: 'templates/allot.html',
+        controller: 'AllotCtrl'
       }
     }
   }).state('tab.car', {
@@ -142,18 +123,42 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
         controller: 'DriverCtrl'
       }
     }
-  }).state('orderDetail', {
-    url: '/order/:id',
-    templateUrl: 'templates/order-detail.html',
-    controller: 'OrderDetailCtrl'
+  }).state('tab.account', {
+    url: '/account',
+    views: {
+      'tab-account': {
+        templateUrl: 'templates/account.html',
+        controller: 'AccountCtrl'
+      }
+    }
+  }).state('password', {
+    url: '/password',
+    templateUrl: 'templates/setting-password.html',
+    controller: 'AccountCtrl'
+  }).state('msg-list', {
+    url: '/setting/msgs',
+    templateUrl: 'templates/setting-message.html',
+    controller: 'AccountCtrl'
+  }).state('login', {
+    url: '/login',
+    templateUrl: 'templates/login.html',
+    controller: 'AccountCtrl'
+  }).state('company', {
+    url: '/company',
+    templateUrl: 'templates/setting-company.html',
+    controller: 'AccountCtrl'
+  }).state('allotDetail', {
+    url: '/allot/:id',
+    templateUrl: 'templates/allot-detail.html',
+    controller: 'AllotDetailCtrl'
   }).state('cars', {
     url: 'cars/:oid?startTime&endTime',
     templateUrl: 'templates/car-list.html',
-    controller: 'OrderDetailCtrl'
+    controller: 'AllotDetailCtrl'
   }).state('drivers', {
     url: 'drivers/:oid?startTime&endTime',
     templateUrl: 'templates/driver-list.html',
-    controller: 'OrderDetailCtrl'
+    controller: 'AllotDetailCtrl'
   }).state('carInfo', {
     url: '/carinfo/:id?type',
     templateUrl: 'templates/car-info.html',
@@ -179,12 +184,14 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
     templateUrl: 'templates/area-carlist.html',
     controller: 'AreaCtrl'
   });
-  $urlRouterProvider.otherwise('/home');
+  $urlRouterProvider.otherwise('/');
   $httpProvider.interceptors.push('pathInterceptor');
   $httpProvider.interceptors.push('tokenInterceptor');
   $httpProvider.interceptors.push('logInterceptor');
   fnTransParam = function(data, headersGetter) {
-    if (headersGetter()['Content-Type'] && headersGetter()['Content-Type'].match('application/x-www-form-urlencoded')) {
+    var ct;
+    ct = headersGetter()['Content-Type'];
+    if (ct && ct.match('application/x-www-form-urlencoded')) {
       if (angular.isObject(data) && String(data) !== '[object File]') {
         return $.param(data);
       } else {
