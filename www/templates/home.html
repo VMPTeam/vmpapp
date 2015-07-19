@@ -1,0 +1,95 @@
+<ion-view class="bg-default" view-title="慧管车">
+  <!--顶部信息条-->
+  <div class="bar bar-subheader info-bar-header">
+    <div class="row">
+      <!--左侧信息条-->
+      <div class="col col-67 left">
+        <!--上层-->
+        <div class="row up">
+          <div class="col card" style="background-color: #f9b72c;">
+            <p class="label">待处理</p>
+            <p class="num">6</p>
+          </div>
+          <div class="col card" style="background-color: #8fc73e;">
+            <p class="label">已配车</p>
+            <p class="num">12</p>
+          </div>
+          <div class="col card" style="background-color: #6ec9eb;">
+            <p class="label">在途中</p>
+            <p class="num">9</p>
+          </div>
+        </div>
+        <!--下层-->
+        <div class="row down">
+          <div class="col card fix" style="background-color: #f74c30;">
+            <p class="label">维修</p>
+            <p class="num">2</p>
+          </div>
+          <div class="col card rule" style="background-color: #24b5ed;">
+            <p class="label">违章</p>
+            <p class="num">8</p>
+          </div>
+          <div class="col card exception" style="background-color: #edcd06;">
+            <p class="label">异常</p>
+            <p class="num">1</p>
+          </div>
+        </div>
+      </div>
+      <!--右侧信息条-->
+      <div class="col right" style="background-color: #1cc1f4;">
+        <img alt="" class="img-weather" src="img/sun.png"/>
+        <p class="temperature">21℃</p>
+        <div class="text">
+          <p class="weather">阵雨</p>
+          <p class="city">合肥</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ion-nav-buttons side="right">
+    <a class="button button-icon icon icon-message">
+      <span class="badge badge-assertive">4</span>
+    </a>
+  </ion-nav-buttons>
+  <ion-content class="order-content has-subheader" ng-init="fnGetList()" style="padding-top: 80px;">
+    <ion-refresher on-refresh="fnGetList()" pulling-text="下拉刷新..."></ion-refresher>
+
+    <div class="card mini" ng-repeat="item in vm.list" ui-sref="orderDetail({id: item.serialNum})">
+      <div class="item item-divider">
+        <div class="user">
+          <i class="icon-custom icon-passenger icon-mini"></i>
+          <span>{{item.applicant}}</span>
+          <i class="icon-custom icon-phone icon-mini"></i>
+          <span>{{item.phone}}</span>
+        </div>
+      </div>
+      <div class="item item-text-wrap success">
+        <div>
+          <div class="place-line" style="color: #1e93c2;"></div>
+          <p>{{item.planStartPlace || '未知位置'}}</p>
+          <p>{{item.planEndPlace || '未知位置'}}</p>
+          <div class="text-status" ng-switch="item.status">
+            <span ng-switch-when="1">待审核</span>
+            <span ng-switch-when="2" style="color: #ff9d0b;">待配车</span>
+            <span ng-switch-when="3" style="color: #8ed01f;">已配车</span>
+            <span ng-switch-when="4" style="color: #41c6ef;">在途</span>
+            <span ng-switch-when="5">完成</span>
+            <span ng-switch-when="-1">拒绝</span>
+          </div>
+        </div>
+      </div>
+      <div class="item item-divider">
+        <div class="time">
+          <i class="icon-custom icon-car icon-mini"></i>
+          <span>{{item.vehicleCount}}</span>
+          <i class="icon-custom icon-clock-begin icon-mini" style="color: #38c9cb;" ng-show="item.planStartTime && item.planEndTime"></i>
+          <span ng-show="item.planStartTime && item.planEndTime">{{item.planStartTime}}~{{item.planEndTime}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="empty-list" ng-hide="vm.list.length">
+      暂无数据
+    </div>
+    <ion-infinite-scroll immediate-check="false" ng-if="vm.hasMore" on-infinite="fnGetList(true)"></ion-infinite-scroll>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,19 @@
+<ion-view view-title="慧管车" class="bg-default">
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <a class="button button-clear" ui-sref="area">添加</a>
+  </ion-nav-buttons>
+  <ion-content>
+    <div class="list" ng-init="fnGetList()">
+      <div class="item item-icon-right" ng-repeat="item in vm.list">
+        {{item.name}}
+        <i class="icon ion-ios-arrow-right"></i>
+      </div>
+    </div>
+    <div class="empty-list" ng-hide="vm.list.length">
+      暂无数据
+    </div>
+  </ion-content>
+</ion-view>

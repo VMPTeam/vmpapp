@@ -1,0 +1,31 @@
+<ion-view view-title="慧管车" class="bg-default">
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="fnSaveCheckCar()">返回</a>
+  </ion-nav-buttons>
+  <ion-content>
+    <ul class="list mini" ng-init="fnGetCarList()">
+      <li class="item item-avatar item-checkbox" ng-repeat="item in vm.carList">
+        <label class="checkbox">
+          <input type="checkbox" ng-model="item.checked">
+        </label>
+        <img class="car-avatar" ng-src="{{item.vehicleAvatar}}">
+
+        <h2 ng-bind="item.vehicleLic"></h2>
+
+        <p>{{item.vehicleNickName}}&nbsp;{{item.vehicleType}}</p>
+        <!-- <span class="status">
+          <span style="color: #3fac29;" ng-switch="item.location.status">
+            <span ng-switch-when="1">运动中</span>
+            <span ng-switch-when="2">静止</span>
+            <span ng-switch-when="3">离线</span>
+            <span ng-switch-default>未知</span>
+          </span>
+          <i class="icon ion-ios-arrow-right"></i>
+        </span> -->
+      </li>
+    </ul>
+    <div class="empty-list" ng-hide="vm.list.length">
+      暂无数据
+    </div>
+  </ion-content>
+</ion-view>

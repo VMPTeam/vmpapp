@@ -1,0 +1,77 @@
+.item-icon-left .icon-custom {
+  position: absolute;
+  top: 6px;
+  left: 11px;
+}
+.item-icon-right .icon-custom {
+  right: 11px;
+}
+.item-icon-left.item-icon-right .icon-custom:first-child {
+  right: auto;
+}
+.item-icon-left.item-icon-right .icon-custom:last-child {
+  left: auto;
+}
+.icon-custom::before {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  content: ' ';
+  background-size: 100%;
+}
+.icon-custom.icon-mini::before {
+  width: 24px;
+  height: 24px;
+  vertical-align: bottom;
+}
+.icon-user::before {
+  background-image: url('../img/person.png');
+}
+.icon-lock::before {
+  background-image: url('../img/lock.png');
+}
+.icon-end::before {
+  background-image: url('../img/end.png');
+}
+.icon-begin::before {
+  background-image: url('../img/begin.png');
+}
+.icon-clock-begin::before {
+  background-image: url('../img/clock-begin.png');
+}
+.icon-clock-finish::before {
+  background-image: url('../img/clock-finish.png');
+}
+.icon-car::before {
+  background-image: url('../img/car.png');
+}
+.icon-passenger::before {
+  background-image: url('../img/passenger.png');
+}
+.icon-map::before {
+  background-image: url('../img/map.png');
+}
+.icon-order::before {
+  background-image: url('../img/order.png');
+}
+.icon-phone::before {
+  background-image: url('../img/phone.png');
+}
+.icon-home-outline::before {
+  background-image: url('../img/1_01.png');
+}
+.icon-home::before {
+  background-image: url('../img/1_09.png');
+}
+.icon-gear-outline::before {
+  background-image: url('../img/1_04.png');
+}
+.icon-gear::before {
+  background-image: url('../img/1_12.png');
+}
+.icon-trip-outline::before {
+  background-image: url('../img/1_07.png');
+}
+.icon-trip::before {
+  background-image: url('../img/1_15.png');
+}

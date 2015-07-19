@@ -1,0 +1,36 @@
+<!--
+Create tabs with an icon and label, using the tabs-positive style.
+Each tab's child <ion-nav-view> directive will have its own
+navigation history that also transitions its views in and out.
+-->
+<ion-tabs class="tabs-bottom tabs-icon-top tabs-color-active-balanced">
+
+  <!-- Dashboard Tab -->
+  <ion-tab title="首页" icon-off="ion-ios-home-outline" icon-on="ion-ios-home" ui-sref="tab.home">
+    <ion-nav-view name="tab-home"></ion-nav-view>
+  </ion-tab>
+
+
+  <!-- 车辆管理 Tab -->
+  <ion-tab title="车辆" icon-off="ion-ios-location-outline" icon-on="ion-ios-location" ui-sref="tab.car">
+    <ion-nav-view name="tab-car"></ion-nav-view>
+  </ion-tab>
+
+
+  <!-- 驾驶员管理 Tab -->
+  <ion-tab title="驾驶员" icon-off="ion-ios-person-outline" icon-on="ion-ios-person" ui-sref="tab.driver">
+    <ion-nav-view name="tab-driver"></ion-nav-view>
+  </ion-tab>
+
+  <!-- 统计分析 Tab -->
+  <ion-tab title="统计分析" icon-off="ion-ios-paper-outline" icon-on="ion-ios-paper" ui-sref="tab.report">
+    <ion-nav-view name="tab-report"></ion-nav-view>
+  </ion-tab>
+
+
+  <!-- Account Tab -->
+  <ion-tab title="设置" icon-off="ion-ios-gear-outline" icon-on="ion-ios-gear" ui-sref="tab.account">
+    <ion-nav-view name="tab-account"></ion-nav-view>
+  </ion-tab>
+
+</ion-tabs>

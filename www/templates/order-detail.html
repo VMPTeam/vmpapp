@@ -1,0 +1,101 @@
+<ion-view view-title="慧管车" class="bg-default" ng-init="fnGetOrderList()" cache-view="false">
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ui-sref="tab.home">返回</a>
+  </ion-nav-buttons>
+  <!--<div class="bar bar-subheader">-->
+    <div class="tabs-striped tabs-top tabs-background-stable" ng-if="vm.orderList.length">
+      <div class="tabs">
+        <!--<ion-scroll direction="x" style="width: 100%;">-->
+          <div class="tab-item"
+               ng-repeat="tab in vm.orderList | limitTo: 5"
+               ng-bind="tab.applicant"
+               ng-class="{active: tab.serialNum === vm.currentTab}"
+               ng-click="fnChangeTab(tab.serialNum)"
+            ></div>
+        <!--</ion-scroll>-->
+      </div>
+    </div>
+  <!--</div>-->
+
+  <ion-content ng-init="fnDetail()" ng-class="{ 'has-tabs-top': vm.orderList.length}">
+    <div class="list mini" ng-init="vm.orderExpand = true">
+      <div class="item" ng-click="vm.orderExpand = !vm.orderExpand">
+        订单状态
+        <span class="item-note black">{{vm.orderExpand ? '收起' : '展开'}}</span>
+      </div>
+    </div>
+    <div class="list mini" ng-show="vm.orderExpand" style="margin-top: -21px;">
+      <!-- end place -->
+      <div class="item item-icon-left">
+        <i class="icon ion-ios-telephone-outline"></i>
+        <label>联系方式</label>
+        <a ng-href="tel:{{vm.order.phone}}" class="item-note">{{vm.order.phone}}</a>
+      </div>
+      <!-- end place -->
+      <div class="item item-icon-left">
+        <i class="icon ion-ios-flag-outline"></i>
+        <span>{{vm.order.planEndPlace || '未知地点'}}</span>
+      </div>
+      <!-- begin place -->
+      <div class="item item-icon-left">
+        <i class="icon ion-ios-location-outline"></i>
+        <span>{{vm.order.planStartPlace || '未知地点'}}</span>
+      </div>
+
+      <!-- begin time -->
+      <div class="item item-icon-left">
+        <i class="icon ion-ios-time-outline"></i>
+        <label>开始</label>
+        <span class="item-note" ng-bind="vm.order.planStartTime"></span>
+      </div>
+      <!-- end time -->
+      <div class="item item-icon-left">
+        <i class="icon ion-ios-time-outline"></i>
+        <label>结束</label>
+        <span class="item-note" ng-bind="vm.order.planEndTime"></span>
+      </div>
+      <div class="item item-icon-left" ng-click="vm.peopleExpand = !vm.peopleExpand">
+        <i class="icon ion-ios-people-outline"></i>
+        <label>用车人员</label>
+        <span class="item-note">{{vm.peopleExpand ? '收起' : '展开'}}</span>
+      </div>
+      <div class="item item-divider" ng-show="vm.peopleExpand" ng-repeat="item in vm.order.passengers">
+        <a ng-bind="item.phone" ng-href="tel:{{item.phone}}"></a>
+        <span ng-bind="item.name" style="float: right;"></span>
+      </div>
+      <div class="item item-icon-left">
+        <i class="icon ion-ios-briefcase-outline"></i>
+        <label>用车需求</label>
+        <span class="item-note" ng-bind="vm.order.description"></span>
+      </div>
+      <div class="item item-icon-left">
+        <i class="icon ion-ios-paper-outline"></i>
+        <label>审批意见</label>
+        <span class="item-note" ng-bind="vm.order.comment"></span>
+      </div>
+
+    </div>
+
+    <div class="list mini">
+      <!-- car -->
+      <div class="item item-icon-left">
+        <i class="icon ion-android-car"></i>
+        <label>分配车辆</label>
+        <span class="item-note blue" ng-show="fnCheckEmptyOrder()" ng-click="fnGotoCarList(vm.order.driverAndVehicle)">添加</span>
+      </div>
+      <div class="item item-divider item-avatar" ng-repeat="item in vm.order.driverAndVehicle"
+           ng-click="fnGotoDriverList(item)" ng-show="item.vehicleUid">
+        <img class="avatar" ng-src="{{item.vehicleAvatar || 'img/car-avatar.png'}}" alt=""/>
+        <h2 ng-bind="item.vehicleLic + ' ' + item.seatNum + '座'"></h2>
+        <a ng-href="tel:{{item.phone}}">{{item.driverName}}{{item.phone}}</a>
+        <img src="img/close.png" class="close" style="top: 14px;" ng-click="fnClearOrder(item, $event)"/>
+      </div>
+    </div>
+
+
+    <div class="action-bar padding">
+      <button class="button button-block button-balanced" ng-click="fnCommit()">{{vm.nextId ? '分配并处理下一条' : '分配'}}</button>
+    </div>
+
+  </ion-content>
+</ion-view>

@@ -1,0 +1,102 @@
+<ion-view view-title="慧管车">
+  <ion-nav-buttons side="left">
+    <button class="button button-clear" ng-click="fnChangeView()">
+      {{vm.mapView ? '列表视图' : '地图视图'}}
+    </button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <a class="button button-icon icon icon-message"><span class="badge badge-assertive">4</span></a>
+  </ion-nav-buttons>
+  <ion-content class="car-list" ng-class="{'map-view': vm.mapView}">
+    <ion-refresher
+      pulling-text="下拉刷新..."
+      on-refresh="fnGetCarList(1)">
+    </ion-refresher>
+    <!--列表视图-->
+    <div ng-hide="vm.mapView">
+      <div class="bar bar-header item-input-inset">
+        <label class="item-input-wrapper">
+          <i class="icon ion-ios-search placeholder-icon"></i>
+          <input type="search" placeholder="请输入关键字进行搜索" ng-model="vm.search"
+                 ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }"
+                 ng-change="fnGetCarList()">
+        </label>
+        <button class="button button-clear" ng-click="vm.search = '';fnGetCarList()">
+          取消
+        </button>
+      </div>
+      <div class="list mini" ng-init="fnGetCarList()">
+        <a class="item item-avatar" ng-repeat="item in vm.list" ui-sref="carInfo({id: item.vehicleUid})">
+          <img ng-src="{{item.vehicleAvatar}}">
+
+          <h2 ng-bind="item.vehicleLic"></h2>
+
+          <p>{{item.vehicleNickName}}&nbsp;{{item.vehicleType}}</p>
+          <span class="status">
+            <span style="color: #3fac29;" ng-switch="item.location.status">
+              <span ng-switch-when="1">运动中</span>
+              <span ng-switch-when="2">静止</span>
+              <span ng-switch-when="3">离线</span>
+              <span ng-switch-default>未知</span>
+            </span>
+            <i class="icon ion-ios-arrow-right"></i>
+          </span>
+        </a>
+      </div>
+      <div class="empty-list" ng-hide="vm.list.length">
+        暂无数据
+      </div>
+    </div>
+    <!--地图视图-->
+    <div ng-show="vm.mapView" style="width: 100%; height: 100%;" ng-init="fnInitMap()">
+      <div id="carMap" style="width: 100%; height: 100%;"></div>
+      <!--状态图例-->
+      <div class="status-box">
+        <p class="green">运动</p>
+        <p class="blue">静止</p>
+        <p class="grey">离线</p>
+      </div>
+      <div class="area-box" ui-sref="areaList">
+        栅栏
+      </div>
+      <div class="custom-info-box" ng-show="vm.selectedCar">
+        <div class="info">
+          <div class="row">
+            <div class="col text-center no-padding">
+              <i class="icon-person55"></i>
+              <p data-driverName>{{vm.selectedCar.driverName}}</p>
+            </div>
+            <a class="col text-center no-padding border">
+              <i class="icon-phone55"></i>
+              <p data-driverPhone>{{vm.selectedCar.driverPhone}}</p>
+            </a>
+            <div class="col text-center no-padding">
+              <i class="icon-car55"></i>
+              <p data-vehicleLic>{{vm.selectedCar.vehicleLic}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <p>所属部门：<span data-buShortName>{{vm.selectedCar.buShortName}}</span></p>
+              <p>上报时间：<span data-updateTime>{{vm.selectedCar.location.updateTime | date: 'yyyy-MM-dd HH:mm:ss'}}</span></p>
+              <p>所在位置：<span data-address class="truncate">{{vm.selectedCar.address}}</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="action-bar row">
+          <div class="col" ui-sref="carInfo({id: vm.selectedCar.vehicleUid, type: 1})"><i class="icon-detail"></i>详情</div>
+          <div class="col" ui-sref="carInfo({id: vm.selectedCar.vehicleUid, type: 2})"><i class="icon-line"></i>记录</div>
+          <div class="col" ui-sref="carInfo({id: vm.selectedCar.vehicleUid, type: 3})"><i class="icon-trace"></i>跟踪</div>
+          <div class="col" ui-sref="carInfo({id: vm.selectedCar.vehicleUid, type: 4})"><i class="icon-area"></i>车况</div>
+          <div class="col" ui-sref="carInfo({id: vm.selectedCar.vehicleUid, type: 5})"><i class="icon-park"></i>停靠</div>
+        </div>
+        <div class="arrow-down"></div>
+      </div>
+    </div>
+    <ion-infinite-scroll
+      ng-if="vm.hasMore"
+      on-infinite="fnGetCarList(true)"
+      immediate-check="false">
+    </ion-infinite-scroll>
+  </ion-content>
+</ion-view>

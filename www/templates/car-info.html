@@ -1,0 +1,182 @@
+<ion-view view-title="慧管车" class="bg-default" cache-view="false">
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
+  </ion-nav-buttons>
+  <div class="tabs-striped tabs-top tabs-background-stable">
+    <div class="tabs" ng-init="fnInitTab()">
+      <div class="tab-item"
+           ng-repeat="tab in vm.tabList"
+           ng-bind="tab"
+           ng-class="{active: tab === vm.tab}"
+           ng-click="vm.tab = vm.tabList[$index]"
+        ></div>
+    </div>
+  </div>
+  <ion-content class="car-info-content has-tabs-top" ng-class="{'map-view': vm.mapView}" ng-init="fnGetCarDetail()">
+    <!--车辆跟踪-->
+    <div class="trace map-container" ng-show="vm.tab === '车辆跟踪'">
+      <div id="traceMap" class="map"></div>
+      <div class="info-bar">
+        <div class="row">
+          <div class="col">车牌号:{{vm.info.vehicleLic}}</div>
+          <div class="col">别名:{{vm.info.vehicleNickName}}</div>
+        </div>
+        <div class="row">
+          <div class="col" ng-switch="vm.currentLocation.stauts">
+            <span ng-switch-when="1">当前状态:运动中</span>
+            <span ng-switch-when="2">当前状态:静止</span>
+            <span ng-switch-when="3">当前状态:离线</span>
+            <span ng-switch-default>当前状态:未知</span>
+          </div>
+          <div class="col">当前速度:{{vm.currentLocation.speed}}km/h</div>
+        </div>
+        <div class="row">
+          <div class="col">上报时间:{{vm.currentLocation.updateTime | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+        </div>
+      </div>
+    </div>
+    <!--车辆状况-->
+    <div class="status" ng-show="vm.tab === '车辆状况'">
+      <!--仪表板-->
+      <div class="dashboard">
+        <!--时速-->
+        <div class="shisu">
+          <img id="speed" class="point" src="img/zhizhen_b.png" alt=""/>
+        </div>
+        <!--电压-->
+        <div class="dianya">
+          <img id="voltage" class="point" src="img/zhizhen.png" alt=""/>
+          <div class="label">
+            <p>电瓶电压</p>
+            <p>{{vm.currentLocation.voltage}}V</p>
+          </div>
+        </div>
+        <!--转速-->
+        <div class="zhuansu">
+          <img id="rpm" class="point" src="img/zhizhen.png" alt=""/>
+          <div class="label">
+            <p>发动机转速</p>
+            <p>{{vm.currentLocation.rpm}}rpm</p>
+          </div>
+        </div>
+        <!--当前时速-->
+        <div class="current-speed">
+          <label>当前时速</label>
+          <h2>{{vm.currentLocation.speed | number: 1}}Km/h</h2>
+        </div>
+        <!--当前油耗-->
+        <div class="fuel">
+          <label>当前油耗</label>
+          <h2>{{vm.currentLocation.fuel | number: 2}}L</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mile">
+          <label>行驶里程 Km</label>
+          <h4>{{vm.currentLocation.mile | number: 2}}</h4>
+        </div>
+        <div class="col avg-fuel">
+          <label>平均油耗 L</label>
+          <h4>{{vm.currentLocation.avgFuel | number: 2}}</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col all-fuel">
+          <label>耗油量 L</label>
+          <h4>{{vm.currentLocation.allFuel | number: 2}}</h4>
+        </div>
+        <div class="col degree">
+          <label>车外环境温度 ℃</label>
+          <h4>{{vm.currentLocation.degree | number: 0}}</h4>
+        </div>
+      </div>
+    </div>
+    <!--行车记录-->
+    <div class="record" ng-show="vm.tab === '行车记录'">
+      <div class="board">
+        <div class="date row">
+          <div class="col" ng-click="fnSetDay(vm.today, -1)">{{fnOtherDay(vm.today, -1) | date: 'M月d日'}}</div>
+          <div class="col" style="color: #3cbd0d;" id="datePicker" ng-click="fnOpenPicker(vm.today)">
+            {{vm.today | date: 'M月d日'}}
+          </div>
+          <div class="col" ng-click="fnSetDay(vm.today, 1)">{{fnOtherDay(vm.today, 1) | date: 'M月d日'}}</div>
+        </div>
+        <div class="time row row-center">
+          <!--<div class="col col-25" style="text-align: right;" ng-click="fnOpenPicker(vm.beginTime, 'time')">{{vm.beginTime | date: 'HH:mm'}}</div>-->
+          <div class="col col-25" style="text-align: right;">00:00</div>
+          <div class="col col-50"><hr size="4" style="border-style:dashed;"></div>
+          <!--<div class="col col-25" style="text-align: left;" ng-click="fnOpenPicker(vm.endTime, 'time')">{{vm.endTime | date: 'HH:mm'}}</div>-->
+          <div class="col col-25" style="text-align: left;">23:59</div>
+        </div>
+        <div class="info row">
+          <div class="col red">
+            <p>当日油耗</p>
+            <p>{{fnGetFuel() | number: 2}}L</p>
+          </div>
+          <div class="col black">
+            <p>行驶里程</p>
+            <p>{{fnGetMile() | number: 2}}Km</p>
+          </div>
+          <div class="col yellow">
+            <p>平均油耗</p>
+            <p>{{fnGetAvgFuel() | number: 2}}L/100Km</p>
+          </div>
+        </div>
+      </div>
+      <div class="list mini" ng-repeat="item in vm.journals">
+        <div class="item">
+          <div class="status">
+            <p>行程:{{item.miles}}Km</p>
+            <p>停留{{fnDateLenth(item.stand)}}</p>
+          </div>
+          <p>{{item.startLoc.time | date: 'HH:mm'}} 从 {{item.startLoc.sematic_description}}</p>
+          <p>{{item.endLoc.time | date: 'HH:mm'}} 到 {{item.endLoc.sematic_description}}</p>
+        </div>
+      </div>
+      <div class="empty-list" ng-hide="vm.journals.length" style="top: 140px;">
+        暂无数据
+      </div>
+    </div>
+    <!--停车分布-->
+    <div class="park map-container" ng-show="vm.tab === '停车分布'">
+      <div class="map" id="parkMap"></div>
+    </div>
+    <!--车辆档案-->
+    <div class="archive" ng-show="vm.tab === '车辆档案'">
+      <div class="list mini">
+        <div class="item">
+          <span>车牌号</span>
+          <span class="item-note">{{vm.info.vehicleLic}}</span>
+        </div>
+        <div class="item">
+          <span>车辆别名</span>
+          <span class="item-note">{{vm.info.vehicleNickName}}</span>
+        </div>
+        <div class="item">
+          <span>品牌和车型</span>
+          <span class="item-note">{{vm.info.vehicleType}}</span>
+        </div>
+        <div class="item">
+          <span>所属部门</span>
+          <span class="item-note">{{vm.info.deptName}}</span>
+        </div>
+        <div class="item">
+          <span>当前里程</span>
+          <span class="item-note">{{vm.info.displayDistance}}</span>
+        </div>
+        <div class="item">
+          <span>保养里程间隔</span>
+          <span class="item-note">{{vm.info.displayDistance}}</span>
+        </div>
+        <div class="item">
+          <span>保险日期</span>
+          <span class="item-note">{{vm.info.vehicleAuditTime}}</span>
+        </div>
+        <div class="item">
+          <span>年检日期</span>
+          <span class="item-note">{{vm.info.vehicleAuditTime}}</span>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

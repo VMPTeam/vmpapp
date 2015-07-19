@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<widget id="com.wttech.vmp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>vmp-client</name>
+  <description>
+        An Ionic Framework and Cordova project.
+    </description>
+  <author email="hi@ionicframework" href="http://ionicframework.com/">
+      Ionic Framework Team
+    </author>
+  <content src="index.html"/>
+  <access origin="*"/>
+  <access origin="tel:*" launch-external="yes"/>
+  <preference name="webviewbounce" value="false"/>
+  <preference name="UIWebViewBounce" value="false"/>
+  <preference name="DisallowOverscroll" value="true"/>
+  <preference name="android-minSdkVersion" value="16"/>
+  <preference name="BackupWebStorage" value="none"/>
+  <preference name="SplashScreen" value="screen"/>
+  <preference name="SplashScreenDelay" value="3000"/>
+  <preference name="Orientation" value="portrait"/>
+  <preference name="StatusBarBackgroundColor" value="#ffffff"/>
+  <preference name="StatusBarOverlaysWebView" value="true"/>
+  <feature name="DatePicker">
+    <param name="ios-package" value="DatePicker"/>
+  </feature>
+  <feature name="DatePickerPlugin">
+    <param name="android-package" value="com.okaybmd.cordova.plugin.datepicker.DatePickerPlugin"/>
+  </feature>
+  <feature name="StatusBar">
+    <param name="ios-package" value="CDVStatusBar" onload="true"/>
+  </feature>
+  <icon src="resources/logo.png"/>
+  <platform name="android">
+    <splash src="resources/launcher.png" density="land-ldpi"/>
+    <splash src="resources/launcher.png" density="land-mdpi"/>
+    <splash src="resources/launcher.png" density="land-hdpi"/>
+    <splash src="resources/launcher.png" density="land-xhdpi"/>
+    <splash src="resources/launcher.png" density="land-xxhdpi"/>
+    <splash src="resources/launcher.png" density="land-xxxhdpi"/>
+    <splash src="resources/launcher.png" density="port-ldpi"/>
+    <splash src="resources/launcher.png" density="port-mdpi"/>
+    <splash src="resources/launcher.png" density="port-hdpi"/>
+    <splash ssrc="resources/launcher.png" density="port-xhdpi"/>
+    <splash src="resources/launcher.png" density="port-xxhdpi"/>
+    <splash src="resources/launcher.png" density="port-xxxhdpi"/>
+  </platform>
+  <platform name="ios">
+    <splash height="480" src="resources/launcher.png" width="320"/>
+    <splash height="960" src="resources/launcher.png" width="640"/>
+    <splash height="1024" src="resources/launcher.png" width="768"/>
+    <splash height="2048" src="resources/launcher.png" width="1536"/>
+    <splash height="768" src="resources/launcher.pngg" width="1024"/>
+    <splash height="1536" src="resources/launcher.png" width="2048"/>
+    <splash height="1136" src="resources/launcher.png" width="640"/>
+    <splash height="1334" src="resources/launcher.png" width="750"/>
+    <splash height="2208" src="resources/launcher.png" width="1242"/>
+    <splash height="1242" src="resources/launcher.png" width="2208"/>
+  </platform>
+</widget>

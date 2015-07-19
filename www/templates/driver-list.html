@@ -1,0 +1,33 @@
+<ion-view view-title="慧管车">
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
+  </ion-nav-buttons>
+  <ion-content class="driver-list">
+    <div class="bar bar-header item-input-inset">
+      <label class="item-input-wrapper">
+        <i class="icon ion-ios-search placeholder-icon"></i>
+        <input type="search" placeholder="请输入关键字进行搜索" ng-model="vm.search"
+               ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }" ng-change="fnGetDriverList()">
+      </label>
+      <button class="button button-clear" ng-click="vm.search = '';fnGetDriverList()">
+        取消
+      </button>
+    </div>
+    <ion-refresher
+      pulling-text="下拉刷新..."
+      on-refresh="fnGetDriverList(1)">
+    </ion-refresher>
+    <div class="list mini" ng-init="fnGetDriverList()">
+      <a class="item" collection-repeat="item in vm.list" ng-click="fnSelectDriver(item)">
+        <h2 ng-bind="item.driverName"></h2>
+        <p>准驾车型:{{item.approvalType}}</p>
+        <span class="phone">{{item.phone}}</span>
+      </a>
+    </div>
+    <ion-infinite-scroll
+      ng-if="vm.hasMore"
+      on-infinite="fnGetDriverList(true)"
+      immediate-check="false">
+    </ion-infinite-scroll>
+  </ion-content>
+</ion-view>

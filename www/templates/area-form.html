@@ -1,0 +1,75 @@
+<ion-view class="bg-default" view-title="慧管车">
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <a class="button button-clear" ng-disabled="!vm.formData.name || !fnGetPoints().length" ng-click="fnCreate()">保存</a>
+  </ion-nav-buttons>
+  <ion-content class="area-content" ng-init="fnDetail(vm.id)">
+    <form name="form" ng-if="!vm.id">
+      <div class="list mini">
+        <label class="item item-input" style="height: 44px;">
+          <span class="input-label">栅栏名称</span>
+          <input ng-model="vm.formData.name" name="name" required style="text-align: right;" type="text">
+        </label>
+        <a class="item" ui-sref="areaMap">
+          <span class="">监控区域</span>
+          <span class="item-note" ng-hide="fnGetPoints().length">未选择</span>
+          <span class="item-note" ng-show="fnGetPoints().length">已选择</span>
+        </a>
+        <label class="item item-input item-select select-clear" style="height: 44px;">
+          <span class="input-label">触发方式</span>
+          <select ng-model="vm.formData.trigger">
+            <option value="0">驶出</option>
+            <option value="1">驶入</option>
+            <option value="2">驶入驶出</option>
+          </select>
+        </label>
+        <a class="item" ui-sref="areaCar">
+          <span class="">监控车辆</span>
+          <span class="item-note" ng-hide="fnGetSelectedCar().length">未选择</span>
+          <span class="item-note" ng-show="fnGetSelectedCar().length">已选择</span>
+        </a>
+        <label class="item" ng-click="fnOpenPicker('startTime')">
+          <span class="">开始时间</span>
+          <span class="item-note" ng-bind="vm.formData.startTime | date: 'HH:mm'">已选择</span>
+        </label>
+        <label class="item" ng-click="fnOpenPicker('endTime')">
+          <span class="">结束时间</span>
+          <span class="item-note" ng-bind="vm.formData.endTime | date: 'HH:mm'">已选择</span>
+        </label>
+      </div>
+    </form>
+    <div class="list mini" ng-if="vm.id">
+      <label class="item item-input" style="height: 44px;">
+        <span class="input-label">栅栏名称</span>
+        <span ng-bind="vm.formData.name" style="text-align: right;">
+      </label>
+      <a class="item" ui-sref="areaMap({id: vm.id})">
+        <span class="">监控区域</span>
+        <span class="item-note">已选择</span>
+      </a>
+      <label class="item item-input item-select select-clear" style="height: 44px;">
+        <span class="input-label">触发方式</span>
+        <span ng-switch="vm.formData.trigger">
+          <span ng-switch-when="0">驶出</span>
+          <span ng-switch-when="1">驶入</span>
+          <span ng-switch-when="2">驶入驶出</span>
+        </select>
+      </label>
+      <label class="item">
+        <span class="">监控车辆</span>
+        <span class="item-note" ng-hide="vm.formData.vehicles.length">未选择</span>
+        <span class="item-note" ng-show="vm.formData.vehicles.length">已选择</span>
+      </label>
+      <label class="item">
+        <span class="">开始时间</span>
+        <span class="item-note" ng-bind="vm.formData.startTime | date: 'HH:mm'"></span>
+      </label>
+      <label class="item">
+        <span class="">结束时间</span>
+        <span class="item-note" ng-bind="vm.formData.endTime | date: 'HH:mm'"></span>
+      </label>
+    </div>
+  </ion-content>
+</ion-view>

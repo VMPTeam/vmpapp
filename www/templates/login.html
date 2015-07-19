@@ -1,0 +1,30 @@
+<ion-view hide-nav-bar="true" class="bg">
+  <ion-content class="login-content">
+    <div class="text-center">
+      <!-- <img class="logo" src="img/logo.png" alt="皖通科技"/>
+      <div class="app-name">
+        <h2>慧管车</h2>
+        <span>HUIGUANCHE</span>
+      </div> -->
+      <img src="img/wantong.png" class="logo" alt="" style="width: 90vw;" />
+    </div>
+    <form name="loginForm">
+      <div class="list list-inset">
+        <label class="item item-icon-left item-input" style="padding-left: 50px;">
+          <i class="icon-custom icon-user"></i>
+          <input type="text" name="username" ng-model="vm.username" placeholder="用户名" required>
+        </label>
+        <label class="item item-icon-left item-input" style="padding-left: 50px;">
+          <i class="icon-custom icon-lock"></i>
+          <input type="password" name="password" ng-model="vm.password" placeholder="密码" required>
+        </label>
+      </div>
+      <div class="row btn-login">
+        <div class="col">
+          <button class="button button-block button-outline button-light" style="margin-left: 0;" ng-click="fnLogin(vm.username, vm.password)">登录</button>
+        </div>
+      </div>
+      <a class="btn-company" ui-sref="company">设置企业号</a>
+    </form>
+  </ion-content>
+</ion-view>

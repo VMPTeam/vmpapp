@@ -1,0 +1,13 @@
+<ion-view class="bg-default" view-title="慧管车">
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <a class="button button-clear" ng-click="fnGetBounds()">确认</a>
+  </ion-nav-buttons>
+  <ion-content class="area-content map-view">
+    <div style="width: 100%; height: 100%;" ng-init="fnInitMap()">
+      <div id="areaMap" style="width: 100%; height: 100%;"></div>
+    </div>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,34 @@
+<ion-view view-title="慧管车">
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
+  </ion-nav-buttons>
+  <ion-content class="car-list">
+    <div class="bar bar-header item-input-inset">
+      <label class="item-input-wrapper">
+        <i class="icon ion-ios-search placeholder-icon"></i>
+        <input type="search" placeholder="请输入关键字进行搜索" ng-model="vm.search"
+               ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }" ng-change="fnGetCarList()">
+      </label>
+      <button class="button button-clear" ng-click="vm.search = '';fnGetCarList()">
+        取消
+      </button>
+    </div>
+    <ion-refresher
+      pulling-text="下拉刷新..."
+      on-refresh="fnGetCarList(1)">
+    </ion-refresher>
+    <div class="list mini" ng-init="fnGetCarList()">
+      <a class="item item-avatar" collection-repeat="item in vm.list" ng-click="fnSelectCar(item)">
+        <img ng-src="{{item.vehicleAvatar}}">
+        <h2 ng-bind="item.vehicleLic"></h2>
+        <p>{{item.vehicleNickName}}&nbsp;{{item.vehicleType}}</p>
+        <span class="distance">{{item.displanDistance || '100km'}}</span>
+      </a>
+    </div>
+    <ion-infinite-scroll
+      ng-if="vm.hasMore"
+      on-infinite="fnGetCarList(true)"
+      immediate-check="false">
+    </ion-infinite-scroll>
+  </ion-content>
+</ion-view>

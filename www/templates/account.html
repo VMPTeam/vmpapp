@@ -1,0 +1,38 @@
+<ion-view view-title="慧管车" class="bg-default">
+  <ion-nav-buttons side="right">
+    <a class="button button-icon icon icon-message"><span class="badge badge-assertive">4</span></a>
+  </ion-nav-buttons>
+  <ion-content>
+    <ul class="list">
+      <li class="item item-avatar" href="#">
+        <img src="img/avatar.png">
+        <h2 ng-bind="::vm.account.realName"></h2>
+        <p ng-bind="::vm.account.orgCode || '皖通科技'"></p>
+      </li>
+    </ul>
+    <ul class="list">
+      <li class="item">
+        手机号
+        <span class="item-note" ng-bind="::vm.account.phone"></span>
+      </li>
+      <a class="item item-icon-right" ui-sref="password">
+        修改密码
+        <i class="icon ion-ios-arrow-right"></i>
+      </a>
+    </ul>
+
+    <ul class="list">
+      <a class="item item-icon-right" ui-sref="msg-list">
+        提醒设置
+        <i class="icon ion-ios-arrow-right"></i>
+      </a>
+    </ul>
+    <div class="row">
+      <div class="col padding">
+        <button class="button button-full button-assertive" ng-click="fnLogout()">
+          退出当前帐号
+        </button>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
