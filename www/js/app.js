@@ -1,3 +1,5 @@
+var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
 angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.services', 'angular-md5', 'ngStorage']).constant('BASE_URL', '/Business').constant('CLIENT_TYPE', 'vehicle_manager').constant('KEY_COMPANY', 'VMP_COMPANY').constant('KEY_TOKEN', 'VMP_TOKEN').constant('KEY_ACCOUNT', 'VMP_ACCOUNT').constant('KEY_USERNAME', 'VMP_USERNAME').constant('KEY_PASSWORD', 'VMP_PASSWORD').run(function($rootScope, $ionicPlatform, $ionicScrollDelegate, $location, $localStorage, KEY_COMPANY, KEY_TOKEN) {
   var companyCode, oToken;
   oToken = $localStorage[KEY_TOKEN];
@@ -91,7 +93,14 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
   $stateProvider.state('tab', {
     url: "",
     abstract: true,
-    templateUrl: "templates/tabs.html"
+    templateUrl: "templates/tabs.html",
+    controller: function($scope, Account) {
+      return $scope.fnGetPermission = function(role) {
+        var permission, roles;
+        roles = Account.roles();
+        return permission = indexOf.call(roles, role) >= 0;
+      };
+    }
   }).state('tab.allot', {
     url: '/allots',
     views: {

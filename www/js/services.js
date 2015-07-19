@@ -12,6 +12,17 @@ angular.module('starter.services', []).service('ErrorHandle', function() {
     }
   };
 }).service('Account', function($http, $q, $timeout, $localStorage, $filter, md5, KEY_TOKEN, KEY_ACCOUNT, ErrorHandle) {
+  var roles;
+  if ($localStorage[KEY_ACCOUNT] != null) {
+    roles = $localStorage[KEY_ACCOUNT].roles;
+  }
+
+  /*
+  获取权限列表
+   */
+  this.roles = function() {
+    return roles;
+  };
 
   /*
   登录
@@ -67,6 +78,7 @@ angular.module('starter.services', []).service('ErrorHandle', function() {
         return defer.reject(res.message);
       } else {
         $localStorage[KEY_ACCOUNT] = res;
+        roles = res.roles;
         return defer.resolve(res);
       }
     }).error(function(err, status) {
