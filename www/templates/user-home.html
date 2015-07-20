@@ -21,23 +21,19 @@
         <div class="item item-icon-left" ng-click="fnOpen()">
           <i class="icon-custom icon-clock-begin"></i>
           <label>开始</label>
-          <input type="text" class="date-picker" pick-a-date="vm.planStartTime" min-date="today"
-                 pick-a-date-options="{ container: 'body', clear: ''}"
-                 style="height: 21px;background-color: transparent;">
-          <input type="text" class="time-picker" pick-a-time="vm.planStartTime"
-                 pick-a-time-options="{ container: 'body', clear: '', format: 'HH:i'}"
-                 style="height: 21px;background-color: transparent;">
+          <span class="date-picker" ng-click="fnOpenPicker('planStartTime')"
+                 style="text-align:right;">{{vm.planStartTime | date: 'yyyy-MM-dd'}}</span>
+          <span class="time-picker" ng-click="fnOpenPicker('planStartTime', 'time')"
+                 style="margin-left: 20px;text-align:right;">{{vm.planStartTime | date: 'HH:mm'}}</span>
         </div>
         <!-- end time -->
         <div class="item item-icon-left">
           <i class="icon-custom icon-clock-finish"></i>
           <label>结束</label>
-          <input type="text" class="date-picker" pick-a-date="vm.planEndTime" min-date="today"
-                 pick-a-date-options="{ container: 'body', clear: '' }"
-                 style="height: 21px;background-color: transparent;">
-          <input type="text" class="time-picker" pick-a-time="vm.planEndTime"
-                 pick-a-time-options="{ container: 'body', clear: '', format: 'HH:i'}"
-                 style="height: 21px;background-color: transparent;">
+          <span class="date-picker" ng-click="fnOpenPicker('planEndTime')"
+                 style="text-align:right;">{{vm.planStartTime | date: 'yyyy-MM-dd'}}</span>
+          <span class="time-picker" ng-click="fnOpenPicker('planEndTime', 'time')"
+                 style="margin-left: 20px;text-align:right;">{{vm.planStartTime | date: 'HH:mm'}}</span>
         </div>
         <!-- car -->
         <div class="item item-icon-left item-icon-right">

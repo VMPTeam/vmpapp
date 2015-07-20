@@ -15,11 +15,12 @@ angular.module('starter.directives', []).directive('vmpTabs', function(Account) 
     scope: {
       lat: '=',
       lng: '=',
-      address: '='
+      address: '=',
+      onConfirm: '&'
     },
     restrict: 'E',
     link: function($scope, iElm, iAttrs, controller) {
-      var createMarker, geolocation, map, top_right_navigation;
+      var ac, createMarker, geolocation, map, top_right_navigation;
       createMarker = function(point) {
         var geoc, marker;
         marker = new BMap.Marker(point);
@@ -59,6 +60,18 @@ angular.module('starter.directives', []).directive('vmpTabs', function(Account) 
       });
       map.addControl(top_right_navigation);
       geolocation = new BMap.Geolocation();
+      ac = new BMap.Autocomplete({
+        input: 'searchInput',
+        location: map
+      });
+      ac.addEventListener('onconfirm', function(e) {
+        console.log(e.item);
+        return $timeout(function() {
+          return $scope.onConfirm({
+            address: e.item.value.city + e.item.value.district + e.item.value.business
+          });
+        });
+      });
       map.addEventListener('load', function() {
         return $ionicLoading.show({
           template: '正在加载地图,请稍后'

@@ -554,4 +554,28 @@ angular.module('starter.services', []).service('ErrorHandle', function() {
     });
     return defer.promise;
   };
+  this.suggestion = function(param) {
+    var defer, params, url;
+    defer = $q.defer();
+    url = 'http://api.map.baidu.com/place/v2/suggestion';
+    params = {
+      ak: 'C6941f690ce486f7b3a55371cb235d93',
+      region: param.region || '合肥市',
+      output: 'json',
+      query: param.q
+    };
+    $http.get(url, {
+      params: params,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }).success(function(res) {
+      if (res.status === 0) {
+        return defer.resolve(res.result);
+      } else {
+        return defer.reject('百度地图服务异常：' + res.status);
+      }
+    });
+    return defer.promise;
+  };
 });

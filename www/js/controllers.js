@@ -1471,7 +1471,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       });
     });
   };
-}).controller('User.HomeCtrl', function($scope, $ionicPopup, $filter, $ionicLoading, $localStorage, $cordovaDatePicker, $cordovaGeolocation, $ionicHistory, $stateParams, Order) {
+}).controller('User.HomeCtrl', function($scope, $ionicPopup, $filter, $ionicLoading, $localStorage, $cordovaDatePicker, $cordovaGeolocation, $ionicHistory, $stateParams, Order, Map) {
   var validate, vm;
   vm = $scope.vm = {
     planStartTime: new Date(),
@@ -1479,6 +1479,21 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     carList: $localStorage['selectedCar']
   };
   $scope.today = new Date();
+  $scope.fnOpenPicker = function(key, mode) {
+    if (mode == null) {
+      mode = 'date';
+    }
+    $cordovaDatePicker.show({
+      mode: mode,
+      date: new Date(),
+      doneButtonLabel: '确定',
+      cancelButtonLabel: '取消'
+    }).then(function(date) {
+      if (date != null) {
+        return vm[key] = date;
+      }
+    });
+  };
   $scope.fnOpen = function() {
     return $cordovaDatePicker.show({
       date: vm.today,
@@ -1563,6 +1578,21 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     delete vm.endLocLa;
     return delete vm.endLocLo;
   };
+  $scope.fnSearch = function() {
+    var data;
+    if (!vm.searchText) {
+      return;
+    }
+    data = {
+      q: vm.searchText
+    };
+    return Map.suggestion(data).then(function(res) {
+      vm.poiResults = res;
+      return vm.errorText = null;
+    }, function(msg) {
+      return vm.errorText = msg;
+    });
+  };
   $scope.fnGetLocation = function() {
     var planEndPlace, planStartPlace;
     planStartPlace = $localStorage['planStartPlace'];
@@ -1605,6 +1635,11 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       $localStorage[$stateParams.from] = vm;
       return $ionicHistory.goBack();
     }
+  };
+  $scope.fnConfirm2 = function(address) {
+    vm.address = address;
+    $localStorage[$stateParams.from] = vm;
+    return $ionicHistory.goBack();
   };
   return $scope.$on('$ionicView.enter', function() {
     $scope.fnGetLocation();

@@ -822,3 +822,6 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
   border-top: 10px solid #2f2726;
   margin: auto;
 }
+.tangram-suggestion-main {
+  z-index: 2;
+}
