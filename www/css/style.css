@@ -18,6 +18,19 @@ ion-content .icon {
   border-color: #1e93c2;
   color: #fff;
 }
+.card {
+  border-radius: 10px;
+}
+.card .item.item-text-wrap {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.card .item.item-text-wrap p {
+  margin-right: 80px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 .empty-list {
   position: absolute;
   width: 100%;
@@ -159,7 +172,7 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 }
 .order-content .text-status {
   position: absolute;
-  top: 22px;
+  top: 18px;
   right: 20px;
 }
 .order-content .text-status span {
@@ -824,4 +837,7 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 }
 .tangram-suggestion-main {
   z-index: 2;
+}
+.dw-i > div {
+  opacity: 0 !important;
 }

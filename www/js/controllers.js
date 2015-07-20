@@ -736,22 +736,8 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return vm.tab = vm.tabList[0];
     }
   };
-  $scope.fnOpenPicker = function(val, mode) {
-    if (mode == null) {
-      mode = 'date';
-    }
-    $cordovaDatePicker.show({
-      mode: mode,
-      date: vm.today,
-      maxDate: new Date(),
-      allowFutureDates: false,
-      doneButtonLabel: '确定',
-      cancelButtonLabel: '取消'
-    }).then(function(date) {
-      if (date != null) {
-        return vm.today = date;
-      }
-    });
+  $scope.fnOpenPicker = function() {
+    return vm.todayInstance.show();
   };
   $scope.fnGetCarDetail = function() {
     return Car.detail(vm.id).then(function(res) {
@@ -1007,6 +993,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     var d;
     d = new Date(date.valueOf());
     d.setDate(d.getDate() + day);
+    vm.todayInstance.setVal(vm.today, false, false, true);
     return d;
   };
   $scope.fnSetDay = function(date, day) {
@@ -1479,27 +1466,6 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     carList: $localStorage['selectedCar']
   };
   $scope.today = new Date();
-  $scope.fnOpenPicker = function(key, mode) {
-    if (mode == null) {
-      mode = 'date';
-    }
-    $cordovaDatePicker.show({
-      mode: mode,
-      date: new Date(),
-      doneButtonLabel: '确定',
-      cancelButtonLabel: '取消'
-    }).then(function(date) {
-      if (date != null) {
-        return vm[key] = date;
-      }
-    });
-  };
-  $scope.fnOpen = function() {
-    return $cordovaDatePicker.show({
-      date: vm.today,
-      allowFutureDates: false
-    });
-  };
   validate = function() {
     var msg;
     if (vm.vehicleCount == null) {
@@ -1528,6 +1494,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         $ionicPopup.alert({
           title: '开始时间不能大于结束时间'
         });
+        return;
       }
       $ionicLoading.show();
       data = angular.extend(vm);

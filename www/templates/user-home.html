@@ -21,19 +21,23 @@
         <div class="item item-icon-left" ng-click="fnOpen()">
           <i class="icon-custom icon-clock-begin"></i>
           <label>开始</label>
-          <span class="date-picker" ng-click="fnOpenPicker('planStartTime')"
-                 style="text-align:right;">{{vm.planStartTime | date: 'yyyy-MM-dd'}}</span>
-          <span class="time-picker" ng-click="fnOpenPicker('planStartTime', 'time')"
-                 style="margin-left: 20px;text-align:right;">{{vm.planStartTime | date: 'HH:mm'}}</span>
+          <input type="text" class="date-picker" readonly mobiscroll-date="vm.planStartTime"
+          mobiscroll-options="{lang: 'zh', mode: 'mixed', minDate: today, dateFormat: 'yy-mm-dd' }"
+          style="height: 21px;background-color: transparent;text-align:right;">
+          <input type="text" class="time-picker" readonly mobiscroll-time="vm.planStartTime"
+          mobiscroll-options="{lang: 'zh', mode: 'mixed', timeFormat: 'HH:ii' }"
+          style="height: 21px;background-color: transparent;text-align:left;">
         </div>
         <!-- end time -->
         <div class="item item-icon-left">
           <i class="icon-custom icon-clock-finish"></i>
           <label>结束</label>
-          <span class="date-picker" ng-click="fnOpenPicker('planEndTime')"
-                 style="text-align:right;">{{vm.planStartTime | date: 'yyyy-MM-dd'}}</span>
-          <span class="time-picker" ng-click="fnOpenPicker('planEndTime', 'time')"
-                 style="margin-left: 20px;text-align:right;">{{vm.planStartTime | date: 'HH:mm'}}</span>
+          <input type="text" class="date-picker" readonly mobiscroll-date="vm.planEndTime"
+          mobiscroll-options="{lang: 'zh', mode: 'mixed', minDate: today, dateFormat: 'yy-mm-dd' }"
+          style="height: 21px;background-color: transparent;text-align:right;">
+          <input type="text" class="time-picker" readonly mobiscroll-time="vm.planEndTime"
+          mobiscroll-options="{lang: 'zh', mode: 'mixed', timeFormat: 'HH:ii' }"
+          style="height: 21px;background-color: transparent;text-align:left;">
         </div>
         <!-- car -->
         <div class="item item-icon-left item-icon-right">
