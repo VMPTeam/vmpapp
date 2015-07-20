@@ -1,6 +1,8 @@
-<ion-view view-title="慧管车" class="bg-default">
+<ion-view view-title="慧管车" class="bg-default" cache-view="false">
   <ion-nav-buttons side="right">
-    <a class="button button-icon icon icon-message"><span class="badge badge-assertive">4</span></a>
+    <a class="button button-icon icon icon-message" ng-if="!fnGetPermission('leader') && !fnGetPermission('user')">
+      <span class="badge badge-assertive">4</span>
+    </a>
   </ion-nav-buttons>
   <ion-content>
     <ul class="list">
@@ -8,20 +10,18 @@
         <img src="img/avatar.png">
         <h2 ng-bind="::vm.account.realName"></h2>
         <p ng-bind="::vm.account.orgCode || '皖通科技'"></p>
+        <p ng-bind="::vm.account.phone || 15555111111"></p>
+        <p ng-bind="::vm.account.email"></p>
       </li>
     </ul>
     <ul class="list">
-      <li class="item">
-        手机号
-        <span class="item-note" ng-bind="::vm.account.phone"></span>
-      </li>
       <a class="item item-icon-right" ui-sref="password">
         修改密码
         <i class="icon ion-ios-arrow-right"></i>
       </a>
     </ul>
 
-    <ul class="list">
+    <ul class="list" ng-hide="::(fnGetPermission('leader') || fnGetPermission('user'))">
       <a class="item item-icon-right" ui-sref="msg-list">
         提醒设置
         <i class="icon ion-ios-arrow-right"></i>
@@ -35,4 +35,5 @@
       </div>
     </div>
   </ion-content>
+  <vmp-tabs></vmp-tabs>
 </ion-view>

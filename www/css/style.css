@@ -1,3 +1,6 @@
+a {
+  text-decoration: none !important;
+}
 .bg-black {
   background: #21292b !important;
 }
@@ -17,6 +20,19 @@ ion-content .icon {
   background-color: #cfecf9;
   border-color: #1e93c2;
   color: #fff;
+}
+.card {
+  border-radius: 10px;
+}
+.card .item.item-text-wrap {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.card .item.item-text-wrap p {
+  margin-right: 80px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .empty-list {
   position: absolute;
@@ -81,7 +97,6 @@ ion-content .icon {
 }
 .tabs-striped .tabs {
   background-color: #fff;
-  border-bottom-color: #c8edbb;
 }
 .tabs-striped .tabs .tab-item {
   border-bottom-color: #1e93c2;
@@ -160,7 +175,7 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 }
 .order-content .text-status {
   position: absolute;
-  top: 22px;
+  top: 18px;
   right: 20px;
 }
 .order-content .text-status span {
@@ -588,8 +603,8 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 .car-info-content .status .dashboard .shisu .point {
   transform: rotateZ(-105deg);
   position: absolute;
-  left: 55px;
-  top: 130px;
+  left: 75px;
+  top: 4.5vh;
   height: 90px;
 }
 .car-info-content .status .dashboard .dianya {
@@ -822,4 +837,10 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
   border-right: 10px solid transparent;
   border-top: 10px solid #2f2726;
   margin: auto;
+}
+.tangram-suggestion-main {
+  z-index: 2;
+}
+.dw-i > div {
+  opacity: 0 !important;
 }

@@ -12,6 +12,12 @@
 .item-icon-left.item-icon-right .icon-custom:last-child {
   left: auto;
 }
+.tab-item .icon-custom {
+  display: block;
+  margin: 0 auto;
+  height: 32px;
+  font-size: 32px;
+}
 .icon-custom::before {
   display: inline-block;
   width: 32px;
@@ -25,53 +31,84 @@
   vertical-align: bottom;
 }
 .icon-user::before {
-  background-image: url('../img/person.png');
+  background-image: url("../img/person.png");
 }
 .icon-lock::before {
-  background-image: url('../img/lock.png');
+  background-image: url("../img/lock.png");
 }
 .icon-end::before {
-  background-image: url('../img/end.png');
+  background-image: url("../img/end.png");
 }
 .icon-begin::before {
-  background-image: url('../img/begin.png');
+  background-image: url("../img/begin.png");
 }
 .icon-clock-begin::before {
-  background-image: url('../img/clock-begin.png');
+  background-image: url("../img/clock-begin.png");
 }
 .icon-clock-finish::before {
-  background-image: url('../img/clock-finish.png');
+  background-image: url("../img/clock-finish.png");
 }
 .icon-car::before {
-  background-image: url('../img/car.png');
+  background-image: url("../img/car.png");
 }
 .icon-passenger::before {
-  background-image: url('../img/passenger.png');
+  background-image: url("../img/passenger.png");
 }
 .icon-map::before {
-  background-image: url('../img/map.png');
+  background-image: url("../img/map.png");
 }
 .icon-order::before {
-  background-image: url('../img/order.png');
+  background-image: url("../img/order.png");
 }
 .icon-phone::before {
-  background-image: url('../img/phone.png');
+  background-image: url("../img/phone.png");
 }
-.icon-home-outline::before {
-  background-image: url('../img/1_01.png');
+.icon-tab-home::before {
+  background-image: url("../img/1_01.png");
 }
-.icon-home::before {
-  background-image: url('../img/1_09.png');
+.icon-tab-car::before {
+  background-image: url("../img/1_02.png");
 }
-.icon-gear-outline::before {
-  background-image: url('../img/1_04.png');
+.icon-tab-person::before {
+  background-image: url("../img/1_03.png");
 }
-.icon-gear::before {
-  background-image: url('../img/1_12.png');
+.icon-tab-gear::before {
+  background-image: url("../img/1_04.png");
 }
-.icon-trip-outline::before {
-  background-image: url('../img/1_07.png');
+.icon-tab-wheel::before {
+  background-image: url("../img/1_05.png");
 }
-.icon-trip::before {
-  background-image: url('../img/1_15.png');
+.icon-tab-layout::before {
+  background-image: url("../img/1_06.png");
+}
+.icon-tab-trip::before {
+  background-image: url("../img/1_07.png");
+}
+.icon-tab-order::before {
+  background-image: url("../img/1_08.png");
+}
+/*tab-item激活样式*/
+.tab-item.active .icon-tab-home::before {
+  background-image: url("../img/1_09.png");
+}
+.tab-item.active .icon-tab-car::before {
+  background-image: url("../img/1_10.png");
+}
+.tab-item.active .icon-tab-person::before {
+  background-image: url("../img/1_11.png");
+}
+.tab-item.active .icon-tab-gear::before {
+  background-image: url("../img/1_12.png");
+}
+.tab-item.active .icon-tab-wheel::before {
+  background-image: url("../img/1_13.png");
+}
+.tab-item.active .icon-tab-layout::before {
+  background-image: url("../img/1_14.png");
+}
+.tab-item.active .icon-tab-trip::before {
+  background-image: url("../img/1_15.png");
+}
+.tab-item.active .icon-tab-order::before {
+  background-image: url("../img/1_16.png");
 }

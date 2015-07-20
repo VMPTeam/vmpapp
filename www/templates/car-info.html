@@ -14,7 +14,7 @@
   </div>
   <ion-content class="car-info-content has-tabs-top" ng-class="{'map-view': vm.mapView}" ng-init="fnGetCarDetail()">
     <!--车辆跟踪-->
-    <div class="trace map-container" ng-show="vm.tab === '车辆跟踪'">
+    <div class="trace map-container" ng-show="vm.tab === '车辆跟踪'" ng-cloak>
       <div id="traceMap" class="map"></div>
       <div class="info-bar">
         <div class="row">
@@ -36,7 +36,7 @@
       </div>
     </div>
     <!--车辆状况-->
-    <div class="status" ng-show="vm.tab === '车辆状况'">
+    <div class="status" ng-show="vm.tab === '车辆状况'" ng-cloak>
       <!--仪表板-->
       <div class="dashboard">
         <!--时速-->
@@ -92,13 +92,16 @@
       </div>
     </div>
     <!--行车记录-->
-    <div class="record" ng-show="vm.tab === '行车记录'">
+    <div class="record" ng-show="vm.tab === '行车记录'" ng-cloak>
       <div class="board">
         <div class="date row">
           <div class="col" ng-click="fnSetDay(vm.today, -1)">{{fnOtherDay(vm.today, -1) | date: 'M月d日'}}</div>
-          <div class="col" style="color: #3cbd0d;" id="datePicker" ng-click="fnOpenPicker(vm.today)">
+          <div class="col" style="color: #3cbd0d;" ng-click="fnOpenPicker()">
             {{vm.today | date: 'M月d日'}}
           </div>
+          <input id="today" type="hidden" readonly mobiscroll-date ng-model="vm.today" mobiscroll-instance="vm.todayInstance"
+          mobiscroll-options="{lang: 'zh', mode: 'mixed', dateFormat: 'm月d日' }"
+          style="background-color: transparent; text-align: center; line-height: 20px; padding: 0;">
           <div class="col" ng-click="fnSetDay(vm.today, 1)">{{fnOtherDay(vm.today, 1) | date: 'M月d日'}}</div>
         </div>
         <div class="time row row-center">
@@ -138,11 +141,11 @@
       </div>
     </div>
     <!--停车分布-->
-    <div class="park map-container" ng-show="vm.tab === '停车分布'">
+    <div class="park map-container" ng-show="vm.tab === '停车分布'" ng-cloak>
       <div class="map" id="parkMap"></div>
     </div>
     <!--车辆档案-->
-    <div class="archive" ng-show="vm.tab === '车辆档案'">
+    <div class="archive" ng-show="vm.tab === '车辆档案'" ng-cloak>
       <div class="list mini">
         <div class="item">
           <span>车牌号</span>

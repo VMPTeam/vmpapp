@@ -19,7 +19,7 @@
       on-refresh="fnGetList(1)">
     </ion-refresher>
     <div class="list mini" ng-init="fnGetList()">
-      <div class="item" ng-repeat="item in vm.list">
+      <div class="item" ng-repeat="item in vm.list" ui-sref="driverDetail({id: item.driverUid})">
         {{item.driverName}}
         <!--<p>准驾车型:{{item.approvalType}}</p>-->
         <span class="item-note" ng-switch="item.status">
@@ -34,4 +34,6 @@
       immediate-check="false">
     </ion-infinite-scroll>
   </ion-content>
+  <vmp-tabs></vmp-tabs>
+
 </ion-view>

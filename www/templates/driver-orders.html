@@ -1,0 +1,42 @@
+<ion-view view-title="慧管车">
+  <ion-nav-buttons side="right">
+    <a class="button button-icon icon icon-message"><span class="badge badge-assertive">4</span></a>
+  </ion-nav-buttons>
+  <ion-content class="order-content" ng-init="fnGetList()" style="padding-top: 0;">
+    <ion-refresher
+      pulling-text="下拉刷新..."
+      on-refresh="fnGetList(1)">
+    </ion-refresher>
+    <div class="card mini" ng-repeat="item in vm.list" ui-sref="driverOrderDetail({id: item.serialNum})">
+      <div class="item item-divider">
+        <div class="user">
+          <i class="icon-custom icon-passenger icon-mini"></i>
+          <span>{{item.applicant}}</span>
+          <i class="icon-custom icon-phone icon-mini"></i>
+          <span>{{item.phone}}</span>
+        </div>
+      </div>
+      <div class="item item-text-wrap success">
+        <div>
+          <div class="place-line"></div>
+          <p>{{item.planStartPlace || '未知位置'}}</p>
+          <p>{{item.planEndPlace || '未知位置'}}</p>
+        </div>
+      </div>
+      <div class="item item-divider">
+        <div class="time">
+          <i class="icon-custom icon-clock-begin icon-mini"></i>
+          <span>{{item.planStartTime}}~{{item.planEndTime}}</span>
+          <!--<div class="btn-detail" >-->
+            <!--<span>详情</span>-->
+            <!--<i class="icon ion-ios-arrow-right"></i>-->
+          <!--</div>-->
+        </div>
+      </div>
+    </div>
+    <div class="empty-list" ng-hide="vm.list.length">
+      暂无数据
+    </div>
+  </ion-content>
+  <vmp-tabs></vmp-tabs>
+</ion-view>

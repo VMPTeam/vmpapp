@@ -1,0 +1,110 @@
+<ion-view view-title="慧管车" class="bg-default">
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
+  </ion-nav-buttons>
+  <ion-content ng-init="fnDetail()">
+    <div class="list mini" style="margin-top: 20px;">
+      <div class="item">
+        订单状态
+        <span class="item-note" ng-switch="vm.order.status">
+          <span ng-switch-when="1">审批中</span>
+          <span ng-switch-when="2">审批中</span>
+          <span ng-switch-when="3">已配车</span>
+          <span ng-switch-when="4">在途</span>
+          <span ng-switch-when="5">完成</span>
+        </span>
+      </div>
+    </div>
+    <div class="list mini">
+      <!-- end place -->
+      <div class="item item-icon-left">
+        <i class="icon-custom icon-end"></i>
+        <span>{{::vm.order.planEndPlace}}</span>
+      </div>
+      <!-- begin place -->
+      <div class="item item-icon-left">
+        <i class="icon-custom icon-begin"></i>
+        <span>{{::vm.order.planStartPlace}}</span>
+      </div>
+
+      <!-- begin time -->
+      <div class="item item-icon-left">
+        <i class="icon-custom icon-clock-begin"></i>
+        <label>开始</label>
+        <span class="item-note" ng-bind="::vm.order.planStartTime"></span>
+      </div>
+      <!-- end time -->
+      <div class="item item-icon-left">
+        <i class="icon-custom icon-clock-finish"></i>
+        <label>结束</label>
+        <span class="item-note" ng-bind="::vm.order.planEndTime"></span>
+      </div>
+      <!-- car -->
+      <div class="item item-icon-left" ng-click="vm.expand = !vm.expand">
+        <i class="icon-custom icon-car"></i>
+        <label>车辆信息</label>
+        <span class="item-note" ng-show="vm.order.driverAndVehicle.length">{{vm.expand ? '收起' : '展开'}}</span>
+      </div>
+      <div class="item item-divider" ng-show="vm.expand && vm.order.driverAndVehicle.length" ng-repeat="item in ::vm.order.driverAndVehicle">
+        <span ng-bind="::item.vehicleLic"></span>
+        <a ng-href="tel:{{item.phone}}" style="float: right;">{{::item.driver}}{{::item.phone}}</a>
+      </div>
+
+
+    </div>
+
+    <div class="list mini">
+      <div class="item item-icon-left" ng-click="vm.peopleExpand = !vm.peopleExpand">
+        <i class="icon-custom icon-passenger"></i>
+        <label>用车人员</label>
+        <span class="item-note" ng-show="vm.order.passengers.length">{{vm.peopleExpand ? '收起' : '展开'}}</span>
+      </div>
+      <div class="item item-divider" ng-show="vm.peopleExpand && vm.order.passengers.length" ng-repeat="item in ::vm.order.passengers">
+        <a ng-href="tel:{{item.phone}}" ng-bind="item.phone"></a>
+        <span ng-bind="item.name" style="float: right;"></span>
+      </div>
+      <div class="item item-icon-left">
+        <i class="icon-custom icon-order"></i>
+        <label>用车需求</label>
+        <span class="item-note" ng-bind="::vm.order.description"></span>
+      </div>
+      <div class="item" ng-show="fnIsLeader()">
+        <textarea ng-model="vm.comment" name="name" rows="2" cols="40" placeholder="审批意见"></textarea>
+      </div>
+    </div>
+
+    <div class="action-bar" ng-show="fnIsLeader() && vm.order.status == 1">
+      <div class="row padding">
+        <button class="button button-block button-balanced" style="background-color: #1E93C2; border-color: #1E93C2;" ng-click="fnApprove()">同意</button>
+      </div>
+      <div class="row padding">
+        <button class="button button-block button-outline button-assertive" ng-click="fnReject()">拒绝</button>
+      </div>
+    </div>
+
+    <div class="action-bar" ng-show="!fnIsLeader() && vm.order.status == 5">
+      <button class="button button-block" ng-disabled="vm.order.isFeedback == 1 "
+              ng-click="fnOpenModal()">反馈</button>
+    </div>
+
+  </ion-content>
+</ion-view>
+<script id="feedback-modal.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar class="bar-positive">
+      <div class="buttons">
+        <button class="button button-clear" ng-click="fnCloseModal()">
+          <i class="icon ion-ios-arrow-left"></i>
+          返回
+        </button>
+      </div>
+      <h1 class="title">意见反馈</h1>
+    </ion-header-bar>
+    <ion-content class="padding stable-bg">
+      <form name="form">
+        <textarea placeholder="请输入你的宝贵评价" ng-model="vm.feedback" rows="10" required style="width: 100%;resize: none;"></textarea>
+        <button class="button button-block button-balanced" ng-disabled="form.$invalid" ng-click="fnFeedback(vm.feedback)">提交</button>
+      </form>
+    </ion-content>
+  </ion-modal-view>
+</script>

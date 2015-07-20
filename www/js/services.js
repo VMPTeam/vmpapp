@@ -1,9 +1,12 @@
-angular.module('starter.services', []).service('ErrorHandle', function() {
+var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+angular.module('starter.services', []).service('ErrorHandle', function($rootScope) {
   var handle;
   return handle = function(status, res, defer) {
     if (status === 500) {
       return defer.reject('服务器异常');
     } else if (status === 401) {
+      $rootScope.fnReLogin();
       return defer.reject('服务器异常');
     } else if (status === 0) {
       return defer.reject('服务器无响应');
@@ -12,6 +15,27 @@ angular.module('starter.services', []).service('ErrorHandle', function() {
     }
   };
 }).service('Account', function($http, $q, $timeout, $localStorage, $filter, md5, KEY_TOKEN, KEY_ACCOUNT, ErrorHandle) {
+  var roles;
+  if ($localStorage[KEY_ACCOUNT] != null) {
+    roles = $localStorage[KEY_ACCOUNT].roles;
+  }
+
+  /*
+  获取权限列表
+   */
+  this.roles = function() {
+    return roles;
+  };
+  this.permission = function(role) {
+    var permission;
+    if (role === 'user') {
+      if (roles.length === 1 && roles[0] === role) {
+        return true;
+      }
+    } else {
+      return permission = indexOf.call(roles, role) >= 0;
+    }
+  };
 
   /*
   登录
@@ -67,6 +91,7 @@ angular.module('starter.services', []).service('ErrorHandle', function() {
         return defer.reject(res.message);
       } else {
         $localStorage[KEY_ACCOUNT] = res;
+        roles = res.roles;
         return defer.resolve(res);
       }
     }).error(function(err, status) {
@@ -138,6 +163,24 @@ angular.module('starter.services', []).service('ErrorHandle', function() {
     var defer;
     defer = $q.defer();
     $http.get('/organization/' + code).success(function(res) {
+      if (res.ret) {
+        return defer.reject(res.message);
+      } else {
+        return defer.resolve(res);
+      }
+    }).error(function(err, status) {
+      return ErrorHandle(status, err, defer);
+    });
+    return defer.promise;
+  };
+  this.weather = function(city) {
+    var defer;
+    defer = $q.defer();
+    $http.get('/weather', {
+      params: {
+        city: city
+      }
+    }).success(function(res) {
       if (res.ret) {
         return defer.reject(res.message);
       } else {
@@ -250,6 +293,24 @@ angular.module('starter.services', []).service('ErrorHandle', function() {
     $http.get('/driver/list', {
       params: data
     }).success(function(res) {
+      if (res.ret) {
+        return defer.reject(res.message);
+      } else {
+        return defer.resolve(res);
+      }
+    }).error(function(err, status) {
+      return ErrorHandle(status, err, defer);
+    });
+    return defer.promise;
+  };
+
+  /*
+  查看驾驶员详情
+   */
+  this.detail = function(id) {
+    var defer;
+    defer = $q.defer();
+    $http.get('/driver/' + id).success(function(res) {
       if (res.ret) {
         return defer.reject(res.message);
       } else {
@@ -524,6 +585,24 @@ angular.module('starter.services', []).service('ErrorHandle', function() {
     }).success(function(res) {
       if (res.status === 0) {
         return defer.resolve(res.result);
+      } else {
+        return defer.reject('百度地图服务异常：' + res.status);
+      }
+    });
+    return defer.promise;
+  };
+  this.ip = function() {
+    var defer, url;
+    defer = $q.defer();
+    url = 'http://api.map.baidu.com/location/ip';
+    $http.jsonp(url, {
+      params: {
+        ak: 'C6941f690ce486f7b3a55371cb235d93',
+        callback: 'JSON_CALLBACK'
+      }
+    }).success(function(res) {
+      if (res.status === 0) {
+        return defer.resolve(res);
       } else {
         return defer.reject('百度地图服务异常：' + res.status);
       }

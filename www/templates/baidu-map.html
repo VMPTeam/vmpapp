@@ -1,0 +1,20 @@
+<ion-view view-title="慧管车">
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-clear" ng-click="fnConfirm()">
+      确认
+    </button>
+  </ion-nav-buttons>
+  <ion-pane>
+    <baidu-map class="map" lat="vm.lat" lng="vm.lng" address="vm.address" on-confirm="fnConfirm2(address)"></baidu-map>
+    <div class="list list-inset" style="position: absolute; top: 6vh; left: 0; right: 0;">
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" id="searchInput" placeholder="搜索地点" ng-model="vm.searchText"
+        ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }" >
+      </label>
+    </div>
+  </ion-pane>
+</ion-view>

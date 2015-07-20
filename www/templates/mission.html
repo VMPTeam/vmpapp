@@ -1,0 +1,96 @@
+<ion-view view-title="慧管车" class="bg-default">
+  <ion-nav-buttons side="left">
+    <button class="button button-clear" ui-sref="alarm">事故报警</button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <a class="button button-icon icon icon-message"><span class="badge badge-assertive">4</span></a>
+  </ion-nav-buttons>
+  <ion-content class="mission-content" ng-init="fnGetList()">
+    <ion-refresher
+      pulling-text="下拉刷新..."
+      on-refresh="fnGetList()">
+    </ion-refresher>
+    <!--第一个任务订单-->
+    <div class="card detail mini" ng-show="vm.current" ui-sref="driverOrderDetail({id: vm.current.serialNum})">
+      <div class="item item-text-wrap">
+        <div class="user">
+          <i class="icon-custom icon-passenger icon-mini"></i>
+          <span ng-bind="vm.current.applicant"></span>
+          <i class="icon-custom icon-phone icon-mini"></i>
+          <span ng-bind="vm.current.phone"></span>
+        </div>
+
+        <div style="padding-left: 5px;">
+          <div class="place-line"></div>
+          <p>{{vm.current.planStartPlace || '未知位置'}}</p>
+
+          <p>{{vm.current.planEndPlace || '未知位置'}}</p>
+        </div>
+
+        <div class="time">
+          <i class="icon-custom icon-clock-begin icon-mini"></i>
+          <span>{{vm.current.planStartTime}}~{{vm.current.planEndTime}}</span>
+        </div>
+
+        <div class="car">
+          <i class="icon-custom icon-car icon-mini"></i>
+          <span>车辆牌号:</span>
+          <span ng-bind="fnConcatVehicleLic(vm.current.driverAndVehicle)"></span>
+        </div>
+
+        <div class="comment">
+          <i class="icon-custom icon-order icon-mini"></i>
+          <span>用车说明:</span>
+          <span>{{vm.current.description}}</span>
+        </div>
+
+        <div class="people">
+          <i class="icon-custom icon-passenger icon-mini"></i>
+          <span>用车人:</span>
+          <span>{{fnConcatPeople(vm.current.passengers)}}</span>
+        </div>
+
+        <div class="action-bar padding" ng-show="vm.current.status == 3">
+          <button class="button button-block button-blue" ng-click="fnBegining(vm.current.driverAndVehicle[0].orderUid, $event)">已上车</button>
+        </div>
+        <div class="action-bar padding button-bar" ng-show="vm.current.status == 4">
+          <button class="button button-blue" ng-click="fnGotoTaxList(vm.current.driverAndVehicle[0].orderUid, $event)">行车日志</button>
+          <button class="button button-blue" ng-click="fnFinish(vm.current.driverAndVehicle[0].orderUid, $event)">完成任务</button>
+        </div>
+
+      </div>
+    </div>
+    <!--剩余任务-->
+    <div class="card mini" ng-repeat="item in vm.list" ui-sref="driverOrderDetail({id: item.serialNum})">
+      <div class="item item-divider">
+        <div class="user">
+          <i class="icon-custom icon-passenger icon-mini"></i>
+          <span>{{item.applicant}}</span>
+          <i class="icon-custom icon-phone icon-mini"></i>
+          <span>{{item.phone}}</span>
+        </div>
+      </div>
+      <div class="item item-text-wrap success">
+        <div>
+          <div class="place-line"></div>
+          <p>{{item.planStartPlace || '未知位置'}}</p>
+          <p>{{item.planEndPlace || '未知位置'}}</p>
+        </div>
+      </div>
+      <div class="item item-divider">
+        <div class="time">
+          <i class="icon-custom icon-clock-begin icon-mini"></i>
+          <span>{{item.planStartTime}}~{{item.planEndTime}}</span>
+          <!--<div class="btn-detail" ui-sref="driverOrderDetail({id: item.serialNum})">-->
+            <!--<span>详情</span>-->
+            <!--<i class="icon ion-ios-arrow-right"></i>-->
+          <!--</div>-->
+        </div>
+      </div>
+    </div>
+    <div class="empty-list" ng-hide="vm.list.length">
+      暂无数据
+    </div>
+  </ion-content>
+  <vmp-tabs></vmp-tabs>
+</ion-view>

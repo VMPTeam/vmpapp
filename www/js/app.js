@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.services', 'angular-md5', 'ngStorage']).constant('BASE_URL', '/Business').constant('CLIENT_TYPE', 'vehicle_manager').constant('KEY_COMPANY', 'VMP_COMPANY').constant('KEY_TOKEN', 'VMP_TOKEN').constant('KEY_ACCOUNT', 'VMP_ACCOUNT').constant('KEY_USERNAME', 'VMP_USERNAME').constant('KEY_PASSWORD', 'VMP_PASSWORD').run(function($rootScope, $ionicPlatform, $ionicScrollDelegate, $location, $localStorage, KEY_COMPANY, KEY_TOKEN) {
+angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.services', 'starter.directives', 'starter.filters', 'angular-md5', 'mobiscroll-datetime', 'ngStorage']).constant('BASE_URL', 'http://220.178.67.250:8080/Business').constant('CLIENT_TYPE', 'vehicle_manager').constant('KEY_COMPANY', 'VMP_COMPANY').constant('KEY_TOKEN', 'VMP_TOKEN').constant('KEY_ACCOUNT', 'VMP_ACCOUNT').constant('KEY_USERNAME', 'VMP_USERNAME').constant('KEY_PASSWORD', 'VMP_PASSWORD').run(function($rootScope, $ionicPlatform, $ionicScrollDelegate, $location, $localStorage, KEY_COMPANY, KEY_TOKEN, Account) {
   var companyCode, oToken;
   oToken = $localStorage[KEY_TOKEN];
   companyCode = $localStorage[KEY_COMPANY];
@@ -6,6 +6,14 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
     $location.path('/company');
   } else if (!oToken || !oToken.access_token) {
     $location.path('/login');
+  } else {
+    if (Account.permission('vehicle_manager')) {
+      $location.path('/allots');
+    } else if (Account.permission('driver')) {
+      $location.path('/mission');
+    } else {
+      $location.path('/userhome');
+    }
   }
   $ionicPlatform.ready(function() {
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -22,6 +30,21 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
       $ionicScrollDelegate.freezeAllScrolls(false);
     }
   });
+  return;
+  return $rootScope.fnReLogin = function() {
+    var password, username;
+    username = $localStorage[KEY_USERNAME];
+    password = $localStorage[KEY_PASSWORD];
+    return Account.login(username, password).then(function() {
+      return Account.userInfo();
+    }).then(angular.loop, function(msg) {
+      delete $localStorage[KEY_TOKEN];
+      $ionicLoading.hide();
+      return $ionicPopup.alert({
+        title: msg
+      });
+    });
+  };
 }).factory('pathInterceptor', function(BASE_URL) {
   var interceptor;
   interceptor = {
@@ -88,49 +111,29 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
   $ionicConfigProvider.views.transition('none');
   $ionicConfigProvider.tabs.position('bottom');
   $ionicConfigProvider.navBar.alignTitle('center');
-  $stateProvider.state('tab', {
-    url: "",
-    abstract: true,
-    templateUrl: "templates/tabs.html"
-  }).state('tab.allot', {
+  $stateProvider.state('allot', {
     url: '/allots',
-    views: {
-      'tab-allot': {
-        templateUrl: 'templates/allot.html',
-        controller: 'AllotCtrl'
-      }
-    }
-  }).state('tab.car', {
+    templateUrl: 'templates/allot.html',
+    controller: 'AllotCtrl'
+  }).state('car', {
     url: '/car',
-    views: {
-      'tab-car': {
-        templateUrl: 'templates/tab-car.html',
-        controller: 'CarCtrl'
-      }
-    }
-  }).state('tab.report', {
+    templateUrl: 'templates/tab-car.html',
+    controller: 'CarCtrl'
+  }).state('report', {
     url: '/reports',
-    views: {
-      'tab-report': {
-        templateUrl: 'templates/tab-report.html'
-      }
-    }
-  }).state('tab.driver', {
-    url: '/driver',
-    views: {
-      'tab-driver': {
-        templateUrl: 'templates/tab-driver.html',
-        controller: 'DriverCtrl'
-      }
-    }
-  }).state('tab.account', {
+    templateUrl: 'templates/tab-report.html'
+  }).state('driver', {
+    url: '/driverlist',
+    templateUrl: 'templates/tab-driver.html',
+    controller: 'DriverCtrl'
+  }).state('driverDetail', {
+    url: '/driverdetail/:id',
+    templateUrl: 'templates/driver-detail.html',
+    controller: 'DriverCtrl'
+  }).state('account', {
     url: '/account',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/account.html',
-        controller: 'AccountCtrl'
-      }
-    }
+    templateUrl: 'templates/account.html',
+    controller: 'AccountCtrl'
   }).state('password', {
     url: '/password',
     templateUrl: 'templates/setting-password.html',
@@ -183,6 +186,54 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
     url: '/areacar',
     templateUrl: 'templates/area-carlist.html',
     controller: 'AreaCtrl'
+  }).state('mission', {
+    url: '/mission',
+    templateUrl: 'templates/mission.html',
+    controller: 'MissionCtrl'
+  }).state('tax', {
+    url: '/tax/:taxId',
+    templateUrl: 'templates/tax-list.html',
+    controller: 'MissionCtrl'
+  }).state('addTax', {
+    url: '/tax/:taxId/add',
+    templateUrl: 'templates/tax.html',
+    controller: 'MissionCtrl'
+  }).state('alarm', {
+    url: '/alarm',
+    templateUrl: 'templates/alarm.html',
+    controller: 'MissionCtrl'
+  }).state('driverOrders', {
+    url: '/driverorders',
+    templateUrl: 'templates/driver-orders.html',
+    controller: 'Driver.OrderCtrl'
+  }).state('driverOrderDetail', {
+    url: '/driverorder/:id',
+    templateUrl: 'templates/driver-order-detail.html',
+    controller: 'Driver.OrderCtrl'
+  }).state('userHome', {
+    url: '/userhome?from&lat&lng&address',
+    templateUrl: 'templates/user-home.html',
+    controller: 'User.HomeCtrl'
+  }).state('map', {
+    url: '/map?from',
+    templateUrl: 'templates/baidu-map.html',
+    controller: 'User.HomeCtrl'
+  }).state('userCars', {
+    url: '/usercars',
+    templateUrl: 'templates/user-car-list.html',
+    controller: 'User.CarCtrl'
+  }).state('userPeoples', {
+    url: '/userPeoples',
+    templateUrl: 'templates/people-list.html',
+    controller: 'User.PeopleCtrl'
+  }).state('userOrders', {
+    url: '/userorders',
+    templateUrl: 'templates/user-orders.html',
+    controller: 'User.OrderCtrl'
+  }).state('userOrderDetail', {
+    url: '/userorder/:id',
+    templateUrl: 'templates/user-order-detail.html',
+    controller: 'User.OrderDetailCtrl'
   });
   $urlRouterProvider.otherwise('/');
   $httpProvider.interceptors.push('pathInterceptor');
