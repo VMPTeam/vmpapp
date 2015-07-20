@@ -1,43 +1,29 @@
-<ion-view view-title="慧管车" style="background: #f0eff4;">
+<ion-view view-title="慧管车" class="bg-default">
   <ion-nav-buttons side="left">
     <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
   </ion-nav-buttons>
-  <ion-content class="alarm-content padding">
-      <div class="archive" ng-show="vm.tab === '车辆档案'" ng-cloak>
-        <div class="list mini">
-          <div class="item">
-            <span>车牌号</span>
-            <span class="item-note">{{vm.info.vehicleLic}}</span>
-          </div>
-          <div class="item">
-            <span>车辆别名</span>
-            <span class="item-note">{{vm.info.vehicleNickName}}</span>
-          </div>
-          <div class="item">
-            <span>品牌和车型</span>
-            <span class="item-note">{{vm.info.vehicleType}}</span>
-          </div>
-          <div class="item">
-            <span>所属部门</span>
-            <span class="item-note">{{vm.info.deptName}}</span>
-          </div>
-          <div class="item">
-            <span>当前里程</span>
-            <span class="item-note">{{vm.info.displayDistance}}</span>
-          </div>
-          <div class="item">
-            <span>保养里程间隔</span>
-            <span class="item-note">{{vm.info.displayDistance}}</span>
-          </div>
-          <div class="item">
-            <span>保险日期</span>
-            <span class="item-note">{{vm.info.vehicleAuditTime}}</span>
-          </div>
-          <div class="item">
-            <span>年检日期</span>
-            <span class="item-note">{{vm.info.vehicleAuditTime}}</span>
-          </div>
-        </div>
+  <ion-content ng-init="fnDetail(vm.id)">
+    <div class="list mini">
+      <div class="item">
+        <span>姓名</span>
+        <span class="item-note">{{vm.driver.realName}}</span>
       </div>
+      <div class="item">
+        <span>部门</span>
+        <span class="item-note">{{vm.driver.deptName}}</span>
+      </div>
+      <div class="item">
+        <span>电话</span>
+        <span class="item-note">{{vm.driver.phone}}</span>
+      </div>
+      <div class="item">
+        <span>所属部门</span>
+        <span class="item-note">{{vm.driver.deptName}}</span>
+      </div>
+      <div class="item">
+        <span>牌照</span>
+        <span class="item-note">{{vm.driver.approvalType}}</span>
+      </div>
+    </div>
   </ion-content>
 </ion-view>

@@ -262,9 +262,10 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     pageStart: 1,
     pageCount: 10,
     search: '',
-    hasMore: true
+    hasMore: true,
+    id: $stateParams.id
   };
-  return $scope.fnGetList = function(concat) {
+  $scope.fnGetList = function(concat) {
     var data;
     if (concat == null) {
       concat = false;
@@ -300,6 +301,18 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     })["finally"](function() {
       $scope.$broadcast('scroll.refreshComplete');
       return $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
+  };
+  return $scope.fnDetail = function(id) {
+    $ionicLoading.show();
+    return Driver.detail(id).then(function(res) {
+      $ionicLoading.hide();
+      return vm.driver = res;
+    }, function(msg) {
+      $ionicLoading.hide();
+      return $ionicPopup.alert({
+        title: msg
+      });
     });
   };
 }).controller('AccountCtrl', function($scope, $state, $ionicLoading, $ionicPopup, $localStorage, $cordovaGeolocation, Account, KEY_COMPANY, KEY_TOKEN, KEY_USERNAME, KEY_PASSWORD, KEY_ACCOUNT, CLIENT_TYPE) {

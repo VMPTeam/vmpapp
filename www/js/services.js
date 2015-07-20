@@ -1,11 +1,12 @@
 var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-angular.module('starter.services', []).service('ErrorHandle', function() {
+angular.module('starter.services', []).service('ErrorHandle', function($rootScope) {
   var handle;
   return handle = function(status, res, defer) {
     if (status === 500) {
       return defer.reject('服务器异常');
     } else if (status === 401) {
+      $rootScope.fnReLogin();
       return defer.reject('服务器异常');
     } else if (status === 0) {
       return defer.reject('服务器无响应');
@@ -274,6 +275,24 @@ angular.module('starter.services', []).service('ErrorHandle', function() {
     $http.get('/driver/list', {
       params: data
     }).success(function(res) {
+      if (res.ret) {
+        return defer.reject(res.message);
+      } else {
+        return defer.resolve(res);
+      }
+    }).error(function(err, status) {
+      return ErrorHandle(status, err, defer);
+    });
+    return defer.promise;
+  };
+
+  /*
+  查看驾驶员详情
+   */
+  this.detail = function(id) {
+    var defer;
+    defer = $q.defer();
+    $http.post('/driver/' + id).success(function(res) {
       if (res.ret) {
         return defer.reject(res.message);
       } else {

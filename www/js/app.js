@@ -30,6 +30,21 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
       $ionicScrollDelegate.freezeAllScrolls(false);
     }
   });
+  return;
+  return $rootScope.fnReLogin = function() {
+    var password, username;
+    username = $localStorage[KEY_USERNAME];
+    password = $localStorage[KEY_PASSWORD];
+    return Account.login(username, password).then(function() {
+      return Account.userInfo();
+    }).then(angular.loop, function(msg) {
+      delete $localStorage[KEY_TOKEN];
+      $ionicLoading.hide();
+      return $ionicPopup.alert({
+        title: msg
+      });
+    });
+  };
 }).factory('pathInterceptor', function(BASE_URL) {
   var interceptor;
   interceptor = {
@@ -108,8 +123,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
     url: '/reports',
     templateUrl: 'templates/tab-report.html'
   }).state('driver', {
-    url: '/driver',
+    url: '/driverlist',
     templateUrl: 'templates/tab-driver.html',
+    controller: 'DriverCtrl'
+  }).state('driverDetail', {
+    url: '/driverdetail/:id',
+    templateUrl: 'templates/driver-detail.html',
     controller: 'DriverCtrl'
   }).state('account', {
     url: '/account',
