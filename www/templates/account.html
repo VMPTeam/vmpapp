@@ -10,13 +10,11 @@
         <img src="img/avatar.png">
         <h2 ng-bind="::vm.account.realName"></h2>
         <p ng-bind="::vm.account.orgCode || '皖通科技'"></p>
+        <p ng-bind="::vm.account.phone || 15555111111"></p>
+        <p ng-bind="::vm.account.email"></p>
       </li>
     </ul>
     <ul class="list">
-      <li class="item">
-        手机号
-        <span class="item-note" ng-bind="::vm.account.phone"></span>
-      </li>
       <a class="item item-icon-right" ui-sref="password">
         修改密码
         <i class="icon ion-ios-arrow-right"></i>
