@@ -173,6 +173,24 @@ angular.module('starter.services', []).service('ErrorHandle', function($rootScop
     });
     return defer.promise;
   };
+  this.weather = function(city) {
+    var defer;
+    defer = $q.defer();
+    $http.get('/weather', {
+      params: {
+        city: city
+      }
+    }).success(function(res) {
+      if (res.ret) {
+        return defer.reject(res.message);
+      } else {
+        return defer.resolve(res);
+      }
+    }).error(function(err, status) {
+      return ErrorHandle(status, err, defer);
+    });
+    return defer.promise;
+  };
 }).service('Car', function($http, $q, ErrorHandle) {
 
   /*
@@ -292,7 +310,7 @@ angular.module('starter.services', []).service('ErrorHandle', function($rootScop
   this.detail = function(id) {
     var defer;
     defer = $q.defer();
-    $http.post('/driver/' + id).success(function(res) {
+    $http.get('/driver/' + id).success(function(res) {
       if (res.ret) {
         return defer.reject(res.message);
       } else {
@@ -573,24 +591,18 @@ angular.module('starter.services', []).service('ErrorHandle', function($rootScop
     });
     return defer.promise;
   };
-  this.suggestion = function(param) {
-    var defer, params, url;
+  this.ip = function() {
+    var defer, url;
     defer = $q.defer();
-    url = 'http://api.map.baidu.com/place/v2/suggestion';
-    params = {
-      ak: 'C6941f690ce486f7b3a55371cb235d93',
-      region: param.region || '合肥市',
-      output: 'json',
-      query: param.q
-    };
-    $http.get(url, {
-      params: params,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+    url = 'http://api.map.baidu.com/location/ip';
+    $http.jsonp(url, {
+      params: {
+        ak: 'C6941f690ce486f7b3a55371cb235d93',
+        callback: 'JSON_CALLBACK'
       }
     }).success(function(res) {
       if (res.status === 0) {
-        return defer.resolve(res.result);
+        return defer.resolve(res);
       } else {
         return defer.reject('百度地图服务异常：' + res.status);
       }

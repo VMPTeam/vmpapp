@@ -1,6 +1,6 @@
 var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-angular.module('starter.controllers', []).controller('AllotCtrl', function($scope, $state, $ionicPopup, $filter, $ionicLoading, $localStorage, $cordovaGeolocation, Order) {
+angular.module('starter.controllers', []).controller('AllotCtrl', function($scope, $state, $ionicPopup, $filter, $ionicLoading, $localStorage, $cordovaGeolocation, Order, Account, Map) {
   var vm;
   vm = $scope.vm = {
     list: [],
@@ -12,7 +12,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   /*
   获取任务订单
    */
-  return $scope.fnGetList = function(concat) {
+  $scope.fnGetList = function(concat) {
     if (concat == null) {
       concat = false;
     }
@@ -42,6 +42,19 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     })["finally"](function() {
       $scope.$broadcast('scroll.refreshComplete');
       return $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
+  };
+  return $scope.fnWeather = function() {
+    return Map.ip().then(function(res) {
+      vm.city = res.content.address_detail.city;
+      return Account.weather(vm.city).then(function(res) {
+        var date, substr;
+        date = res.today.date;
+        substr = date.substr(date.indexOf('实时：'));
+        substr = substr.match(/\d+/g)[0];
+        res.today.temp = substr;
+        return vm.weather = res;
+      });
     });
   };
 }).controller('CarCtrl', function($scope, $state, $stateParams, $timeout, $filter, $http, Car, Map, $ionicPopup, $localStorage, $ionicLoading, $ionicScrollDelegate) {
