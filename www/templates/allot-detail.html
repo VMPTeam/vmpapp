@@ -3,7 +3,7 @@
     <a class="button icon-left ion-ios-arrow-back button-clear" ui-sref="tab.allot">返回</a>
   </ion-nav-buttons>
   <!--<div class="bar bar-subheader">-->
-    <div class="tabs-striped tabs-top tabs-background-stable" ng-if="vm.orderList.length">
+    <div class="tabs-striped tabs-top tabs-background-stable">
       <div class="tabs">
         <!--<ion-scroll direction="x" style="width: 100%;">-->
           <div class="tab-item"
@@ -17,7 +17,7 @@
     </div>
   <!--</div>-->
 
-  <ion-content ng-init="fnDetail()" ng-class="{ 'has-tabs-top': vm.orderList.length}">
+  <ion-content ng-init="fnDetail()" class="has-tabs-top">
     <div class="list mini" ng-init="vm.orderExpand = true">
       <div class="item" ng-click="vm.orderExpand = !vm.orderExpand">
         订单状态
