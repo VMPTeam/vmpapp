@@ -2077,40 +2077,34 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     myChart.setOption(option);
   };
   $scope.fnLoadData = function() {
-    require.config({
-      paths: {
-        echarts: 'http://echarts.baidu.com/build/dist'
-      }
-    });
-    require(['echarts', 'echarts/chart/bar', 'echarts/chart/line'], function(ec) {
-      myChart = ec.init(document.getElementById('main'), 'macarons');
-      option = {
-        tooltip: {
-          show: true
-        },
-        legend: {
-          data: ['06月 日耗油费统计柱图']
-        },
-        xAxis: [
-          {
-            type: 'category',
-            data: ['', '', '3', '', '', '6', '', '', '9', '', '', '12', '', '', '15', '', '', '18', '', '', '21', '', '', '24', '', '', '27', '', '', '30']
-          }
-        ],
-        yAxis: [
-          {
-            type: 'value'
-          }
-        ],
-        series: [
-          {
-            'name': '日耗油费',
-            'type': 'bar',
-            'data': [5, 20, 40, 10, 220, 131, 123, 43, 40, 10, 220, 131, 123, 43, 220, 131, 123, 43, 220, 131, 123, 43, 220, 131, 123, 43, 220, 131, 123, 43]
-          }
-        ]
-      };
-      myChart.setOption(option);
-    });
+    myChart = echarts.init(document.getElementById('main'), 'macarons');
+    option = {
+      tooltip: {
+        show: true
+      },
+      legend: {
+        data: ['06月 日耗油费统计柱图']
+      },
+      xAxis: [
+        {
+          type: 'category',
+          data: ['', '', '3', '', '', '6', '', '', '9', '', '', '12', '', '', '15', '', '', '18', '', '', '21', '', '', '24', '', '', '27', '', '', '30']
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          'name': '日耗油费',
+          'type': 'bar',
+          'data': [5, 20, 40, 10, 220, 131, 123, 43, 40, 10, 220, 131, 123, 43, 220, 131, 123, 43, 220, 131, 123, 43, 220, 131, 123, 43, 220, 131, 123, 43]
+        }
+      ]
+    };
+    myChart.setOption(option);
   };
+  return;
 });
