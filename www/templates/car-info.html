@@ -3,16 +3,23 @@
     <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
   </ion-nav-buttons>
   <div class="tabs-striped tabs-top tabs-background-stable">
-    <div class="tabs" ng-init="fnInitTab()">
-      <div class="tab-item"
+    <div class="tabs tabs-icon-top" ng-init="fnInitTab()" style="height: 55px;">
+      <div class="tab-item" style="padding-top: 4px;"
            ng-repeat="tab in vm.tabList"
-           ng-bind="tab"
            ng-class="{active: tab === vm.tab}"
            ng-click="vm.tab = vm.tabList[$index]"
-        ></div>
+        >
+      <i class="icon-custom" ng-class="{'icon-tab-car-info': tab == '车辆档案',
+       'icon-tab-car-record': tab == '行车记录',
+       'icon-tab-car-trace': tab == '车辆跟踪',
+       'icon-tab-car-status': tab == '车辆状况',
+       'icon-tab-car-park': tab == '停车分布'}"></i>
+      {{tab}}
+    </div>
     </div>
   </div>
-  <ion-content class="car-info-content has-tabs-top" ng-class="{'map-view': vm.mapView}" ng-init="fnGetCarDetail()">
+  <ion-content class="car-info-content has-tabs-top" style="top: 100px;"
+   ng-class="{'map-view': vm.mapView}" ng-init="fnGetCarDetail()">
     <!--车辆跟踪-->
     <div class="trace map-container" ng-show="vm.tab === '车辆跟踪'" ng-cloak>
       <div id="traceMap" class="map"></div>
@@ -100,9 +107,9 @@
             {{vm.today | date: 'M月d日'}}
           </div>
           <input id="today" type="hidden" readonly mobiscroll-date ng-model="vm.today" mobiscroll-instance="vm.todayInstance"
-          mobiscroll-options="{lang: 'zh', mode: 'mixed', dateFormat: 'm月d日' }"
+          mobiscroll-options="{lang: 'zh', mode: 'mixed', maxDate: today, dateFormat: 'm月d日' }"
           style="background-color: transparent; text-align: center; line-height: 20px; padding: 0;">
-          <div class="col" ng-click="fnSetDay(vm.today, 1)">{{fnOtherDay(vm.today, 1) | date: 'M月d日'}}</div>
+          <div class="col" ng-hide="fnCanNextDay()" ng-click="fnSetDay(vm.today, 1)">{{fnOtherDay(vm.today, 1) | date: 'M月d日'}}</div>
         </div>
         <div class="time row row-center">
           <!--<div class="col col-25" style="text-align: right;" ng-click="fnOpenPicker(vm.beginTime, 'time')">{{vm.beginTime | date: 'HH:mm'}}</div>-->

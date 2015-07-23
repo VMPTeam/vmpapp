@@ -6,32 +6,32 @@
       <div class="col col-67 left">
         <!--上层-->
         <div class="row up">
-          <div class="col card" style="background-color: #f9b72c;">
-            <p class="label">待处理</p>
-            <p class="num">6</p>
-          </div>
-          <div class="col card" style="background-color: #8fc73e;">
-            <p class="label">已配车</p>
-            <p class="num">12</p>
-          </div>
-          <div class="col card" style="background-color: #6ec9eb;">
-            <p class="label">在途中</p>
-            <p class="num">9</p>
-          </div>
-        </div>
-        <!--下层-->
-        <div class="row down">
-          <div class="col card fix" style="background-color: #f74c30;">
+          <div class="col card fix" ui-sref="messages({type: 1})">
             <p class="label">维修</p>
             <p class="num">2</p>
           </div>
-          <div class="col card rule" style="background-color: #24b5ed;">
+          <div class="col card rule" ui-sref="messages({type: 2})">
             <p class="label">违章</p>
             <p class="num">8</p>
           </div>
-          <div class="col card exception" style="background-color: #edcd06;">
+          <div class="col card exception" ui-sref="messages({type: 3})">
             <p class="label">异常</p>
             <p class="num">1</p>
+          </div>
+        </div>
+        <!--下层-->
+        <div class="row down" ng-init="fnGetMsgCount()">
+          <div class="col card">
+            <p class="label">待处理</p>
+            <p class="num">6</p>
+          </div>
+          <div class="col card">
+            <p class="label">已配车</p>
+            <p class="num">12</p>
+          </div>
+          <div class="col card">
+            <p class="label">在途中</p>
+            <p class="num">9</p>
           </div>
         </div>
       </div>

@@ -1,0 +1,14 @@
+<ion-view view-title="慧管车" class="bg-default">
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
+  </ion-nav-buttons>
+  <ion-content class="" ng-init="fnDetail()">
+    <div class="list mini">
+      <div class="item">
+        <h2>车牌号:{{vm.msg.vehicleLic}}</h2>
+        <span>提醒类型:{{vm.msg.messageType}}</span>
+      </div>
+      <p style="text-align: center">{{vm.msg.text}}</p>
+    </div>
+  </ion-content>
+</ion-view>

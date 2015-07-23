@@ -7,7 +7,7 @@
   </ion-nav-buttons>
   <ion-content>
     <div class="list" ng-init="fnGetList()">
-      <div class="item item-icon-right" ng-repeat="item in vm.list">
+      <div class="item item-icon-right" ng-repeat="item in vm.list" ng-click="fnShowSheet(item)">
         {{item.name}}
         <i class="icon ion-ios-arrow-right"></i>
       </div>

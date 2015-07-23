@@ -21,14 +21,14 @@ ion-content .icon {
   border-color: #1e93c2;
   color: #fff;
 }
-.card {
+.card.mini {
   border-radius: 10px;
 }
-.card .item.item-text-wrap {
+.card.mini .item.item-text-wrap {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
-.card .item.item-text-wrap p {
+.card.mini .item.item-text-wrap p {
   margin-right: 80px;
   overflow: hidden;
   white-space: nowrap;
@@ -417,34 +417,16 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 }
 .info-bar-header .left > .row > .col {
   padding: 4px 0;
-  height: 56px;
+  height: 59px;
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
   position: relative;
-  margin: 2px;
+  margin: 1px;
+  box-shadow: none;
+  background-color: #1cc1f4;
 }
 .info-bar-header .left > .row > .col .num {
   letter-spacing: 1px;
-}
-.info-bar-header .up .card {
-  background-image: url('../img/grid_car.png');
-  background-repeat: no-repeat;
-  background-position: left top;
-  background-size: 50%;
-}
-.info-bar-header .down .card {
-  background-repeat: no-repeat;
-  background-position: left top;
-  background-size: 50%;
-}
-.info-bar-header .down .card.fix {
-  background-image: url('../img/grid_2.png');
-}
-.info-bar-header .down .card.rule {
-  background-image: url('../img/grid_3.png');
-}
-.info-bar-header .down .card.exception {
-  background-image: url('../img/grid_4.png');
 }
 .info-bar-header .right {
   border-left: 1px solid #f6f6f6;
@@ -478,13 +460,18 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 }
 .info-bar-header .label {
   position: absolute;
-  bottom: 0;
-  right: 4px;
+  bottom: 4px;
+  left: 0;
+  width: 100%;
+  text-align: center;
 }
 .info-bar-header .num {
   position: absolute;
-  top: 0;
-  right: 4px;
+  top: 6px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
 }
 .info-bar-header .red {
   color: #ff4e4e;

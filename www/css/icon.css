@@ -87,6 +87,21 @@
 .icon-tab-order::before {
   background-image: url("../img/1_08.png");
 }
+.icon-tab-car-info::before {
+  background-image: url("../img/car-detail12_29.png");
+}
+.icon-tab-car-record::before {
+  background-image: url("../img/car-detail12_31.png");
+}
+.icon-tab-car-trace::before {
+  background-image: url("../img/car-detail12_33.png");
+}
+.icon-tab-car-status::before {
+  background-image: url("../img/car-detail12_35.png");
+}
+.icon-tab-car-park::before {
+  background-image: url("../img/car-detail12_37.png");
+}
 /*tab-item激活样式*/
 .tab-item.active .icon-tab-home::before {
   background-image: url("../img/1_09.png");

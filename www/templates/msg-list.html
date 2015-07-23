@@ -1,0 +1,31 @@
+<ion-view view-title="慧管车" class="bg-default">
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
+  </ion-nav-buttons>
+  <div class="tabs-striped tabs-top tabs-background-stable">
+    <div class="tabs" ng-init="fnGetMsgList()">
+      <div class="tab-item"
+           ng-repeat="tab in vm.tabs"
+           ng-bind="tab.name"
+           ng-class="{active: tab.id === vm.currentTab}"
+           ng-click="fnGetMsgList(tab.id)"
+        ></div>
+    </div>
+  </div>
+  <ion-content class="order-content has-header">
+    <ion-refresher
+      pulling-text="下拉刷新..."
+      on-refresh="fnGetMsgList()">
+    </ion-refresher>
+    <div class="list mini">
+      <div class="item item-icon-right" ng-repeat="item in vm.list" ui-sref="messageDetail({messageUid: item.messageUid})">
+        <h2>车牌号:{{item.vehicleLic}}</h2>
+        <span>提醒类型:{{item.messageType}}</span>
+        <i class="icon ion-ios-arrow-right"></i>
+      </div>
+    </div>
+    <div class="empty-list" ng-hide="vm.list.length">
+      暂无数据
+    </div>
+  </ion-content>
+</ion-view>

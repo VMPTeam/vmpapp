@@ -30,46 +30,49 @@
           <span class="item-note" ng-hide="fnGetSelectedCar().length">未选择</span>
           <span class="item-note" ng-show="fnGetSelectedCar().length">已选择</span>
         </a>
-        <label class="item" ng-click="fnOpenPicker('startTime')">
+        <label class="item item-input">
           <span class="">开始时间</span>
-          <span class="item-note" ng-bind="vm.formData.startTime | date: 'HH:mm'">已选择</span>
+          <input type="text" class="time-picker" mobiscroll-time="vm.formData.startTime"
+          mobiscroll-options="{lang: 'zh', mode: 'mixed', timeFormat: 'HH:ii' }"
+          style="text-align: right; background-color: transparent;">
         </label>
-        <label class="item" ng-click="fnOpenPicker('endTime')">
+        <label class="item item-input">
           <span class="">结束时间</span>
-          <span class="item-note" ng-bind="vm.formData.endTime | date: 'HH:mm'">已选择</span>
+          <input type="text" class="time-picker" mobiscroll-time="vm.formData.endTime"
+          mobiscroll-options="{lang: 'zh', mode: 'mixed', timeFormat: 'HH:ii' }"
+          style="text-align: right; background-color: transparent;">
         </label>
       </div>
     </form>
     <div class="list mini" ng-if="vm.id">
-      <label class="item item-input" style="height: 44px;">
-        <span class="input-label">栅栏名称</span>
-        <span ng-bind="vm.formData.name" style="text-align: right;">
-      </label>
+      <div class="item">
+        栅栏名称
+        <span class="item-note" ng-bind="vm.formData.name">
+      </div>
       <a class="item" ui-sref="areaMap({id: vm.id})">
-        <span class="">监控区域</span>
+        监控区域
         <span class="item-note">已选择</span>
       </a>
-      <label class="item item-input item-select select-clear" style="height: 44px;">
-        <span class="input-label">触发方式</span>
-        <span ng-switch="vm.formData.trigger">
-          <span ng-switch-when="0">驶出</span>
-          <span ng-switch-when="1">驶入</span>
-          <span ng-switch-when="2">驶入驶出</span>
+      <div class="item">
+        触发方式
+        <span class="item-note" ng-switch="vm.formData.trigger">
+          <span class="item-note" ng-switch-when="0">驶出</span>
+          <span class="item-note" ng-switch-when="1">驶入</span>
+          <span class="item-note" ng-switch-when="2">驶入驶出</span>
         </select>
-      </label>
-      <label class="item">
-        <span class="">监控车辆</span>
-        <span class="item-note" ng-hide="vm.formData.vehicles.length">未选择</span>
-        <span class="item-note" ng-show="vm.formData.vehicles.length">已选择</span>
-      </label>
-      <label class="item">
-        <span class="">开始时间</span>
+      </div>
+      <div class="item">
+        监控车辆
+        <span class="item-note" ng-bind="vm.formData.vehicles.length + '辆'"></span>
+      </div>
+      <div class="item">
+        开始时间
         <span class="item-note" ng-bind="vm.formData.startTime | date: 'HH:mm'"></span>
-      </label>
-      <label class="item">
-        <span class="">结束时间</span>
+      </div>
+      <div class="item">
+        结束时间
         <span class="item-note" ng-bind="vm.formData.endTime | date: 'HH:mm'"></span>
-      </label>
+      </div>
     </div>
   </ion-content>
 </ion-view>
