@@ -1433,13 +1433,15 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       });
     });
   };
-}).controller('MissionCtrl', function($scope, $state, $stateParams, $filter, $ionicLoading, $ionicPopup, Order) {
+}).controller('MissionCtrl', function($scope, $state, $stateParams, $filter, $ionicLoading, $ionicPopup, $localStorage, Order, Account, Car, Map, KEY_ACCOUNT) {
   var vm;
   vm = $scope.vm = {
     current: null,
     list: [],
     isBegin: false,
     taxId: $stateParams.taxId,
+    account: $localStorage[KEY_ACCOUNT],
+    retryTime: 3,
     tax: {
       costTime: new Date()
     }
@@ -1605,13 +1607,50 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       });
     });
   };
+  $scope.fnGetLocation = function() {
+    return Account.getLocation().then(function(res) {
+      vm.locLo = res.lng;
+      vm.locLa = res.lat;
+      return Map.geoCoder([vm.locLa, vm.locLo]).then(function(res) {
+        return vm.location = res.sematic_description;
+      });
+    }, function(err) {
+      if (vm.retryTime > 0) {
+        vm.retryTime--;
+        return $scope.fnGetLocation();
+      } else {
+        return vm.text = '无法获取事故地点,请手动填写';
+      }
+    });
+  };
 
   /*
   事故报警
    */
   $scope.fnAlarm = function() {
-    return $ionicPopup.alert({
-      title: '事故报警成功'
+    return $ionicPopup.confirm({
+      title: '是否确认?'
+    }).then(function(flag) {
+      var data;
+      if (flag) {
+        data = {
+          location: vm.location,
+          locLo: vm.locLo,
+          locLa: vm.locLa,
+          vehicleLic: vm.vehicleLic,
+          accidentDesc: vm.accidentDesc,
+          driverName: vm.account.realName
+        };
+        return Car.rescue(data).then(function() {
+          return $ionicPopup.alert({
+            title: '救援成功!'
+          });
+        }, function(msg) {
+          return $ionicPopup.alert({
+            title: msg
+          });
+        });
+      }
     });
   };
 }).controller('Driver.OrderCtrl', function($scope, $state, $stateParams, $ionicLoading, $localStorage, $ionicPopup, Order, KEY_ACCOUNT) {

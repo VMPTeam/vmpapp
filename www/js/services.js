@@ -325,6 +325,24 @@ angular.module('starter.services', []).service('ErrorHandle', function($state) {
     });
     return defer.promise;
   };
+
+  /*
+  应急救援
+   */
+  this.rescue = function(param) {
+    var defer;
+    defer = $q.defer();
+    $http.post('/vehicle/rescue', param).success(function(res) {
+      if (res.ret) {
+        return defer.reject(res.message);
+      } else {
+        return defer.resolve(res);
+      }
+    }).error(function(err, status) {
+      return ErrorHandle(status, err, defer);
+    });
+    return defer.promise;
+  };
 }).service('Driver', function($http, $q, ErrorHandle) {
   this.list = function(data) {
     var defer;

@@ -248,10 +248,6 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 .order-content .card .icon.ion-clipboard {
   margin-right: 4px;
 }
-.mission-content .card .action-bar,
-.order-content .card .action-bar {
-  padding-bottom: 0;
-}
 .mission-content .card .action-bar .button,
 .order-content .card .action-bar .button {
   margin-bottom: 0;

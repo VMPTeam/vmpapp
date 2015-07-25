@@ -1,13 +1,18 @@
-<ion-view view-title="事故报警" style="background: #f0eff4;">
+<ion-view view-title="慧管车" style="background: #f0eff4;">
   <ion-nav-buttons side="left">
     <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
   </ion-nav-buttons>
   <ion-content class="alarm-content padding">
-    <h4 class="alarm-title">确认报警?</h4>
-    <div class="content">
-      <p>事故报警为紧急情况</p>
-      <p>报警救援功能,请谨慎使用</p>
-    </div>
-    <button class="button button-block button-assertive" ng-click="fnAlarm()">立即报警</button>
+    <form name="form">
+      <h4 class="alarm-title">确认救援?</h4>
+      <div class="content">
+        <p>应急救援为紧急情况</p>
+        <p>应急救援功能,请谨慎使用</p>
+        <input type="text" ng-model="vm.vehicleLic" placeholder="请填写车牌号" style="width: 100%; text-align: center;margin-top: 12px;" name="vehicleLic" required>
+        <input type="text" ng-model="vm.location" placeholder="{{vm.text || '正在获取事故地点...'}}" style="width: 100%; text-align: center;margin-top: 12px;" ng-init="fnGetLocation()" name="location" required>
+        <textarea ng-model="vm.accidentDesc" cols="30" rows="4" style="margin-top: 14px; width: 100%;" placeholder="请填写事故描述" name="accidentDesc" required></textarea>
+      </div>
+      <button class="button button-block button-assertive" ng-disabled="form.$invalid" ng-click="fnAlarm()">立即救援</button>
+    </form>
   </ion-content>
 </ion-view>
