@@ -8,19 +8,20 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     pageStart: 1,
     pageCount: 10,
     hasMore: true,
-    unreadMsg: null
+    unreadMsg: null,
+    orderType: 2
   };
 
   /*
   获取任务订单
    */
-  $scope.fnGetList = function(concat) {
+  $scope.fnGetList = function(status, concat) {
     if (concat == null) {
       concat = false;
     }
     $ionicLoading.show();
     return Order.list({
-      status: [2],
+      status: [status],
       pageStart: 1,
       pageCount: 10
     }).then(function(res) {
@@ -67,11 +68,16 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   /*
    * 获取未读消息
    */
-  return $scope.fnGetMsgCount = function() {
+  $scope.fnGetMsgCount = function() {
     return Message.count().then(function(res) {
       return vm.unreadMsg = res;
     });
   };
+  return $scope.$watch('vm.orderType', function(val) {
+    if (angular.isNumber(val)) {
+      return $scope.fnGetList(val);
+    }
+  });
 }).controller('CarCtrl', function($scope, $state, $stateParams, $timeout, $filter, $http, Car, Map, $ionicPopup, $localStorage, $ionicLoading, $ionicScrollDelegate) {
   var _CarMap, _lastInfoWindow, _markerClusterer, vm;
   vm = $scope.vm = {
@@ -470,6 +476,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     if (tab != null) {
       vm.currentTab = tab;
     }
+    vm.list = [];
     return Message.list(vm.currentTab).then(function(res) {
       return vm.list = res.rows;
     })["finally"](function() {
@@ -2065,46 +2072,122 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   return $scope.$on('$destroy', function() {
     return vm.modal.remove();
   });
-}).controller('ReportCtrl', function($scope) {
-  var myChart, option, vm;
-  vm = $scope.vm = {};
-  myChart = void 0;
-  option = void 0;
-  vm.changeMap = function() {
-    myChart.clear();
-    option.legend.data[0] = '213';
-    option.series[0].type = 'line';
-    myChart.setOption(option);
+}).controller('ReportCtrl', function($scope, $state, $stateParams, $localStorage, $ionicPopup, $ionicLoading, $filter, Statistic, KEY_ACCOUNT) {
+  var myChart, vm;
+  vm = $scope.vm = {
+    user: $localStorage[KEY_ACCOUNT],
+    date: new Date(),
+    labels: {
+      'c001': '行驶里程（公里）',
+      'c002': '总油耗（升）',
+      'c004': '平均油耗（升/百公里）',
+      'c003': '总油费（元）',
+      'c005': '用车时间（小时）',
+      'c006': '车机拆除（次）',
+      'c007': '怠速超长（次）',
+      'c008': '越界（次）',
+      'c009': '非调度用车（次）',
+      'c010': '车辆违章（次）',
+      'c011': '车辆超速（次）'
+    },
+    type: $stateParams.type
   };
-  $scope.fnLoadData = function() {
-    myChart = echarts.init(document.getElementById('main'), 'macarons');
+  $scope.today = new Date();
+  if (document.getElementById('main') != null) {
+    myChart = echarts.init(document.getElementById('main'));
+  }
+  $scope.fnRefreshChart = function(list, type) {
+    var dates, j, num, option, values;
+    if (type == null) {
+      type = "line";
+    }
+    myChart.clear();
+    values = [];
+    dates = [];
+    for (num = j = 1; j <= 31; num = ++j) {
+      dates.push(num);
+      if ((list[num - 1] != null) && num === parseInt(list[num - 1]['CREATE_DATE'].substr(8))) {
+        if (vm.type === 'c005') {
+          values.push(list[num - 1]['Y1'] / 60);
+        } else {
+          values.push(list[num - 1]['Y1']);
+        }
+      } else {
+        values.push('-');
+      }
+    }
     option = {
       tooltip: {
-        show: true
+        show: false,
+        trigger: 'axis'
       },
-      legend: {
-        data: ['06月 日耗油费统计柱图']
+      grid: {
+        x: 50,
+        x2: 10,
+        y: 10
       },
-      xAxis: [
-        {
-          type: 'category',
-          data: ['', '', '3', '', '', '6', '', '', '9', '', '', '12', '', '', '15', '', '', '18', '', '', '21', '', '', '24', '', '', '27', '', '', '30']
+      xAxis: {
+        data: dates,
+        axisLabel: {
+          interval: function(index, val) {
+            return (index + 1) % 3 === 0;
+          }
         }
-      ],
-      yAxis: [
-        {
-          type: 'value'
+      },
+      yAxis: {
+        type: 'value',
+        lineStyle: {
+          width: 2
         }
-      ],
+      },
       series: [
         {
-          'name': '日耗油费',
-          'type': 'bar',
-          'data': [5, 20, 40, 10, 220, 131, 123, 43, 40, 10, 220, 131, 123, 43, 220, 131, 123, 43, 220, 131, 123, 43, 220, 131, 123, 43, 220, 131, 123, 43]
+          type: type,
+          data: values
         }
       ]
     };
-    myChart.setOption(option);
+    return myChart.setOption(option);
   };
-  return;
+  $scope.fnLoadData = function() {
+    var data, endTime, startTime;
+    console.log('load data');
+    $ionicLoading.show();
+    startTime = angular.copy(vm.date);
+    startTime.setDate(1);
+    endTime = angular.copy(vm.date);
+    endTime.setMonth(endTime.getMonth() + 1);
+    endTime.setDate(1);
+    endTime.setDate(-1);
+    data = {
+      startDate: $filter('date')(startTime, 'yyyy-MM-dd'),
+      endDate: $filter('date')(endTime, 'yyyy-MM-dd'),
+      unitId: vm.user.dept.deptUid,
+      code: $stateParams.type
+    };
+    return Statistic.fuel(data).then(function(res) {
+      $ionicLoading.hide();
+      $scope.fnRefreshChart(res.rows);
+      return console.log(res);
+    }, function(msg) {
+      $ionicLoading.hide();
+      return $ionicPopup.alert({
+        title: msg
+      });
+    });
+  };
+  $scope.fnChangeDate = function(flag) {
+    var duration;
+    duration = 24 * 60 * 60 * 1000;
+    if (flag > 0 && vm.date.valueOf() > (new Date()).valueOf() - duration) {
+      return;
+    }
+    vm.date.setMonth(vm.date.getMonth() + flag);
+    return vm.dateInstance.setVal(vm.date);
+  };
+  return $scope.$watch('vm.date', function(val) {
+    if ($state.is('reportDtail')) {
+      return $scope.fnLoadData();
+    }
+  }, true);
 });

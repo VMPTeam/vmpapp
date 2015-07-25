@@ -1,0 +1,19 @@
+<ion-view view-title="慧管车">
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
+  </ion-nav-buttons>
+  <ion-content scroll="false">
+    <div id="main" style="height: 82vh;margin-top:2vh;"></div>
+    <div class="x-label">日期(日)</div>
+    <div class="y-label">{{vm.labels[vm.type]}}</div>
+  </ion-content>
+  <div class="bar bar-footer bar-stable">
+    <button class="button button-clear icon ion-ios-arrow-left" ng-click="fnChangeDate(-1)"></button>
+    <div class="title" ng-click="vm.dateInstance.show()">
+    {{vm.date | date: 'yyyy-MM'}}
+    <input id="today" type="hidden" mobiscroll-date ng-model="vm.date" mobiscroll-instance="vm.dateInstance"
+          mobiscroll-options="{lang: 'zh', mode: 'mixed', maxDate: today, dateOrder: 'yymm'}">
+    </div>
+    <button class="button button-clear icon ion-ios-arrow-right" ng-click="fnChangeDate(1)"></button>
+  </div>
+</ion-view>

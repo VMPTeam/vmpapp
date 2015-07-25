@@ -2,8 +2,41 @@
   <ion-nav-buttons side="right">
     <a class="button button-icon icon icon-message"><span class="badge badge-assertive">4</span></a>
   </ion-nav-buttons>
-  <ion-content>
-    <div id="main" style="height: 82vh;margin-top:2vh;" ng-init="fnLoadData()"></div>
+  <ion-content class="reports-content">
+    <div class="row">
+      <div class="col col-50 item-1" ui-sref="reportDtail({type:'c001'})"
+        style="border-right: 2px solid #FFF;">行驶里程</div>
+      <div class="col col-50 item-2" ui-sref="reportDtail({type:'c002'})"
+        style="border-left: 2px solid #FFF;">总油耗</div>
+    </div>
+    <div class="row">
+      <div class="col col-50 item-3" ui-sref="reportDtail({type:'c004'})"
+      style="border-right: 2px solid #FFF;">平均油耗</div>
+      <div class="col col-50 item-4" ui-sref="reportDtail({type:'c003'})"
+       style="border-left: 2px solid #FFF;">总油费</div>
+    </div>
+    <div class="row">
+       <div class="col col-50 item-5" ui-sref="reportDtail({type:'c005'})"
+         style="border-right: 2px solid #FFF;">用车时间</div>
+      <div class="col col-50 item-6" ui-sref="reportDtail({type:'c006'})"
+         style="border-left: 2px solid #FFF;">车机拆除</div>
+    </div>
+    <div class="row">
+      <div class="col col-50 item-7" ui-sref="reportDtail({type:'c007'})"
+         style="border-right: 2px solid #FFF;">怠速超长</div>
+      <div class="col col-50 item-8" ui-sref="reportDtail({type:'c008'})"
+         style="border-left: 2px solid #FFF;">越界</div>
+    </div>
+    <div class="row">
+      <div class="col col-50 item-9" ui-sref="reportDtail({type:'c009'})"
+         style="border-right: 2px solid #FFF;">非调度用车</div>
+      <div class="col col-50 item-10" ui-sref="reportDtail({type:'c010'})"
+         style="border-left: 2px solid #FFF;">车辆违章</div>
+    </div>
+    <div class="row">
+      <div class="col col-50 item-11" ui-sref="reportDtail({type:'c011'})"
+         style="border-right: 2px solid #FFF;">车辆超速</div>
+    </div>
   </ion-content>
   <vmp-tabs></vmp-tabs>
   

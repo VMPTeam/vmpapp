@@ -124,6 +124,10 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
     url: '/reports',
     templateUrl: 'templates/tab-report.html',
     controller: 'ReportCtrl'
+  }).state('reportDtail', {
+    url: '/report?type',
+    templateUrl: 'templates/report-detail.html',
+    controller: 'ReportCtrl'
   }).state('driver', {
     url: '/driverlist',
     templateUrl: 'templates/tab-driver.html',

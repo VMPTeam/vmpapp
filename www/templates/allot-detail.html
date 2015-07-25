@@ -81,19 +81,19 @@
       <div class="item item-icon-left">
         <i class="icon ion-android-car"></i>
         <label>分配车辆</label>
-        <span class="item-note blue" ng-show="fnCheckEmptyOrder()" ng-click="fnGotoCarList(vm.order.driverAndVehicle)">添加</span>
+        <span class="item-note blue" ng-show="fnCheckEmptyOrder() && vm.order.status == 2" ng-click="fnGotoCarList(vm.order.driverAndVehicle)">添加</span>
       </div>
       <div class="item item-divider item-avatar" ng-repeat="item in vm.order.driverAndVehicle"
            ng-click="fnGotoDriverList(item)" ng-show="item.vehicleUid">
         <img class="avatar" ng-src="{{item.vehicleAvatar || 'img/car-avatar.png'}}" alt=""/>
         <h2 ng-bind="item.vehicleLic + ' ' + item.seatNum + '座'"></h2>
         <a ng-href="tel:{{item.phone}}">{{item.driverName}}{{item.phone}}</a>
-        <img src="img/close.png" class="close" style="top: 14px;" ng-click="fnClearOrder(item, $event)"/>
+        <img src="img/close.png" class="close" style="top: 14px;" ng-click="fnClearOrder(item, $event)" ng-show="vm.order.status == 2"/>
       </div>
     </div>
 
 
-    <div class="action-bar padding">
+    <div class="action-bar padding" ng-show="vm.order.status == 2">
       <button class="button button-block button-balanced" ng-click="fnCommit()">{{vm.nextId ? '分配并处理下一条' : '分配'}}</button>
     </div>
 

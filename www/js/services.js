@@ -7,8 +7,7 @@ angular.module('starter.services', []).service('ErrorHandle', function($state) {
     if (status === 500) {
       return defer.reject('服务器异常');
     } else if (status === 401) {
-      $state.go('login');
-      return defer.reject('服务器异常');
+      return $state.go('login');
     } else if (status === 0) {
       return defer.reject('服务器无响应');
     } else {
@@ -605,6 +604,23 @@ angular.module('starter.services', []).service('ErrorHandle', function($state) {
     var defer;
     defer = $q.defer();
     $http.get('/message/' + id).success(function(res) {
+      if (res.ret) {
+        return defer.reject(res.message);
+      } else {
+        return defer.resolve(res);
+      }
+    }).error(function(err, status) {
+      return ErrorHandle(status, err, defer);
+    });
+    return defer.promise;
+  };
+}).service('Statistic', function($http, $q, ErrorHandle) {
+  this.fuel = function(data) {
+    var defer;
+    defer = $q.defer();
+    $http.get('/statistic/chart/single', {
+      params: data
+    }).success(function(res) {
       if (res.ret) {
         return defer.reject(res.message);
       } else {
