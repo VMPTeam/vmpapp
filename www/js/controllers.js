@@ -972,20 +972,22 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     });
   };
   $scope.fnInitTrace = function() {
-    _traceMap = new BMap.Map('traceMap');
-    _traceMap.centerAndZoom('合肥', 10);
-    _traceMap.addControl(new BMap.NavigationControl({
-      anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
-      type: BMAP_NAVIGATION_CONTROL_ZOOM
-    }));
-    _traceMap.addControl(new BMap.ScaleControl({
-      anchor: BMAP_ANCHOR_BOTTOM_LEFT
-    }));
     return $timeout(function() {
-      if (vm.currentLocation != null) {
-        return $scope.fnRefreshMarker(vm.currentLocation);
-      }
-    }, 2000);
+      _traceMap = new BMap.Map('traceMap');
+      _traceMap.centerAndZoom('合肥', 10);
+      _traceMap.addControl(new BMap.NavigationControl({
+        anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
+        type: BMAP_NAVIGATION_CONTROL_ZOOM
+      }));
+      _traceMap.addControl(new BMap.ScaleControl({
+        anchor: BMAP_ANCHOR_BOTTOM_LEFT
+      }));
+      return $timeout(function() {
+        if (vm.currentLocation != null) {
+          return $scope.fnRefreshMarker(vm.currentLocation);
+        }
+      }, 2000);
+    }, 1000);
   };
   $scope.fnInitPark = function() {
     var currentPoint, item, j, len, marker, points, ref, results;

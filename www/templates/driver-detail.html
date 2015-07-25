@@ -17,11 +17,19 @@
         <span class="item-note">{{vm.driver.phone}}</span>
       </div>
       <div class="item">
-        <span>所属部门</span>
-        <span class="item-note">{{vm.driver.deptName}}</span>
+        <span>身份证号</span>
+        <span class="item-note">{{vm.driver.idNumber}}</span>
       </div>
       <div class="item">
-        <span>牌照</span>
+        <span>驾驶证号</span>
+        <span class="item-note">{{vm.driver.licNumber}}</span>
+      </div>
+      <div class="item">
+        <span>申领日期</span>
+        <span class="item-note">{{vm.driver.licFirst | date: 'yyyy-MM-dd'}}</span>
+      </div>
+      <div class="item">
+        <span>准驾车型</span>
         <span class="item-note">{{vm.driver.approvalType}}</span>
       </div>
     </div>
