@@ -15,7 +15,7 @@
   <ion-content class="car-list has-subheader" ng-init="fnGetLocation()">
     <ion-refresher
       pulling-text="下拉刷新..."
-      on-refresh="fnGetCarList(1)">
+      on-refresh="fnGetCarList()">
     </ion-refresher>
     <div class="list mini" ng-init="fnGetCarList()">
       <a class="item item-avatar" collection-repeat="item in vm.list" ng-click="fnSelectCar(item)">

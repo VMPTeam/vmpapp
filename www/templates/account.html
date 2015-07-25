@@ -1,7 +1,7 @@
 <ion-view view-title="慧管车" class="bg-default" cache-view="false">
   <ion-nav-buttons side="right">
-    <a class="button button-icon icon icon-message" ng-if="!fnGetPermission('leader') && !fnGetPermission('user')">
-      <span class="badge badge-assertive">4</span>
+    <a class="button button-icon icon icon-message" ui-sref="messages({type: 1})" ng-if="!fnGetPermission('leader') && !fnGetPermission('user')">
+      <span class="badge badge-assertive" ng-if="unreadMsg">{{unreadMsg}}</span>
     </a>
   </ion-nav-buttons>
   <ion-content>

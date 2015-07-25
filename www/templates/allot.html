@@ -50,8 +50,8 @@
     </div>
   </div>
   <ion-nav-buttons side="right">
-    <a class="button button-icon icon icon-message">
-      <span class="badge badge-assertive">4</span>
+    <a class="button button-icon icon icon-message" ui-sref="messages({type: 1})">
+      <span class="badge badge-assertive" ng-if="unreadMsg">{{unreadMsg}}</span>
     </a>
   </ion-nav-buttons>
   <ion-content class="order-content has-subheader" style="padding-top: 0; top: 188px;">

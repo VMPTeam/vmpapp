@@ -108,7 +108,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       concat = false;
     }
     $ionicLoading.show();
-    if (concat === true) {
+    if (concat === false) {
       vm.pageStart = 1;
     }
     data = {
@@ -313,7 +313,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       concat = false;
     }
     $ionicLoading.show();
-    if (concat === true) {
+    if (concat === false) {
       vm.pageStart = 1;
     }
     data = {
@@ -424,8 +424,10 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       $localStorage[KEY_PASSWORD] = password;
       vm.userInfo = res;
       if (Account.permission('vehicle_manager')) {
+        $scope.$emit('message.open');
         return $state.go('allot');
       } else if (Account.permission('driver')) {
+        $scope.$emit('message.open');
         return $state.go('mission');
       } else {
         return $state.go('userHome');
@@ -442,6 +444,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     });
   };
   $scope.fnLogout = function() {
+    $scope.$emit('message.close');
     return Account.logout().then(function() {
       return $state.go('login');
     });
@@ -716,7 +719,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       concat = false;
     }
     $ionicLoading.show();
-    if (concat === true) {
+    if (concat === false) {
       vm.pageStart = 1;
     }
     data = {
@@ -808,7 +811,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       concat = false;
     }
     $ionicLoading.show();
-    if (concat === true) {
+    if (concat === false) {
       vm.pageStart = 1;
     }
     data = {
@@ -1891,7 +1894,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       concat = false;
     }
     $ionicLoading.show();
-    if (concat === true) {
+    if (concat === false) {
       vm.pageStart = 1;
     }
     data = {
@@ -2064,7 +2067,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       concat = false;
     }
     $ionicLoading.show();
-    if (concat === true) {
+    if (concat === false) {
       vm.pageStart = 1;
     }
     data = {
