@@ -100,6 +100,13 @@ ion-content .icon {
 }
 .tabs-striped .tabs .tab-item {
   border-bottom-color: #1e93c2;
+  margin-top: 0;
+  padding: 4px 0;
+}
+.tabs-striped .tabs .tab-item.active-background.active {
+  margin-top: 0;
+  padding: 4px 0;
+  background-color: #1e93c2;
 }
 ion-tabs.tabs-color-active-balanced .tab-item.tab-item-active,
 ion-tabs.tabs-color-active-balanced .tab-item.active,
@@ -149,7 +156,7 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
   width: 130px;
 }
 .order-content {
-  padding-top: 50px;
+  top: 94px;
 }
 .order-content .card {
   margin: 10px;

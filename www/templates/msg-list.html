@@ -3,17 +3,18 @@
     <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
   </ion-nav-buttons>
   <div class="tabs-striped tabs-top tabs-background-stable">
-    <div class="tabs tabs-icon-top" ng-init="fnGetMsgList()">
-      <div class="tab-item"
+    <div class="tabs tabs-icon-top" ng-init="fnGetMsgList()" style="height:52px;">
+      <div class="tab-item active-background"
            ng-repeat="tab in vm.tabs"
-           ng-bind="tab.name"
            ng-class="{active: tab.id === vm.currentTab}"
            ng-click="fnGetMsgList(tab.id)"
         >
+        <i class="icon-custom" ng-class="'icon-tab-msg-alert-' + tab.id"></i>
+         <span>{{tab.name}}</span>
         </div>
     </div>
   </div>
-  <ion-content class="order-content has-header">
+  <ion-content class="order-content has-header" style="top: 95px;">
     <ion-refresher
       pulling-text="下拉刷新..."
       on-refresh="fnGetMsgList()">

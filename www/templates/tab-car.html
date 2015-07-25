@@ -7,24 +7,24 @@
   <ion-nav-buttons side="right">
     <a class="button button-icon icon icon-message"><span class="badge badge-assertive">4</span></a>
   </ion-nav-buttons>
-  <ion-content class="car-list" ng-class="{'map-view': vm.mapView}">
+  <div class="bar bar-subheader item-input-inset" ng-hide="vm.mapView">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="请输入关键字进行搜索" ng-model="vm.search"
+             ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }"
+             ng-change="fnGetCarList()">
+    </label>
+    <button class="button button-clear" ng-click="vm.search = '';fnGetCarList()">
+      取消
+    </button>
+  </div>
+  <ion-content class="car-list" ng-class="{'map-view': vm.mapView, 'has-subheader': !vm.mapView}">
     <ion-refresher
       pulling-text="下拉刷新..."
       on-refresh="fnGetCarList(1)">
     </ion-refresher>
     <!--列表视图-->
     <div ng-hide="vm.mapView">
-      <div class="bar bar-header item-input-inset">
-        <label class="item-input-wrapper">
-          <i class="icon ion-ios-search placeholder-icon"></i>
-          <input type="search" placeholder="请输入关键字进行搜索" ng-model="vm.search"
-                 ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }"
-                 ng-change="fnGetCarList()">
-        </label>
-        <button class="button button-clear" ng-click="vm.search = '';fnGetCarList()">
-          取消
-        </button>
-      </div>
       <div class="list mini" ng-init="fnGetCarList()">
         <a class="item item-avatar" ng-repeat="item in vm.list" ui-sref="carInfo({id: item.vehicleUid})">
           <img ng-src="{{item.vehicleAvatar}}">

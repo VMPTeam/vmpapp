@@ -16,6 +16,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
       $location.path('/userhome');
     }
   }
+  Account.getLocation();
   $ionicPlatform.ready(function() {
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);

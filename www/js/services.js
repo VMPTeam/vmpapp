@@ -7,18 +7,20 @@ angular.module('starter.services', []).service('ErrorHandle', function($state) {
     if (status === 500) {
       return defer.reject('服务器异常');
     } else if (status === 401) {
-      return $state.go('login');
+      $state.go('login');
+      return defer.reject(null);
     } else if (status === 0) {
       return defer.reject('服务器无响应');
     } else {
       return defer.reject(res.msg || '未知错误:' + status);
     }
   };
-}).service('Account', function($http, $q, $timeout, $localStorage, $filter, md5, KEY_TOKEN, KEY_ACCOUNT, ErrorHandle) {
-  var roles;
+}).service('Account', function($http, $q, $timeout, $localStorage, $filter, $cordovaGeolocation, md5, KEY_TOKEN, KEY_ACCOUNT, ErrorHandle) {
+  var location, roles;
   if ($localStorage[KEY_ACCOUNT] != null) {
     roles = $localStorage[KEY_ACCOUNT].roles;
   }
+  location = null;
 
   /*
   获取权限列表
@@ -35,6 +37,43 @@ angular.module('starter.services', []).service('ErrorHandle', function($state) {
     } else {
       return permission = indexOf.call(roles, role) >= 0;
     }
+  };
+  this.getLocation = function() {
+    var defer, posOptions;
+    defer = $q.defer();
+    if (location != null) {
+      defer.resolve(location);
+    } else {
+      posOptions = {
+        timeout: 10000,
+        enableHighAccuracy: true
+      };
+      $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
+        location = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        return defer.resolve(location);
+      }, function(err) {
+        return defer.reject(err);
+      });
+    }
+    return defer.promise;
+  };
+  this.getDistance = function(lat1, lng1, lat2, lng2) {
+    var Rad, a, b, radLat1, radLat2, s;
+    Rad = function(d) {
+      return d * Math.PI / 180.0;
+    };
+    radLat1 = Rad(lat1);
+    radLat2 = Rad(lat2);
+    a = radLat1 - radLat2;
+    b = Rad(lng1) - Rad(lng2);
+    s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+    s = s * 6378.137;
+    s = Math.round(s * 10000) / 10000;
+    s = s.toFixed(1);
+    return s;
   };
 
   /*

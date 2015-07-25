@@ -39,6 +39,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     }, function(msg) {
       $ionicLoading.hide();
       vm.hasMore = false;
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -129,6 +132,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     }, function(msg) {
       $ionicLoading.hide();
       vm.hasMore = false;
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -282,7 +288,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     })[0];
     if (vm.selectedCar != null) {
       return Map.geoCoder([vm.selectedCar.location.la, vm.selectedCar.location.lo]).then(function(res) {
-        return vm.selectedCar.address = res.sematic_description;
+        if (vm.selectedCar != null) {
+          return vm.selectedCar.address = res.sematic_description;
+        }
       });
     }
   };
@@ -294,7 +302,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   vm = $scope.vm = {
     list: [],
     pageStart: 1,
-    pageCount: 10,
+    pageCount: 15,
     search: '',
     hasMore: true,
     id: $stateParams.id
@@ -329,6 +337,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     }, function(msg) {
       $ionicLoading.hide();
       vm.hasMore = false;
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -344,6 +355,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return vm.driver = res;
     }, function(msg) {
       $ionicLoading.hide();
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -383,6 +397,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return $state.go('login');
     }, function(msg) {
       $ionicLoading.hide();
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -416,6 +433,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     }, function(msg) {
       delete $localStorage[KEY_TOKEN];
       $ionicLoading.hide();
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -430,6 +450,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     return Account.reminderList().then(function(res) {
       return vm.reminderList = res.rows;
     }, function(msg) {
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -455,6 +478,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
           title: '密码已修改'
         });
       }, function(msg) {
+        if (msg == null) {
+          return;
+        }
         return $ionicPopup.alert({
           title: msg
         });
@@ -493,7 +519,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return vm.msg = res;
     });
   };
-}).controller('AllotDetailCtrl', function($scope, $state, $stateParams, $ionicLoading, $ionicPopup, $localStorage, $ionicModal, Order, Car, Driver, KEY_ACCOUNT) {
+}).controller('AllotDetailCtrl', function($scope, $state, $stateParams, $ionicLoading, $ionicPopup, $localStorage, $ionicModal, Order, Car, Driver, Account, KEY_ACCOUNT) {
   var vm;
   vm = $scope.vm = {
     id: $stateParams.id,
@@ -523,7 +549,34 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     ],
     currentTab: $stateParams.id,
     startTime: $stateParams.startTime,
-    endTime: $stateParams.endTime
+    endTime: $stateParams.endTime,
+    location: null,
+    retryTime: 3
+  };
+
+  /*
+  获取地理位置
+   */
+  $scope.fnGetLocation = function() {
+    if (!vm.location) {
+      return Account.getLocation().then(function(res) {
+        return vm.location = res;
+      }, function(err) {
+        if (vm.retryTime > 0) {
+          vm.retryTime--;
+          return $scope.fnGetLocation();
+        }
+      });
+    }
+  };
+  $scope.fnGetDistance = function(location) {
+    var distance;
+    if ((vm.location != null) && (location != null)) {
+      distance = Account.getDistance(vm.location.lat, vm.location.lng, parseInt(location.la), parseInt(location.lo));
+      if (distance != null) {
+        return distance + 'km';
+      }
+    }
   };
 
   /*
@@ -536,6 +589,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       vm.orderList = res.rows;
       return vm.nextId = $scope.fnGetNextId(res.rows);
     }, function(msg) {
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -570,6 +626,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return $ionicLoading.hide();
     }, function(msg) {
       $ionicLoading.hide();
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -605,6 +664,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       });
     }, function(msg) {
       $ionicLoading.hide();
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -681,6 +743,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     }, function(msg) {
       $ionicLoading.hide();
       vm.hasMore = false;
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -770,6 +835,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     }, function(msg) {
       $ionicLoading.hide();
       vm.hasMore = false;
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -832,6 +900,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       vm.info = res;
       return vm.currentLocation = res.location || {};
     }, function(msg) {
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -1000,6 +1071,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       })();
       return $scope.fnInitPark(vm.parks);
     }, function(msg) {
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -1014,6 +1088,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       vm.journals = res.rows;
       return $scope.fnGeoCoder(vm.journals);
     }, function(msg) {
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -1159,6 +1236,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return vm.list = res.rows;
     }, function(msg) {
       $ionicLoading.hide();
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -1185,6 +1265,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return results;
     }, function(msg) {
       $ionicLoading.hide();
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -1211,6 +1294,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return Area.detail(vm.id).then(function(res) {
         return angular.extend(vm.formData, res);
       }, function(msg) {
+        if (msg == null) {
+          return;
+        }
         return $ionicPopup.alert({
           title: msg
         });
@@ -1336,6 +1422,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return $state.go('areaList');
     }, function(msg) {
       $ionicLoading.hide();
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -1401,6 +1490,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return $ionicLoading.hide();
     }, function(msg) {
       $ionicLoading.hide();
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -1436,6 +1528,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         return Order.finish(id).then(function() {
           return $scope.fnGetList();
         }, function(msg) {
+          if (msg == null) {
+            return;
+          }
           return $ionicPopup.alert({
             title: msg
           });
@@ -1452,6 +1547,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     return Order.taxList(vm.taxId).then(function(res) {
       return vm.taxList = res.rows;
     }, function(msg) {
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -1496,6 +1594,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         title: '税费提交成功'
       });
     }, function(msg) {
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -1557,6 +1658,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     return Order.begin(id).then(function() {
       return vm.order.status = 4;
     }, function(msg) {
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -1575,6 +1679,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         return Order.finish(id).then(function() {
           return $state.go('tab.home');
         }, function(msg) {
+          if (msg == null) {
+            return;
+          }
           return $ionicPopup.alert({
             title: msg
           });
@@ -1646,6 +1753,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         });
         return $scope.fnResetForm();
       }, function(msg) {
+        if (msg == null) {
+          return;
+        }
         $ionicLoading.hide();
         return $ionicPopup.alert({
           title: msg
@@ -1681,6 +1791,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       vm.poiResults = res;
       return vm.errorText = null;
     }, function(msg) {
+      if (msg == null) {
+        return;
+      }
       return vm.errorText = msg;
     });
   };
@@ -1740,14 +1853,37 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return vm.vehicleCount = vm.carList.length;
     }
   });
-}).controller('User.CarCtrl', function($scope, Car, $ionicPopup, $localStorage, $ionicLoading) {
+}).controller('User.CarCtrl', function($scope, Car, Account, $ionicPopup, $localStorage, $ionicLoading) {
   var vm;
   vm = $scope.vm = {
     list: [],
     pageStart: 1,
     pageCount: 50,
     search: '',
-    hasMore: true
+    hasMore: true,
+    location: null,
+    retryTime: 3
+  };
+  $scope.fnGetLocation = function() {
+    if (!vm.location) {
+      return Account.getLocation().then(function(res) {
+        return vm.location = res;
+      }, function(err) {
+        if (vm.retryTime > 0) {
+          vm.retryTime--;
+          return $scope.fnGetLocation();
+        }
+      });
+    }
+  };
+  $scope.fnGetDistance = function(location) {
+    var distance;
+    if ((vm.location != null) && (location != null)) {
+      distance = Account.getDistance(vm.location.lat, vm.location.lng, parseInt(location.la), parseInt(location.lo));
+      if (distance != null) {
+        return distance + 'km';
+      }
+    }
   };
   $scope.fnGetList = function(concat) {
     var data;
@@ -1779,6 +1915,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     }, function(msg) {
       $ionicLoading.hide();
       vm.hasMore = false;
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -1824,6 +1963,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     }, function(msg) {
       $scope.$broadcast('scroll.refreshComplete');
       $scope.$broadcast('scroll.infiniteScrollComplete');
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -1849,6 +1991,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return $scope.fnCloseModal;
     }, function(msg) {
       $ionicLoading.hide();
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -1942,6 +2087,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     }, function(msg) {
       $ionicLoading.hide();
       vm.hasMore = false;
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -2024,6 +2172,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         return Order.approve(vm.id, comment).then(function() {
           return $scope.fnDetail();
         }, function(msg) {
+          if (msg == null) {
+            return;
+          }
           return $ionicPopup.alert({
             title: msg
           });
@@ -2032,6 +2183,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         return Order.reject(vm.id, comment).then(function() {
           return $scope.fnDetail();
         }, function(msg) {
+          if (msg == null) {
+            return;
+          }
           return $ionicPopup.alert({
             title: msg
           });
@@ -2046,6 +2200,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return $ionicHistory.goBack(-1);
     }, function(msg) {
       $ionicLoading.hide();
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -2058,6 +2215,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return $ionicHistory.goBack(-1);
     }, function(msg) {
       $ionicLoading.hide();
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
@@ -2171,6 +2331,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return console.log(res);
     }, function(msg) {
       $ionicLoading.hide();
+      if (msg == null) {
+        return;
+      }
       return $ionicPopup.alert({
         title: msg
       });
