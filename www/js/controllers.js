@@ -2595,6 +2595,16 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         show: false,
         trigger: 'axis'
       },
+      toolbox: {
+        show: true,
+        y: 'top',
+        feature: {
+          magicType: {
+            show: true,
+            type: ['line', 'bar']
+          }
+        }
+      },
       grid: {
         x: 50,
         x2: 10,
