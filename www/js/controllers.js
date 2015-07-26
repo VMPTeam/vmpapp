@@ -1145,7 +1145,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       item = ref[j];
       result += parseFloat(item.miles);
     }
-    return result;
+    return result / 1000;
   };
   $scope.fnGetAvgFuel = function() {
     var fuel, item, j, len, mile, ref;

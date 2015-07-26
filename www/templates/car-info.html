@@ -18,7 +18,7 @@
     </div>
     </div>
   </div>
-  <ion-content class="car-info-content has-tabs-top" style="top: 100px;"
+  <ion-content class="car-info-content has-tabs-top"
    ng-class="{'map-view': vm.mapView}" ng-init="fnGetCarDetail()">
     <!--车辆跟踪-->
     <div class="trace map-container" ng-show="vm.tab === '车辆跟踪'" ng-cloak>
@@ -48,7 +48,7 @@
       <div class="dashboard">
         <!--时速-->
         <div class="shisu">
-          <img id="speed" class="point" src="img/zhizhen_b.png" alt=""/>
+          <img id="speed" class="point" src="img/zhizhen_b.png" alt="" style="position: fixed;" />
         </div>
         <!--电压-->
         <div class="dianya">
@@ -99,7 +99,7 @@
       </div>
     </div>
     <!--行车记录-->
-    <div class="record" ng-show="vm.tab === '行车记录'" ng-cloak>
+    <div class="record" ng-show="vm.tab === '行车记录'" ng-cloak style="margin-top: 1vh;">
       <div class="board">
         <div class="date row">
           <div class="col" ng-click="fnSetDay(vm.today, -1)">{{fnOtherDay(vm.today, -1) | date: 'M月d日'}}</div>

@@ -25,29 +25,29 @@
   </feature>
   <icon src="resources/logo.png"/>
   <platform name="android">
-    <splash src="resources/launcher.jpg" density="land-ldpi"/>
-    <splash src="resources/launcher.jpg" density="land-mdpi"/>
-    <splash src="resources/launcher.jpg" density="land-hdpi"/>
-    <splash src="resources/launcher.jpg" density="land-xhdpi"/>
-    <splash src="resources/launcher.jpg" density="land-xxhdpi"/>
-    <splash src="resources/launcher.jpg" density="land-xxxhdpi"/>
-    <splash src="resources/launcher.jpg" density="port-ldpi"/>
-    <splash src="resources/launcher.jpg" density="port-mdpi"/>
-    <splash src="resources/launcher.jpg" density="port-hdpi"/>
-    <splash ssrc="resources/launcher.jpg" density="port-xhdpi"/>
-    <splash src="resources/launcher.jpg" density="port-xxhdpi"/>
-    <splash src="resources/launcher.jpg" density="port-xxxhdpi"/>
+    <splash src="resources/launcher.png" density="land-ldpi"/>
+    <splash src="resources/launcher.png" density="land-mdpi"/>
+    <splash src="resources/launcher.png" density="land-hdpi"/>
+    <splash src="resources/launcher.png" density="land-xhdpi"/>
+    <splash src="resources/launcher.png" density="land-xxhdpi"/>
+    <splash src="resources/launcher.png" density="land-xxxhdpi"/>
+    <splash src="resources/launcher.png" density="port-ldpi"/>
+    <splash src="resources/launcher.png" density="port-mdpi"/>
+    <splash src="resources/launcher.png" density="port-hdpi"/>
+    <splash ssrc="resources/launcher.png" density="port-xhdpi"/>
+    <splash src="resources/launcher.png" density="port-xxhdpi"/>
+    <splash src="resources/launcher.png" density="port-xxxhdpi"/>
   </platform>
   <platform name="ios">
-    <splash height="480" src="resources/launcher.jpg" width="320"/>
-    <splash height="960" src="resources/launcher.jpg" width="640"/>
-    <splash height="1024" src="resources/launcher.jpg" width="768"/>
-    <splash height="2048" src="resources/launcher.jpg" width="1536"/>
-    <splash height="768" src="resources/launcher.jpg" width="1024"/>
-    <splash height="1536" src="resources/launcher.jpg" width="2048"/>
-    <splash height="1136" src="resources/launcher.jpg" width="640"/>
-    <splash height="1334" src="resources/launcher.jpg" width="750"/>
-    <splash height="2208" src="resources/launcher.jpg" width="1242"/>
-    <splash height="1242" src="resources/launcher.jpg" width="2208"/>
+    <splash height="480" src="resources/launcher.png" width="320"/>
+    <splash height="960" src="resources/launcher.png" width="640"/>
+    <splash height="1024" src="resources/launcher.png" width="768"/>
+    <splash height="2048" src="resources/launcher.png" width="1536"/>
+    <splash height="768" src="resources/launcher.png" width="1024"/>
+    <splash height="1536" src="resources/launcher.png" width="2048"/>
+    <splash height="1136" src="resources/launcher.png" width="640"/>
+    <splash height="1334" src="resources/launcher.png" width="750"/>
+    <splash height="2208" src="resources/launcher.png" width="1242"/>
+    <splash height="1242" src="resources/launcher.png" width="2208"/>
   </platform>
 </widget>
