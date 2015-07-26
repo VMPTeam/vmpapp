@@ -19,7 +19,7 @@
     </div>
   </div>
   <ion-content class="car-info-content has-tabs-top"
-   ng-class="{'map-view': vm.mapView}" ng-init="fnGetCarDetail()">
+   ng-class="{'map-view': vm.mapView}" style="top: 99px;" ng-init="fnGetCarDetail()">
     <!--车辆跟踪-->
     <div class="trace map-container" ng-show="vm.tab === '车辆跟踪'" ng-cloak>
       <div id="traceMap" class="map"></div>
