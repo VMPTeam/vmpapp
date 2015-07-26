@@ -751,16 +751,17 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
   padding-top: 20px;
 }
 .custom-info-box {
-  width: 220px;
+  width: 80vw;
   font-size: 12px;
   color: #fff;
   position: fixed;
   z-index: 2;
-  top: 8vh;
-  left: 16vw;
+  top: 7vh;
+  left: 10vw;
+  background: url("../img/info-box-bg.png") no-repeat;
+  background-size: 100%;
 }
 .custom-info-box .info {
-  background: url("../img/info-bg.png") no-repeat;
   border-radius: 6px 6px 0 0;
   background-size: cover;
 }
@@ -770,38 +771,16 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 .custom-info-box .info > .row .col.text-center {
   text-align: center;
 }
-.custom-info-box .info > .row [class*='icon-'] {
-  width: 46px;
-  height: 46px;
-  display: inline-block;
-  background-repeat: no-repeat;
+.custom-info-box .info > .row .col.text {
+  text-align: left;
 }
-.custom-info-box .info > .row .icon-person55 {
-  background: url('../img/person55.png');
-  background-size: cover;
-}
-.custom-info-box .info > .row .icon-phone55 {
-  background: url('../img/phone55.png');
-  background-size: cover;
-}
-.custom-info-box .info > .row .icon-car55 {
-  background: url('http://220.178.67.250:8080/WebApplication/images/brands/aodi.png');
-  background-size: cover;
-}
-.custom-info-box .info p {
+.custom-info-box .info > .row .col.text * {
   margin: 0;
+  padding: 0;
 }
 .custom-info-box .action-bar {
-  background: url("../img/gray_gradual.png");
-  border-radius: 0 0 6px 6px;
-  overflow: hidden;
-}
-.custom-info-box .action-bar.row {
-  padding: 0;
-}
-.custom-info-box .action-bar.row .col {
-  padding: 0;
-  text-align: center;
+  height: 109px;
+  position: relative;
 }
 .custom-info-box .action-bar [class*="icon-"] {
   width: 30px;
@@ -811,27 +790,55 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
   background-size: 100%;
   margin: auto;
 }
+.custom-info-box .action-bar .detail {
+  position: absolute;
+  bottom: 0;
+  left: 28px;
+}
+.custom-info-box .action-bar .line {
+  position: absolute;
+  top: 4px;
+  left: 28px;
+}
+.custom-info-box .action-bar .area {
+  position: absolute;
+  top: 14px;
+  left: 93px;
+  padding: 12px;
+  background: url('../img/info-box-center.png') no-repeat;
+  background-size: 100%;
+}
+.custom-info-box .action-bar .park {
+  position: absolute;
+  right: 30px;
+  top: 4px;
+}
+.custom-info-box .action-bar .trace {
+  position: absolute;
+  bottom: 0;
+  right: 30px;
+}
 .custom-info-box .action-bar .icon-detail {
-  background-image: url("../img/detail.png");
+  background-image: url("../img/car-detail12_03.png");
 }
 .custom-info-box .action-bar .icon-line {
-  background-image: url("../img/line.png");
+  background-image: url("../img/car-detail12_05.png");
 }
 .custom-info-box .action-bar .icon-area {
-  background-image: url("../img/area.png");
+  background-image: url("../img/car-detail12_09.png");
 }
 .custom-info-box .action-bar .icon-park {
-  background-image: url("../img/park.png");
+  background-image: url("../img/car-detail12_11.png");
 }
 .custom-info-box .action-bar .icon-trace {
-  background-image: url("../img/trace.png");
+  background-image: url("../img/car-detail12_07.png");
 }
 .custom-info-box .arrow-down {
   width: 0;
   height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-top: 10px solid #2f2726;
+  border-top: 10px solid #3480b4;
   margin: auto;
 }
 .tangram-suggestion-main {

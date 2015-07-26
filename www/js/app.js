@@ -4,7 +4,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
   $rootScope.fnOpenTimer = function() {
     $rootScope.timer = $interval(function() {
       return Message.count().then(function(res) {
-        var count, ref;
+        var count;
         count = parseInt(res['1']) + parseInt(res['2']) + parseInt(res['3']);
         $rootScope.unreadMsg = count < 100 ? count : '...';
       });

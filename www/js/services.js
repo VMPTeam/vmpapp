@@ -596,6 +596,52 @@ angular.module('starter.services', []).service('ErrorHandle', function($state) {
     });
     return defer.promise;
   };
+  this.remove = function(id) {
+    var defer;
+    defer = $q.defer();
+    $http.post('/area/' + id + '/delete').success(function(res) {
+      if (res.ret) {
+        return defer.reject(res.message);
+      } else {
+        return defer.resolve(res);
+      }
+    }).error(function(err, status) {
+      return ErrorHandle(status, err, defer);
+    });
+    return defer.promise;
+  };
+  this.enable = function(id) {
+    var defer;
+    defer = $q.defer();
+    $http.post('/area/' + id, {
+      status: 0
+    }).success(function(res) {
+      if (res.ret) {
+        return defer.reject(res.message);
+      } else {
+        return defer.resolve(res);
+      }
+    }).error(function(err, status) {
+      return ErrorHandle(status, err, defer);
+    });
+    return defer.promise;
+  };
+  this.disable = function(id) {
+    var defer;
+    defer = $q.defer();
+    $http.post('/area/' + id, {
+      status: 1
+    }).success(function(res) {
+      if (res.ret) {
+        return defer.reject(res.message);
+      } else {
+        return defer.resolve(res);
+      }
+    }).error(function(err, status) {
+      return ErrorHandle(status, err, defer);
+    });
+    return defer.promise;
+  };
   this.create = function(data) {
     var defer;
     defer = $q.defer();

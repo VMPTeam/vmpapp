@@ -135,10 +135,11 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         vm.list = res.rows;
       }
       if (res.total < vm.pageCount) {
-        return vm.hasMore = false;
+        vm.hasMore = false;
       } else {
-        return vm.hasMore = true;
+        vm.hasMore = true;
       }
+      return $scope.fnRefreshMarker(vm.list);
     }, function(msg) {
       $ionicLoading.hide();
       vm.hasMore = false;
@@ -165,6 +166,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   初始化地图
    */
   $scope.fnInitMap = function() {
+    $scope.fnGetCarList();
     return $timeout(function() {
       _CarMap = new BMap.Map('carMap');
       _CarMap.centerAndZoom('合肥', 12);
@@ -918,12 +920,12 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     return $('.car-info-content').offset(function(index, coords) {
       var temp;
       temp = {
-        top: coords.top + 4,
+        top: coords.top + 20,
         left: coords.left
       };
       return temp;
     });
-  }, 200);
+  }, 800);
   $scope.fnInitTab = function() {
     if ($stateParams.type != null) {
       return vm.tab = vm.tabList[$stateParams.type - 1];
@@ -1094,7 +1096,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     voltageOption = {
       name: '电压',
       type: 'gauge',
-      center: ['80%', '50%'],
+      center: ['84%', '50%'],
       radius: '50%',
       min: 0,
       max: 36,
@@ -1150,7 +1152,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     waterOption = {
       name: '水温',
       type: 'gauge',
-      center: ['80%', '60%'],
+      center: ['84%', '60%'],
       radius: '50%',
       min: -40,
       max: 200,
@@ -1578,13 +1580,34 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
             break;
           case 1:
             console.log('开启');
+            Area.enable(item.areaUid).then(function() {
+              return $scope.fnGetList();
+            }, function(msg) {
+              return $ionicPopup.alert({
+                title: msg
+              });
+            });
             break;
           case 2:
             console.log('关闭');
+            Area.disable(item.areaUid).then(function() {
+              return $scope.fnGetList();
+            }, function(msg) {
+              return $ionicPopup.alert({
+                title: msg
+              });
+            });
         }
         return true;
       },
       destructiveButtonClicked: function() {
+        Area.remove(item.areaUid).then(function() {
+          return $scope.fnGetList();
+        }, function(msg) {
+          return $ionicPopup.alert({
+            title: msg
+          });
+        });
         return true;
       }
     });

@@ -3,7 +3,7 @@
     <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
   </ion-nav-buttons>
   <ion-nav-buttons side="right">
-    <a class="button button-clear" ng-disabled="!vm.formData.name || !fnGetPoints().length" ng-click="fnCreate()">保存</a>
+    <a class="button button-clear" ng-disabled="!vm.formData.name || !fnGetPoints().length" ng-click="fnCreate()" ng-hide="vm.id">保存</a>
   </ion-nav-buttons>
   <ion-content class="area-content" ng-init="fnDetail(vm.id)">
     <form name="form" ng-if="!vm.id">
@@ -11,11 +11,16 @@
         <label class="item item-input" style="height: 44px;">
           <span class="input-label">栅栏名称</span>
           <input ng-model="vm.formData.name" name="name" required style="text-align: right;" type="text">
+          <span class="item-note" ng-show="expression">{{vm.formData.name}}</span>
         </label>
-        <a class="item" ui-sref="areaMap">
+        <a class="item" ui-sref="areaMap" ng-hide="vm.id">
           <span class="">监控区域</span>
           <span class="item-note" ng-hide="fnGetPoints().length">未选择</span>
           <span class="item-note" ng-show="fnGetPoints().length">已选择</span>
+        </a>
+        <a class="item" ui-sref="areaMap" ng-show="vm.id">
+          <span class="">监控区域</span>
+          <span class="item-note" style="color: #333;">查看</span>
         </a>
         <label class="item item-input item-select select-clear" style="height: 44px;">
           <span class="input-label">触发方式</span>

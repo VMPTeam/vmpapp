@@ -34,7 +34,7 @@
     <splash src="resources/launcher.png" density="port-ldpi"/>
     <splash src="resources/launcher.png" density="port-mdpi"/>
     <splash src="resources/launcher.png" density="port-hdpi"/>
-    <splash ssrc="resources/launcher.png" density="port-xhdpi"/>
+    <splash src="resources/launcher.png" density="port-xhdpi"/>
     <splash src="resources/launcher.png" density="port-xxhdpi"/>
     <splash src="resources/launcher.png" density="port-xxxhdpi"/>
   </platform>
