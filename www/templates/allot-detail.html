@@ -2,22 +2,18 @@
   <ion-nav-buttons side="left">
     <a class="button icon-left ion-ios-arrow-back button-clear" ui-sref="allot">返回</a>
   </ion-nav-buttons>
-  <!--<div class="bar bar-subheader">-->
-    <div class="tabs-striped tabs-top tabs-background-stable">
-      <div class="tabs">
-        <!--<ion-scroll direction="x" style="width: 100%;">-->
-          <div class="tab-item"
-               ng-repeat="tab in vm.orderList | limitTo: 5"
-               ng-bind="tab.applicant"
-               ng-class="{active: tab.serialNum === vm.currentTab}"
-               ng-click="fnChangeTab(tab.serialNum)"
-            ></div>
-        <!--</ion-scroll>-->
-      </div>
+  <!-- <div class="tabs-striped tabs-top tabs-background-stable">
+    <div class="tabs">
+        <div class="tab-item"
+             ng-repeat="tab in vm.orderList | limitTo: 5"
+             ng-bind="tab.applicant"
+             ng-class="{active: tab.serialNum === vm.currentTab}"
+             ng-click="fnChangeTab(tab.serialNum)"
+          ></div>
     </div>
-  <!--</div>-->
+  </div> -->
 
-  <ion-content ng-init="fnDetail()" class="has-tabs-top">
+  <ion-content ng-init="fnDetail()" class="has-header">
     <div class="list mini" ng-init="vm.orderExpand = true">
       <div class="item" ng-click="vm.orderExpand = !vm.orderExpand">
         订单状态
@@ -93,8 +89,9 @@
     </div>
 
 
-    <div class="action-bar padding" ng-show="vm.order.status == 2">
-      <button class="button button-block button-balanced" ng-click="fnCommit()">{{vm.nextId ? '分配并处理下一条' : '分配'}}</button>
+    <div class="action-bar padding" ng-class="{'button-bar': vm.nextId}" ng-show="vm.order.status == 2">
+      <button class="button button-blue" ng-class="{'button-block': !vm.nextId}" ng-click="fnCommit()">分配</button>
+      <button class="button button-blue" ng-show="vm.nextId" style="min-width: 164px;" ng-click="fnCommit(true)">分配并处理下一条</button>
     </div>
 
   </ion-content>

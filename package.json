@@ -16,7 +16,11 @@
   },
   "cordovaPlugins": [
     "com.ionic.keyboard",
-    "org.apache.cordova.statusbar"
+    "org.apache.cordova.statusbar",
+    {
+      "locator": "/Users/jiangyun/WebstormProjects/car/plugin",
+      "id": "com.wttech.xgplugin"
+    }
   ],
   "cordovaPlatforms": [
     "ios"

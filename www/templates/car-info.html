@@ -29,7 +29,7 @@
           <div class="col">别名:{{vm.info.vehicleNickName}}</div>
         </div>
         <div class="row">
-          <div class="col" ng-switch="vm.currentLocation.stauts">
+          <div class="col" ng-switch="vm.currentLocation.status">
             <span ng-switch-when="1">当前状态:运动中</span>
             <span ng-switch-when="2">当前状态:静止</span>
             <span ng-switch-when="3">当前状态:离线</span>
@@ -45,38 +45,7 @@
     <!--车辆状况-->
     <div class="status" ng-show="vm.tab === '车辆状况'" ng-cloak>
       <!--仪表板-->
-      <div class="dashboard">
-        <!--时速-->
-        <div class="shisu">
-          <img id="speed" class="point" src="img/zhizhen_b.png" alt="" style="position: fixed;" />
-        </div>
-        <!--电压-->
-        <div class="dianya">
-          <img id="voltage" class="point" src="img/zhizhen.png" alt=""/>
-          <div class="label">
-            <p>电瓶电压</p>
-            <p>{{vm.currentLocation.voltage}}V</p>
-          </div>
-        </div>
-        <!--转速-->
-        <div class="zhuansu">
-          <img id="rpm" class="point" src="img/zhizhen.png" alt=""/>
-          <div class="label">
-            <p>发动机转速</p>
-            <p>{{vm.currentLocation.rpm}}rpm</p>
-          </div>
-        </div>
-        <!--当前时速-->
-        <div class="current-speed">
-          <label>当前时速</label>
-          <h2>{{vm.currentLocation.speed | number: 1}}Km/h</h2>
-        </div>
-        <!--当前油耗-->
-        <div class="fuel">
-          <label>当前油耗</label>
-          <h2>{{vm.currentLocation.fuel | number: 2}}L</h2>
-        </div>
-      </div>
+      <div class="dashboard" id="gauge"></div>
       <div class="row">
         <div class="col mile">
           <label>行驶里程 Km</label>
@@ -99,27 +68,25 @@
       </div>
     </div>
     <!--行车记录-->
-    <div class="record" ng-show="vm.tab === '行车记录'" ng-cloak style="margin-top: 1vh;">
+    <div class="record fix-retina" ng-show="vm.tab === '行车记录'" ng-cloak>
       <div class="board">
         <div class="date row">
-          <div class="col" ng-click="fnSetDay(vm.today, -1)">{{fnOtherDay(vm.today, -1) | date: 'M月d日'}}</div>
+          <div class="col" ng-click="fnSetDay(vm.today, -1)">
+          <i class="icon ion-ios-arrow-left"></i>
+          {{fnOtherDay(vm.today, -1) | date: 'M月d日'}}
+          </div>
           <div class="col" style="color: #3cbd0d;" ng-click="fnOpenPicker()">
             {{vm.today | date: 'M月d日'}}
           </div>
           <input id="today" type="hidden" readonly mobiscroll-date ng-model="vm.today" mobiscroll-instance="vm.todayInstance"
           mobiscroll-options="{lang: 'zh', mode: 'mixed', maxDate: today, dateFormat: 'm月d日' }"
           style="background-color: transparent; text-align: center; line-height: 20px; padding: 0;">
-          <div class="col" ng-hide="fnCanNextDay()" ng-click="fnSetDay(vm.today, 1)">{{fnOtherDay(vm.today, 1) | date: 'M月d日'}}</div>
-        </div>
-        <div class="time row row-center">
-          <!--<div class="col col-25" style="text-align: right;" ng-click="fnOpenPicker(vm.beginTime, 'time')">{{vm.beginTime | date: 'HH:mm'}}</div>-->
-          <div class="col col-25" style="text-align: right;">00:00</div>
-          <div class="col col-50"><hr size="4" style="border-style:dashed;"></div>
-          <!--<div class="col col-25" style="text-align: left;" ng-click="fnOpenPicker(vm.endTime, 'time')">{{vm.endTime | date: 'HH:mm'}}</div>-->
-          <div class="col col-25" style="text-align: left;">23:59</div>
+          <div class="col" ng-click="fnSetDay(vm.today, 1)">{{fnOtherDay(vm.today, 1) | date: 'M月d日'}}
+          <i class="icon ion-ios-arrow-right"></i>
+          </div>
         </div>
         <div class="info row">
-          <div class="col red">
+          <div class="col black">
             <p>当日油耗</p>
             <p>{{fnGetFuel() | number: 2}}L</p>
           </div>
@@ -127,7 +94,7 @@
             <p>行驶里程</p>
             <p>{{fnGetMile() | number: 2}}Km</p>
           </div>
-          <div class="col yellow">
+          <div class="col black">
             <p>平均油耗</p>
             <p>{{fnGetAvgFuel() | number: 2}}L/100Km</p>
           </div>

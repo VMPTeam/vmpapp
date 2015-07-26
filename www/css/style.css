@@ -16,10 +16,13 @@ a {
 ion-content .icon {
   color: #1e93c2;
 }
+.item-avatar > img:first-child {
+  border-radius: 0;
+}
 .button-blue {
   background-color: #cfecf9;
   border-color: #1e93c2;
-  color: #fff;
+  color: #222;
 }
 .card.mini {
   border-radius: 10px;
@@ -154,9 +157,6 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 }
 .date-picker {
   width: 130px;
-}
-.order-content {
-  top: 94px;
 }
 .order-content .card {
   margin: 10px;
@@ -564,9 +564,12 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 .car-info-box > div .status {
   float: right;
 }
+.car-info-content .trace {
+  position: relative;
+}
 .car-info-content .trace .info-bar {
   position: absolute;
-  top: 1vh;
+  top: 0;
   width: 100%;
   z-index: 2;
   background-color: rgba(0, 0, 0, 0.6);
@@ -581,7 +584,6 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 }
 .car-info-content .status .dashboard {
   position: relative;
-  background: #4895df;
   height: 200px;
 }
 .car-info-content .status .dashboard .shisu {
@@ -898,4 +900,7 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
   text-align: center;
   transform: rotate(-90deg);
   -webkit-transform: rotate(-90deg);
+}
+.has-footer {
+  bottom: 49px;
 }

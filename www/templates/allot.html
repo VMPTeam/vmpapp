@@ -40,7 +40,7 @@
       </div>
       <!--右侧信息条-->
       <div class="col right" style="background-color: #1cc1f4;" ng-init="fnWeather()">
-        <img alt="" class="img-weather" ng-src="{{vm.weather.pictureUrl}}"/>
+        <img alt="" class="img-weather" ng-src="{{vm.weather.pictureUrl || 'img/sun.png'}}"/>
         <p class="temperature">{{vm.weather.today.temp}}℃</p>
         <div class="text">
           <p class="weather">{{vm.weather.today.weather}}</p>
@@ -54,7 +54,7 @@
       <span class="badge badge-assertive" ng-if="unreadMsg">{{unreadMsg}}</span>
     </a>
   </ion-nav-buttons>
-  <ion-content class="order-content has-subheader" style="padding-top: 0; top: 188px;">
+  <ion-content class="allot order-content has-subheader has-footer">
     <ion-refresher on-refresh="fnGetList(vm.orderType)" pulling-text="下拉刷新..."></ion-refresher>
 
     <div class="card mini" ng-repeat="item in vm.list" ui-sref="allotDetail({id: item.serialNum})">

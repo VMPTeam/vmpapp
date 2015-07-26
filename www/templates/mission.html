@@ -7,7 +7,7 @@
     <span class="badge badge-assertive" ng-if="unreadMsg">{{unreadMsg}}</span>
     </a>
   </ion-nav-buttons>
-  <ion-content class="mission-content" ng-init="fnGetList()">
+  <ion-content class="mission-content has-footer" ng-init="fnGetList()">
     <ion-refresher
       pulling-text="下拉刷新..."
       on-refresh="fnGetList()">

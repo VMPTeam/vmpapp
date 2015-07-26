@@ -6,7 +6,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
       return Message.count().then(function(res) {
         var count;
         count = parseInt(res['1']) + parseInt(res['2']) + parseInt(res['3']);
-        $rootScope.unreadMsg = count;
+        $rootScope.unreadMsg = count < 100 ? count : '...';
       });
     }, 30000);
   };
@@ -115,7 +115,9 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
   return interceptor;
 }).config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, $httpProvider) {
   var fnTransParam;
+  $ionicConfigProvider.views.maxCache(20);
   $ionicConfigProvider.views.transition('none');
+  $ionicConfigProvider.views.forwardCache(true);
   $ionicConfigProvider.tabs.position('bottom');
   $ionicConfigProvider.navBar.alignTitle('center');
   $stateProvider.state('allot', {
