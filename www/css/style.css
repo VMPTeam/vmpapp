@@ -16,10 +16,13 @@ a {
 ion-content .icon {
   color: #1e93c2;
 }
+.item-avatar > img:first-child {
+  border-radius: 0;
+}
 .button-blue {
   background-color: #cfecf9;
   border-color: #1e93c2;
-  color: #fff;
+  color: #222;
 }
 .card.mini {
   border-radius: 10px;

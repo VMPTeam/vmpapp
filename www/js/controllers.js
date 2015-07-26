@@ -155,18 +155,20 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   初始化地图
    */
   $scope.fnInitMap = function() {
-    _CarMap = new BMap.Map('carMap');
-    _CarMap.centerAndZoom('合肥', 12);
-    _CarMap.addControl(new BMap.NavigationControl({
-      anchor: BMAP_ANCHOR_TOP_RIGHT,
-      type: BMAP_NAVIGATION_CONTROL_ZOOM
-    }));
-    _CarMap.addControl(new BMap.ScaleControl({
-      anchor: BMAP_ANCHOR_BOTTOM_LEFT
-    }));
     return $timeout(function() {
-      return $scope.fnRefreshMarker(vm.list);
-    }, 1000);
+      _CarMap = new BMap.Map('carMap');
+      _CarMap.centerAndZoom('合肥', 12);
+      _CarMap.addControl(new BMap.NavigationControl({
+        anchor: BMAP_ANCHOR_TOP_RIGHT,
+        type: BMAP_NAVIGATION_CONTROL_ZOOM
+      }));
+      _CarMap.addControl(new BMap.ScaleControl({
+        anchor: BMAP_ANCHOR_BOTTOM_LEFT
+      }));
+      return $timeout(function() {
+        return $scope.fnRefreshMarker(vm.list);
+      }, 1000);
+    }, 500);
   };
 
   /*
@@ -416,7 +418,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       template: '正在登录...',
       hideOnStateChange: true
     });
-    return Account.login(username, password).then(function() {
+    return Account.login(username + '@' + vm.companyInfo.orgCode, password).then(function() {
       return Account.userInfo();
     }).then(function(res) {
       $ionicLoading.hide();
@@ -956,7 +958,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     return _traceMap.panTo(point);
   };
   $scope.fnRefreshDashboard = function(location) {
-    var option, rpmOption, speedOption, voltageOption;
+    var option, rpmOption, speedOption, voltageOption, waterOption;
     speedOption = {
       name: '时速',
       type: 'gauge',
@@ -1066,13 +1068,13 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     voltageOption = {
       name: '电压',
       type: 'gauge',
-      center: ['86%', '76%'],
+      center: ['46%', '76%'],
       radius: '50%',
-      min: 0,
-      max: 27,
+      min: 9,
+      max: 36,
       startAngle: 135,
       endAngle: 45,
-      splitNumber: 3,
+      splitNumber: 2,
       axisLine: {
         lineStyle: {
           color: [[0.2, '#ff4500'], [0.8, '#48b'], [1, '#228b22']],
@@ -1089,9 +1091,11 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       axisLabel: {
         formatter: function(v) {
           switch (v) {
-            case 0:
+            case 9:
               return 'L';
-            case 27:
+            case 13.5:
+              return '电压';
+            case 36:
               return 'H';
           }
         }
@@ -1117,8 +1121,64 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         }
       ]
     };
+    waterOption = {
+      name: '水温',
+      type: 'gauge',
+      center: ['86%', '76%'],
+      radius: '50%',
+      min: -40,
+      max: 200,
+      startAngle: 315,
+      endAngle: 225,
+      splitNumber: 2,
+      axisLine: {
+        lineStyle: {
+          color: [[0.2, '#ff4500'], [0.8, '#48b'], [1, '#228b22']],
+          width: 8
+        }
+      },
+      axisTick: {
+        splitNumber: 9,
+        lenth: 10,
+        lineStyle: {
+          color: 'auto'
+        }
+      },
+      axisLabel: {
+        formatter: function(v) {
+          switch (v) {
+            case -40:
+              return 'L';
+            case 120:
+              return '水温';
+            case 200:
+              return 'H';
+          }
+        }
+      },
+      splitLine: {
+        length: 15,
+        lineStyle: {
+          color: 'auto'
+        }
+      },
+      pointer: {
+        width: 2
+      },
+      title: {
+        show: false
+      },
+      detail: {
+        show: false
+      },
+      data: [
+        {
+          value: parseFloat(location.waterDegree || 0)
+        }
+      ]
+    };
     option = {
-      series: [speedOption, rpmOption, voltageOption]
+      series: [speedOption, rpmOption, voltageOption, waterOption]
     };
     return $timeout(function() {
       if (!_gauge) {

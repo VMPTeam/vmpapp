@@ -26,7 +26,7 @@
       on-refresh="fnGetCarList(1)">
     </ion-refresher>
     <!--列表视图-->
-    <div ng-hide="vm.mapView">
+    <div ng-if="!vm.mapView">
       <div class="list mini" ng-init="fnGetCarList()">
         <a class="item item-avatar" ng-repeat="item in vm.list" ui-sref="carInfo({id: item.vehicleUid})">
           <img ng-src="{{item.vehicleAvatar}}">
@@ -50,7 +50,7 @@
       </div>
     </div>
     <!--地图视图-->
-    <div ng-show="vm.mapView" style="width: 100%; height: 100%;" ng-init="fnInitMap()">
+    <div ng-if="vm.mapView" style="width: 100%; height: 100%;" ng-init="fnInitMap()">
       <div id="carMap" style="width: 100%; height: 100%;"></div>
       <!--状态图例-->
       <div class="status-box">
