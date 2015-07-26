@@ -1117,7 +1117,8 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       if (!_gauge) {
         _gauge = echarts.init(document.getElementById('gauge'), 'blue');
       }
-      return _gauge.setOption(option);
+      _gauge.setOption(option);
+      return _gauge.refresh();
     }, 500);
   };
   $scope.fnInitTrace = function() {
@@ -1136,7 +1137,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
           return $scope.fnRefreshMarker(vm.currentLocation);
         }
       }, 2000);
-    }, 1000);
+    }, 500);
   };
   $scope.fnInitPark = function() {
     var currentPoint, item, j, len, marker, points, ref, results;
@@ -1207,6 +1208,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   };
   $scope.fnGetPark = function() {
     var getPoint;
+    $timeout(function() {
+      return $scope.fnInitPark();
+    }, 500);
     getPoint = function(item) {
       item.point = new BMap.Point(item.lo, item.la);
       return item;
@@ -1223,7 +1227,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         }
         return results;
       })();
-      return $scope.fnInitPark(vm.parks);
+      return $scope.fnInitPark();
     }, function(msg) {
       if (msg == null) {
         return;
