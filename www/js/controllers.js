@@ -873,7 +873,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     return results;
   };
 }).controller('CarInfoCtrl', function($scope, $state, $stateParams, $timeout, $filter, $interval, $ionicLoading, $ionicPopup, $cordovaDatePicker, $ionicScrollDelegate, $localStorage, $ionicModal, Car, Map) {
-  var _carMarker, _parkMap, _traceMap, vm;
+  var _carMarker, _gauge, _parkMap, _traceMap, vm;
   vm = $scope.vm = {
     id: $stateParams.id,
     tabList: ['车辆档案', '行车记录', '车辆跟踪', '车辆状况', '停车分布'],
@@ -888,6 +888,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   _traceMap = null;
   _carMarker = null;
   _parkMap = null;
+  _gauge = null;
   $scope.fnInitTab = function() {
     if ($stateParams.type != null) {
       return vm.tab = vm.tabList[$stateParams.type - 1];
@@ -948,28 +949,176 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     return _traceMap.panTo(point);
   };
   $scope.fnRefreshDashboard = function(location) {
-    var rpm, rpmAngle, rpmMaxAngle, rpmStartAngle, speed, speedAngle, speedMaxAngle, speedStartAngle, voltage, voltageAngle, voltageMaxAngle, voltageStartAngle;
-    speedMaxAngle = 210;
-    speedStartAngle = -105;
-    speed = parseFloat(location.speed) || 0;
-    speedAngle = (speedMaxAngle / 240 * speed) + speedStartAngle;
-    $('#speed').css({
-      'transform': 'rotateZ(' + speedAngle + 'deg)'
-    });
-    voltageMaxAngle = 116;
-    voltageStartAngle = -58;
-    voltage = parseFloat(location.voltage) || 0;
-    voltageAngle = (voltageMaxAngle / 27 * voltage) + voltageStartAngle;
-    $('#voltage').css({
-      'transform': 'rotateZ(' + voltageAngle + 'deg)'
-    });
-    rpmMaxAngle = 116;
-    rpmStartAngle = -58;
-    rpm = parseFloat(location.rpm) || 0;
-    rpmAngle = (rpmMaxAngle / 10000 * rpm) + rpmStartAngle;
-    return $('#rpm').css({
-      'transform': 'rotateZ(' + rpmAngle + 'deg)'
-    });
+    var option, rpmOption, speedOption, voltageOption;
+    speedOption = {
+      name: '时速',
+      type: 'gauge',
+      z: 3,
+      min: 0,
+      max: 240,
+      splitNumber: 6,
+      axisLine: {
+        lineStyle: {
+          color: [[0.2, '#1bb2d8'], [0.8, '#1790cf'], [1, '#1c7099']],
+          width: 6
+        }
+      },
+      axisTick: {
+        splitNumber: 10,
+        lenth: 14,
+        lineStyle: {
+          color: 'auto'
+        }
+      },
+      splitLine: {
+        length: 20,
+        lineStyle: {
+          color: 'auto'
+        }
+      },
+      pointer: {
+        length: '90%',
+        color: 'auto'
+      },
+      title: {
+        offsetCenter: [0, '84%'],
+        textStyle: {
+          color: '#333',
+          fontWeight: 'bolder',
+          fontSize: 12,
+          fontStyle: 'italic'
+        }
+      },
+      detail: {
+        textStyle: {
+          fontWeight: 'bloder',
+          color: 'auto'
+        }
+      },
+      data: [
+        {
+          value: parseFloat(location.speed || 0),
+          name: 'km/h'
+        }
+      ]
+    };
+    rpmOption = {
+      name: '转速',
+      type: 'gauge',
+      center: ['16%', '55%'],
+      radius: ['50%', '50%'],
+      min: 0,
+      max: 8,
+      endAngle: 45,
+      splitNumber: 4,
+      axisLine: {
+        lineStyle: {
+          color: [[0.2, '#1bb2d8'], [0.8, '#1790cf'], [1, '#1c7099']],
+          width: 6
+        }
+      },
+      axisTick: {
+        splitNumber: 10,
+        lenth: 12,
+        lineStyle: {
+          color: 'auto'
+        }
+      },
+      splitLine: {
+        length: 18,
+        lineStyle: {
+          color: 'auto'
+        }
+      },
+      pointer: {
+        width: 5
+      },
+      title: {
+        offsetCenter: [0, '100%'],
+        textStyle: {
+          color: '#333',
+          fontWeight: 'bolder',
+          fontSize: 12,
+          fontStyle: 'italic'
+        }
+      },
+      detail: {
+        offsetCenter: [0, '20%'],
+        textStyle: {
+          fontWeight: 'bloder',
+          color: 'auto'
+        }
+      },
+      data: [
+        {
+          value: parseFloat(location.rpm || 0) * 0.001,
+          name: 'x1000 r/min'
+        }
+      ]
+    };
+    voltageOption = {
+      name: '电压',
+      type: 'gauge',
+      center: ['86%', '76%'],
+      radius: '50%',
+      min: 0,
+      max: 27,
+      startAngle: 135,
+      endAngle: 45,
+      splitNumber: 3,
+      axisLine: {
+        lineStyle: {
+          color: [[0.2, '#ff4500'], [0.8, '#48b'], [1, '#228b22']],
+          width: 8
+        }
+      },
+      axisTick: {
+        splitNumber: 9,
+        lenth: 10,
+        lineStyle: {
+          color: 'auto'
+        }
+      },
+      axisLabel: {
+        formatter: function(v) {
+          switch (v) {
+            case 0:
+              return 'L';
+            case 27:
+              return 'H';
+          }
+        }
+      },
+      splitLine: {
+        length: 15,
+        lineStyle: {
+          color: 'auto'
+        }
+      },
+      pointer: {
+        width: 2
+      },
+      title: {
+        show: false
+      },
+      detail: {
+        show: false
+      },
+      data: [
+        {
+          value: parseFloat(location.voltage || 0)
+        }
+      ]
+    };
+    option = {
+      series: [speedOption, rpmOption, voltageOption]
+    };
+    return $timeout(function() {
+      if (!_gauge) {
+        _gauge = echarts.init(document.getElementById('gauge'), 'blue');
+      }
+      return _gauge.setOption(option);
+    }, 500);
   };
   $scope.fnInitTrace = function() {
     return $timeout(function() {
