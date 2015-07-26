@@ -422,6 +422,13 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       $ionicLoading.hide();
       $localStorage[KEY_USERNAME] = username;
       $localStorage[KEY_PASSWORD] = password;
+      if (window.cordova && window.cordova.plugins && window.cordova.plugins.XGPlugin) {
+        cordova.plugins.XGPlugin.register(function(res) {
+          return console.log(res);
+        }, function(err) {
+          return console.log(err);
+        }, username + '@' + vm.companyInfo.orgCode);
+      }
       vm.userInfo = res;
       if (Account.permission('vehicle_manager')) {
         $scope.$emit('message.open');
