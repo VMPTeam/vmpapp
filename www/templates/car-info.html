@@ -19,7 +19,7 @@
     </div>
   </div>
   <ion-content class="car-info-content has-tabs-top"
-   ng-class="{'map-view': vm.mapView}" ng-init="fnGetCarDetail()">
+   ng-class="{'map-view': vm.mapView}" style="top: 99px;" ng-init="fnGetCarDetail()">
     <!--车辆跟踪-->
     <div class="trace map-container" ng-show="vm.tab === '车辆跟踪'" ng-cloak>
       <div id="traceMap" class="map"></div>
@@ -45,38 +45,7 @@
     <!--车辆状况-->
     <div class="status" ng-show="vm.tab === '车辆状况'" ng-cloak>
       <!--仪表板-->
-      <div class="dashboard">
-        <!--时速-->
-        <div class="shisu">
-          <img id="speed" class="point" src="img/zhizhen_b.png" alt="" style="position: fixed;" />
-        </div>
-        <!--电压-->
-        <div class="dianya">
-          <img id="voltage" class="point" src="img/zhizhen.png" alt=""/>
-          <div class="label">
-            <p>电瓶电压</p>
-            <p>{{vm.currentLocation.voltage}}V</p>
-          </div>
-        </div>
-        <!--转速-->
-        <div class="zhuansu">
-          <img id="rpm" class="point" src="img/zhizhen.png" alt=""/>
-          <div class="label">
-            <p>发动机转速</p>
-            <p>{{vm.currentLocation.rpm}}rpm</p>
-          </div>
-        </div>
-        <!--当前时速-->
-        <div class="current-speed">
-          <label>当前时速</label>
-          <h2>{{vm.currentLocation.speed | number: 1}}Km/h</h2>
-        </div>
-        <!--当前油耗-->
-        <div class="fuel">
-          <label>当前油耗</label>
-          <h2>{{vm.currentLocation.fuel | number: 2}}L</h2>
-        </div>
-      </div>
+      <div class="dashboard" id="gauge"></div>
       <div class="row">
         <div class="col mile">
           <label>行驶里程 Km</label>
@@ -99,7 +68,7 @@
       </div>
     </div>
     <!--行车记录-->
-    <div class="record" ng-show="vm.tab === '行车记录'" ng-cloak style="margin-top: 1vh;">
+    <div class="record" ng-show="vm.tab === '行车记录'" ng-cloak>
       <div class="board">
         <div class="date row">
           <div class="col" ng-click="fnSetDay(vm.today, -1)">{{fnOtherDay(vm.today, -1) | date: 'M月d日'}}</div>

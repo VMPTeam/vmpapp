@@ -566,7 +566,7 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 }
 .car-info-content .trace .info-bar {
   position: absolute;
-  top: 1vh;
+  top: 0;
   width: 100%;
   z-index: 2;
   background-color: rgba(0, 0, 0, 0.6);
@@ -581,7 +581,6 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 }
 .car-info-content .status .dashboard {
   position: relative;
-  background: #4895df;
   height: 200px;
 }
 .car-info-content .status .dashboard .shisu {
