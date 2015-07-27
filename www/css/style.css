@@ -1,6 +1,18 @@
 a {
   text-decoration: none !important;
 }
+.button.button-assertive {
+  border-width: 0 !important;
+  background-color: #ef437a;
+  color: #fff;
+  border-radius: 8px;
+}
+.button.button-stable {
+  border-width: 0 !important;
+  background-color: #dcdcdc;
+  color: #cacaca;
+  border-radius: 8px;
+}
 .bg-black {
   background: #21292b !important;
 }
@@ -20,9 +32,14 @@ ion-content .icon {
   border-radius: 0;
 }
 .button-blue {
-  background-color: #cfecf9;
-  border-color: #1e93c2;
-  color: #222;
+  background-color: #1eb9f2;
+  border-width: 0 !important;
+  color: #fff;
+  border-radius: 8px;
+}
+.button-blue.activated {
+  background-color: #1ca7da;
+  color: #8cd5f0;
 }
 .card.mini {
   border-radius: 10px;
@@ -102,14 +119,14 @@ ion-content .icon {
   background-color: #fff;
 }
 .tabs-striped .tabs .tab-item {
-  border-bottom-color: #1e93c2;
+  border-bottom-color: #53b8de;
   margin-top: 0;
   padding: 4px 0;
 }
 .tabs-striped .tabs .tab-item.active-background.active {
   margin-top: 0;
   padding: 4px 0;
-  background-color: #1e93c2;
+  background-color: #53b8de;
 }
 ion-tabs.tabs-color-active-balanced .tab-item.tab-item-active,
 ion-tabs.tabs-color-active-balanced .tab-item.active,
@@ -717,6 +734,7 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 }
 .car-info-content .record .board > .row .col {
   text-align: center;
+  font-size: 18px;
   padding: 0;
   margin: 5px 0;
 }
@@ -740,6 +758,17 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 .car-info-content .record .board > .row.info .col {
   border-left: 1px solid #f1f1f1;
 }
+.car-info-content .record .board .arrow-circle::before {
+  position: absolute;
+  display: block;
+  right: 4px;
+  top: 2px;
+  content: ' ';
+  width: 16px;
+  height: 16px;
+  background: url('../img/arrow-circle.png') no-repeat;
+  background-size: 100%;
+}
 .car-info-content .record p {
   font-size: 12px;
 }
@@ -751,13 +780,14 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
   padding-top: 20px;
 }
 .custom-info-box {
-  width: 80vw;
+  width: 256px;
+  height: 195px;
   font-size: 12px;
   color: #fff;
   position: fixed;
   z-index: 2;
-  top: 7vh;
-  left: 10vw;
+  top: 0;
+  left: 0;
   background: url("../img/info-box-bg.png") no-repeat;
   background-size: 100%;
 }
@@ -885,7 +915,7 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
   background-image: url('../img/report8.png');
 }
 .reports-content .row > .col.item-9 {
-  background-image: url('../img/report8.png');
+  background-image: url('../img/report9.png');
 }
 .reports-content .row > .col.item-10 {
   background-image: url('../img/report10.png');
@@ -910,4 +940,9 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 }
 .has-footer {
   bottom: 49px;
+}
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

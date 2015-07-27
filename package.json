@@ -18,7 +18,7 @@
     "com.ionic.keyboard",
     "org.apache.cordova.statusbar",
     {
-      "locator": "/Users/jiangyun/WebstormProjects/car/plugin",
+      "locator": "/Users/jiangyun/WebstormProjects/car/com.wttech.xgplugin",
       "id": "com.wttech.xgplugin"
     }
   ],

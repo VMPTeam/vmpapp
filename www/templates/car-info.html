@@ -4,7 +4,7 @@
   </ion-nav-buttons>
   <div class="tabs-striped tabs-top tabs-background-stable">
     <div class="tabs tabs-icon-top" ng-init="fnInitTab()" style="height: 55px;">
-      <div class="tab-item" style="padding-top: 4px;"
+      <div class="tab-item active-background" style="padding-top: 4px;"
            ng-repeat="tab in vm.tabList"
            ng-class="{active: tab === vm.tab}"
            ng-click="vm.tab = vm.tabList[$index]"
@@ -75,8 +75,8 @@
           <i class="icon ion-ios-arrow-left"></i>
           {{fnOtherDay(vm.today, -1) | date: 'M月d日'}}
           </div>
-          <div class="col" style="color: #3cbd0d;" ng-click="fnOpenPicker()">
-            {{vm.today | date: 'M月d日'}}
+          <div class="col" style="color: #3cbd0d;position: relative;" ng-click="fnOpenPicker()">
+            {{vm.today | date: 'M月d日'}} <i class="arrow-circle"></i>
           </div>
           <input id="today" type="hidden" readonly mobiscroll-date ng-model="vm.today" mobiscroll-instance="vm.todayInstance"
           mobiscroll-options="{lang: 'zh', mode: 'mixed', maxDate: today, dateFormat: 'm月d日' }"

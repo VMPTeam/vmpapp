@@ -145,3 +145,18 @@
 .tab-item.active .icon-tab-msg-alert-3::before {
   background-image: url("../img/msg-alert3_1.png");
 }
+.tab-item.active .icon-tab-car-info::before {
+  background-image: url("../img/car-detail12_03.png");
+}
+.tab-item.active .icon-tab-car-record::before {
+  background-image: url("../img/car-detail12_05.png");
+}
+.tab-item.active .icon-tab-car-trace::before {
+  background-image: url("../img/car-detail12_07.png");
+}
+.tab-item.active .icon-tab-car-status::before {
+  background-image: url("../img/car-detail12_09.png");
+}
+.tab-item.active .icon-tab-car-park::before {
+  background-image: url("../img/car-detail12_11.png");
+}

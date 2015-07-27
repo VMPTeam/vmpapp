@@ -3,7 +3,7 @@
   <div class="bar bar-subheader info-bar-header">
     <div class="row">
       <!--左侧信息条-->
-      <div class="col col-67 left" ng-init="fnGetMsgCount()">
+      <div class="col left" ng-init="fnGetMsgCount()">
         <!--上层-->
         <div class="row up">
           <div class="col card fix" ui-sref="messages({type: 1})">
@@ -39,7 +39,7 @@
         </div>
       </div>
       <!--右侧信息条-->
-      <div class="col right" style="background-color: #1cc1f4;" ng-init="fnWeather()">
+      <div class="right" style="background-color: #1cc1f4; width: 121px;" ng-init="fnWeather()">
         <img alt="" class="img-weather" ng-src="{{vm.weather.pictureUrl || 'img/sun.png'}}"/>
         <p class="temperature">{{vm.weather.today.temp}}℃</p>
         <div class="text">

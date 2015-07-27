@@ -23,7 +23,7 @@
       <div class="item item-icon-right" ng-repeat="item in vm.list" ui-sref="messageDetail({messageUid: item.messageUid})">
         <h2>车牌号:{{item.vehicleLic}}</h2>
         <span>提醒类型:{{item.messageType}}</span>
-        <i class="icon ion-ios-arrow-right"></i>
+        <i class="icon ion-ios-arrow-right" style="color: grey;"></i>
       </div>
     </div>
     <div class="empty-list" ng-hide="vm.list.length">

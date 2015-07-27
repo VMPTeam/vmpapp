@@ -168,7 +168,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   $scope.fnInitMap = function() {
     $scope.fnGetCarList();
     return $timeout(function() {
-      _CarMap = new BMap.Map('carMap');
+      _CarMap = new BMap.Map('carMap', {
+        enableMapClick: false
+      });
       _CarMap.centerAndZoom('合肥', 12);
       _CarMap.addControl(new BMap.NavigationControl({
         anchor: BMAP_ANCHOR_TOP_RIGHT,
@@ -240,7 +242,14 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     });
     marker.vehicleUid = data.vehicleUid;
     marker.addEventListener('click', function() {
-      var id;
+      var height, id, offset, width;
+      height = 195;
+      width = 256;
+      offset = {
+        top: window.innerHeight / 2 - height - 50,
+        left: (window.innerWidth - width) / 2
+      };
+      $('.custom-info-box').offset(offset);
       _CarMap.panTo(marker.getPosition(), {
         noAnimation: true
       });
@@ -253,7 +262,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
           });
         };
         return _CarMap.addEventListener('movestart', close);
-      }, 500);
+      });
       id = this.vehicleUid;
       return $scope.$apply(function() {
         return $scope.fnSelectCar(id);
@@ -470,6 +479,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   $scope.fnLogout = function() {
     $scope.$emit('message.close');
     return Account.logout().then(function() {
+      if (window.cordova && window.cordova.plugins && window.cordova.plugins.XGPlugin) {
+        cordova.plugins.XGPlugin.unregister();
+      }
       return $state.go('login');
     });
   };
@@ -2598,6 +2610,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       toolbox: {
         show: true,
         y: 'top',
+        itemSize: 30,
         feature: {
           magicType: {
             show: true,
