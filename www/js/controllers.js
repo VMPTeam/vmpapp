@@ -249,7 +249,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         top: window.innerHeight / 2 - height - 50,
         left: (window.innerWidth - width) / 2
       };
-      $('.custom-info-box').offset(offset);
+      $('.custom-info-box').css(offset);
       _CarMap.panTo(marker.getPosition(), {
         noAnimation: true
       });
