@@ -91,7 +91,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return $scope.fnGetList(val);
     }
   });
-}).controller('CarCtrl', function($scope, $state, $stateParams, $timeout, $filter, $http, Car, Map, $ionicPopup, $localStorage, $ionicLoading, $ionicScrollDelegate) {
+}).controller('CarCtrl', function($scope, $state, $stateParams, $timeout, $filter, $http, $q, Car, Map, $ionicPopup, $localStorage, $ionicLoading, $ionicScrollDelegate) {
   var _CarMap, _lastInfoWindow, _markerClusterer, vm;
   vm = $scope.vm = {
     list: [],
@@ -112,22 +112,34 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   /*
   获取车辆列表
    */
-  $scope.fnGetCarList = function(concat) {
-    var data;
+  $scope.fnGetCarList = function(concat, all) {
+    var data, defer;
     if (concat == null) {
       concat = false;
     }
+    if (all == null) {
+      all = false;
+    }
+    defer = $q.defer();
     $ionicLoading.show();
     if (concat === false) {
       vm.pageStart = 1;
     }
-    data = {
-      pageCount: vm.pageCount,
-      pageStart: concat === true ? ++vm.pageStart : vm.pageStart,
-      matchLic: vm.search,
-      matchNick: vm.search
-    };
-    return Car.list(data).then(function(res) {
+    if (all) {
+      data = {
+        pageCount: 999999,
+        pageStart: 1
+      };
+    } else {
+      data = {
+        pageCount: vm.pageCount,
+        pageStart: concat === true ? ++vm.pageStart : vm.pageStart,
+        matchLic: vm.search,
+        matchNick: vm.search
+      };
+    }
+    Car.list(data).then(function(res) {
+      defer.resolve();
       $ionicLoading.hide();
       if (concat === true) {
         vm.list = vm.list.concat(res.rows);
@@ -141,6 +153,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       }
       return $scope.fnRefreshMarker(vm.list);
     }, function(msg) {
+      defer.resolve();
       $ionicLoading.hide();
       vm.hasMore = false;
       if (msg == null) {
@@ -150,9 +163,11 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         title: msg
       });
     })["finally"](function() {
+      defer.resolve();
       $scope.$broadcast('scroll.refreshComplete');
       return $scope.$broadcast('scroll.infiniteScrollComplete');
     });
+    return defer.promise;
   };
 
   /*
@@ -166,8 +181,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   初始化地图
    */
   $scope.fnInitMap = function() {
-    $scope.fnGetCarList();
-    return $timeout(function() {
+    return $scope.fnGetCarList(false, true).then(function() {
       _CarMap = new BMap.Map('carMap', {
         enableMapClick: false
       });
@@ -182,7 +196,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return $timeout(function() {
         return $scope.fnRefreshMarker(vm.list);
       }, 1000);
-    }, 500);
+    });
   };
 
   /*
@@ -243,6 +257,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     marker.vehicleUid = data.vehicleUid;
     marker.addEventListener('click', function() {
       var height, id, offset, width;
+      _CarMap.removeEventListener('movestart', $scope.fnCloseInfoBox);
       height = 195;
       width = 256;
       offset = {
@@ -250,18 +265,12 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         left: (window.innerWidth - width) / 2
       };
       $('.custom-info-box').css(offset);
+      $('#carInfoBox').show();
       _CarMap.panTo(marker.getPosition(), {
         noAnimation: true
       });
       $timeout(function() {
-        var close;
-        close = function() {
-          _CarMap.removeEventListener('movestart', close);
-          return $timeout(function() {
-            return delete vm.selectedCar;
-          });
-        };
-        return _CarMap.addEventListener('movestart', close);
+        return _CarMap.addEventListener('movestart', $scope.fnCloseInfoBox);
       });
       id = this.vehicleUid;
       return $scope.$apply(function() {
@@ -269,6 +278,13 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       });
     });
     return marker;
+  };
+  $scope.fnCloseInfoBox = function() {
+    $('#carInfoBox').hide();
+    _CarMap.removeEventListener('movestart', $scope.fnCloseInfoBox);
+    return $timeout(function() {
+      return delete vm.selectedCar;
+    });
   };
 
   /*

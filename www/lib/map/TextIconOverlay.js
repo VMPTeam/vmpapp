@@ -1032,7 +1032,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
         T.event.on(this._domElement,"mouseout", function(e){
             me.dispatchEvent(eventExtend(e, new BaseEvent("onmouseout")));
         });
-        T.event.on(this._domElement,"click", function(e){
+        T.event.on(this._domElement,"touchend", function(e){
             me.dispatchEvent(eventExtend(e, new BaseEvent("onclick")));
         });
     };

@@ -61,7 +61,7 @@
       <div class="area-box" ui-sref="areaList">
         栅栏
       </div>
-      <div class="custom-info-box text-center no-padding" ng-show="vm.selectedCar">
+      <div class="custom-info-box text-center no-padding" id="carInfoBox">
         <div class="info">
           <div class="row">
             <div class="col col-33 text-center no-padding">
@@ -69,7 +69,7 @@
             </div>
             <div class="col text">
               <h3 style="color: #fff;">{{vm.selectedCar.vehicleLic}}</h3>
-              <p>{{vm.selectedCar.driverName}}</p>
+              <p><i ng-show="vm.selectedCar.driverName" class="icon ion-person"></i>{{vm.selectedCar.driverName}}</p>
               <p class="truncate" style="width: 161px;">{{vm.selectedCar.address}}</p>
             </div>
           </div>

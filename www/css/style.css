@@ -780,6 +780,7 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
   padding-top: 20px;
 }
 .custom-info-box {
+  display: none;
   width: 256px;
   height: 195px;
   font-size: 12px;
