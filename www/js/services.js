@@ -9,8 +9,6 @@ angular.module('starter.services', []).service('ErrorHandle', function($state) {
     } else if (status === 401) {
       $state.go('login');
       return defer.reject(null);
-    } else if (status === 0) {
-      return defer.reject('服务器无响应');
     } else {
       return defer.reject(res.msg || '未知错误:' + status);
     }
@@ -479,7 +477,25 @@ angular.module('starter.services', []).service('ErrorHandle', function($state) {
   this.taxList = function(id) {
     var defer;
     defer = $q.defer();
-    $http.get('/order/' + id(+'/fund/list')).success(function(res) {
+    $http.get('/order/' + id + '/fund/list').success(function(res) {
+      if (res.ret) {
+        return defer.reject(res.message);
+      } else {
+        return defer.resolve(res);
+      }
+    }).error(function(err, status) {
+      return ErrorHandle(status, err, defer);
+    });
+    return defer.promise;
+  };
+
+  /*
+  税费添加
+   */
+  this.addTax = function(id, data) {
+    var defer;
+    defer = $q.defer();
+    $http.post('/order/' + id + '/fund', data).success(function(res) {
       if (res.ret) {
         return defer.reject(res.message);
       } else {

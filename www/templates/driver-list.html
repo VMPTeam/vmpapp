@@ -15,7 +15,7 @@
   <ion-content class="driver-list has-subheader">
     <ion-refresher
       pulling-text="下拉刷新..."
-      on-refresh="fnGetDriverList(1)">
+      on-refresh="fnGetDriverList()">
     </ion-refresher>
     <div class="list mini" ng-init="fnGetDriverList()">
       <a class="item" collection-repeat="item in vm.list" ng-click="fnSelectDriver(item)">

@@ -32,8 +32,7 @@
           <div class="col" ng-switch="vm.currentLocation.status">
             <span ng-switch-when="1">当前状态:运动中</span>
             <span ng-switch-when="2">当前状态:静止</span>
-            <span ng-switch-when="3">当前状态:离线</span>
-            <span ng-switch-default>当前状态:未知</span>
+            <span ng-switch-default>当前状态:离线</span>
           </div>
           <div class="col">当前速度:{{vm.currentLocation.speed}}km/h</div>
         </div>

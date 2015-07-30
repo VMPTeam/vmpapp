@@ -359,7 +359,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       pageCount: vm.pageCount,
       pageStart: concat === true ? ++vm.pageStart : vm.pageStart,
       matchName: vm.search,
-      matchStaffId: vm.search
+      matchStaffCode: vm.search
     };
     return Driver.list(data).then(function(res) {
       $ionicLoading.hide();
@@ -1574,7 +1574,12 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   $scope.fnDetail = function() {
     if (vm.id != null) {
       return Area.detail(vm.id).then(function(res) {
-        return angular.extend(vm.formData, res);
+        angular.extend(vm.formData, res);
+        return $localStorage['points_' + res.areaUid] = {
+          type: res.type,
+          radius: res.radius,
+          points: res.points
+        };
       }, function(msg) {
         if (msg == null) {
           return;
@@ -1666,7 +1671,44 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       map.getContainer().appendChild(div);
       return div;
     };
-    return _areaMap.addControl(new areaControl());
+    if ($stateParams.read) {
+      return $scope.fnDrawPoints($localStorage['points_' + vm.id]);
+    } else {
+      return _areaMap.addControl(new areaControl());
+    }
+  };
+  $scope.fnDrawPoints = function(pointInfo) {
+    var circle, point, points, polygon, type;
+    type = pointInfo.type;
+    points = (function() {
+      var j, len, ref, results;
+      ref = pointInfo.points;
+      results = [];
+      for (j = 0, len = ref.length; j < len; j++) {
+        point = ref[j];
+        results.push(new BMap.Point(point.lo, point.la));
+      }
+      return results;
+    })();
+    if (type) {
+      circle = new BMap.Circle(points[0], pointInfo.radius, {
+        strokeWeight: 2,
+        strokeColor: "#ff0000"
+      });
+      _areaMap.addOverlay(circle);
+      $timeout(function() {
+        return _areaMap.panTo(points[0]);
+      }, 200);
+    } else {
+      polygon = new BMap.Polygon(points, {
+        strokeWeight: 2,
+        strokeColor: "#ff0000"
+      });
+      _areaMap.addOverlay(polygon);
+      $timeout(function() {
+        return _areaMap.setViewport(points);
+      }, 200);
+    }
   };
   $scope.fnGetPoints = function() {
     var points;
@@ -1746,6 +1788,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       costTime: new Date()
     }
   };
+  $scope.today = new Date();
   $scope.fnConcatPeople = function(list) {
     var _arr, people;
     if (!angular.isArray(list)) {
@@ -2601,7 +2644,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   $scope.fnRefreshChart = function(list, type) {
     var dates, j, num, option, values;
     if (type == null) {
-      type = "line";
+      type = "bar";
     }
     myChart.clear();
     values = [];
@@ -2615,7 +2658,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
           values.push(list[num - 1]['Y1']);
         }
       } else {
-        values.push('-');
+        values.push(parseInt(Math.random() * 10));
       }
     }
     option = {
@@ -2626,7 +2669,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       toolbox: {
         show: true,
         y: 'top',
-        itemSize: 30,
+        itemSize: 26,
         feature: {
           magicType: {
             show: true,
@@ -2636,10 +2679,11 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       },
       grid: {
         x: 50,
-        x2: 10,
-        y: 10
+        x2: 50,
+        y: 30
       },
       xAxis: {
+        name: '日期(日)',
         data: dates,
         axisLabel: {
           interval: function(index, val) {
@@ -2648,10 +2692,8 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         }
       },
       yAxis: {
-        type: 'value',
-        lineStyle: {
-          width: 2
-        }
+        name: vm.labels[vm.type],
+        type: 'value'
       },
       series: [
         {
@@ -2673,8 +2715,8 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     endTime.setDate(1);
     endTime.setDate(-1);
     data = {
-      startDate: $filter('date')(startTime, 'yyyy-MM-dd'),
-      endDate: $filter('date')(endTime, 'yyyy-MM-dd'),
+      startDate: $filter('date')(startTime, 'yyyyMMdd'),
+      endDate: $filter('date')(endTime, 'yyyyMMdd'),
       unitId: vm.user.dept.deptUid,
       code: $stateParams.type
     };

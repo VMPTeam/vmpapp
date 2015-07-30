@@ -1,9 +1,15 @@
 a {
   text-decoration: none !important;
 }
+.button-bar > .button {
+  margin-left: 10px;
+}
+.button-bar > .button:first-child {
+  margin-left: 0;
+}
 .button.button-assertive {
   border-width: 0 !important;
-  background-color: #ef437a;
+  background-color: #e14739;
   color: #fff;
   border-radius: 8px;
 }

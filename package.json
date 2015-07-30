@@ -20,7 +20,8 @@
     {
       "locator": "/Users/jiangyun/WebstormProjects/car/com.wttech.xgplugin",
       "id": "com.wttech.xgplugin"
-    }
+    },
+    "cordova-plugin-splashscreen"
   ],
   "cordovaPlatforms": [
     "ios"

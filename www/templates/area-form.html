@@ -3,7 +3,7 @@
     <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
   </ion-nav-buttons>
   <ion-nav-buttons side="right">
-    <a class="button button-clear" ng-disabled="!vm.formData.name || !fnGetPoints().length" ng-click="fnCreate()" ng-hide="vm.id">保存</a>
+    <!-- <a class="button button-clear" ng-disabled="!vm.formData.name || !fnGetPoints().length" ng-click="fnCreate()" ng-hide="vm.id">保存</a> -->
   </ion-nav-buttons>
   <ion-content class="area-content" ng-init="fnDetail(vm.id)">
     <form name="form" ng-if="!vm.id">
@@ -54,9 +54,9 @@
         栅栏名称
         <span class="item-note" ng-bind="vm.formData.name">
       </div>
-      <a class="item" ui-sref="areaMap({id: vm.id})">
+      <a class="item" ui-sref="areaMap({id: vm.id, read: 1})">
         监控区域
-        <span class="item-note">已选择</span>
+        <span class="item-note" style="color: #000;">查看</span>
       </a>
       <div class="item">
         触发方式

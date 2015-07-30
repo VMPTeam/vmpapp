@@ -26,7 +26,7 @@
       </div>
       <div class="item">
         <span>申领日期</span>
-        <span class="item-note">{{vm.driver.licFirst | date: 'yyyy-MM-dd'}}</span>
+        <span class="item-note">{{vm.driver.licFirst | limitTo: 10}}</span>
       </div>
       <div class="item">
         <span>准驾车型</span>

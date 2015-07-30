@@ -23,7 +23,7 @@
   <ion-content class="car-list has-footer" ng-class="{'map-view': vm.mapView, 'has-subheader': !vm.mapView}">
     <ion-refresher
       pulling-text="下拉刷新..."
-      on-refresh="fnGetCarList(1)">
+      on-refresh="fnGetCarList()">
     </ion-refresher>
     <!--列表视图-->
     <div ng-if="!vm.mapView">
@@ -38,8 +38,7 @@
             <span style="color: #3fac29;" ng-switch="item.location.status">
               <span ng-switch-when="1">运动中</span>
               <span ng-switch-when="2">静止</span>
-              <span ng-switch-when="3">离线</span>
-              <span ng-switch-default>未知</span>
+              <span ng-switch-default>离线</span>
             </span>
             <i class="icon ion-ios-arrow-right"></i>
           </span>
