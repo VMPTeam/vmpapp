@@ -17,8 +17,9 @@
   <preference name="BackupWebStorage" value="none"/>
   <preference name="SplashScreenDelay" value="5000"/>
   <preference name="Orientation" value="portrait"/>
-  <preference name="StatusBarBackgroundColor" value="#ffffff"/>
+  <preference name="StatusBarBackgroundColor" value="#000000"/>
   <preference name="StatusBarOverlaysWebView" value="true"/>
+  <preference name="fullscreen" value="true" />
   <feature name="StatusBar">
     <param name="ios-package" value="CDVStatusBar" onload="true"/>
   </feature>

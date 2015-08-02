@@ -2365,7 +2365,7 @@ KEY_ACCOUNT
       grid:
         x: 50
         x2: 50
-        y: 30
+        y: 40
       xAxis: 
         name: '日期(日)'
         data: dates

@@ -127,7 +127,21 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
   $ionicConfigProvider.views.swipeBackEnabled(false);
   $stateProvider.state('newHome', {
     url: '/newHome',
-    templateUrl: 'templates/newHome.html'
+    templateUrl: 'templates/newHome.html',
+    onEnter: function() {
+      return document.addEventListener('deviceready', function() {
+        if (window.StatusBar) {
+          return window.StatusBar.overlaysWebView(false);
+        }
+      }, false);
+    },
+    onExit: function() {
+      return document.addEventListener('deviceready', function() {
+        if (window.StatusBar) {
+          return window.StatusBar.overlaysWebView(true);
+        }
+      }, false);
+    }
   }).state('allot', {
     url: '/allots',
     templateUrl: 'templates/allot.html',

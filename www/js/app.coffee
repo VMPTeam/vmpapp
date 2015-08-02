@@ -167,6 +167,16 @@ $httpProvider
   .state 'newHome',
     url: '/newHome'
     templateUrl: 'templates/newHome.html'
+    onEnter: ->
+      document.addEventListener 'deviceready', ->
+        if window.StatusBar
+          window.StatusBar.overlaysWebView(false)
+      , false
+    onExit: ->
+      document.addEventListener 'deviceready', ->
+        if window.StatusBar
+          window.StatusBar.overlaysWebView(true)
+      , false
 
   # 管理员待分配列表tab
   .state 'allot',

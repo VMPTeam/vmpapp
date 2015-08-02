@@ -2,17 +2,17 @@
   <ion-content class="user-home-content has-footer">
     <form name="form">
       <div class="list mini">
-        <!-- end place -->
-        <div class="item item-icon-left item-icon-right">
-          <i class="icon-custom icon-end"></i>
-          <input type="text" style="width: 100%;height: 21px;" ng-model="vm.planEndPlace" required placeholder="目的地"/>
-          <i class="icon-custom icon-map" ui-sref="map({from: 'planEndPlace'})"></i>
-        </div>
         <!-- begin place -->
         <div class="item item-icon-left item-icon-right">
           <i class="icon-custom icon-begin"></i>
           <input type="text" style="width: 100%;height: 21px;" ng-model="vm.planStartPlace" required placeholder="上车地点"/>
           <i class="icon-custom icon-map" ui-sref="map({from: 'planStartPlace'})"></i>
+        </div>
+        <!-- end place -->
+        <div class="item item-icon-left item-icon-right">
+          <i class="icon-custom icon-end"></i>
+          <input type="text" style="width: 100%;height: 21px;" ng-model="vm.planEndPlace" required placeholder="目的地"/>
+          <i class="icon-custom icon-map" ui-sref="map({from: 'planEndPlace'})"></i>
         </div>
       </div>
 
