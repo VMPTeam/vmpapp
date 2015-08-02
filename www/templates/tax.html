@@ -1,8 +1,8 @@
-<ion-view view-title="慧管车" hide-back-button="true" class="bg-default">
+<ion-view view-title="慧管车" cache-view="false" class="bg-default">
   <ion-nav-buttons side="left">
     <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
   </ion-nav-buttons>
-  <ion-content class="tax-content">
+  <ion-content class="tax-content" ng-init="fnGetTaxInfo()">
     <form name="form">
       <div class="list mini">
         <div class="item item-input item-select">
@@ -22,7 +22,7 @@
         <div class="item">
           <span>缴费地点</span>
           <div class="input-container">
-            <input type="text" ng-model="vm.tax.costLoc" placeholder="合肥"/>
+            <input type="text" ng-model="vm.tax.costLoc" name="place" required placeholder="合肥"/>
           </div>
         </div>
         <div class="item">
@@ -41,7 +41,7 @@
       </div>
 
       <div class="btn-bar padding">
-        <button class="button button-block button-blue" ng-disabled="form.$invalid" ng-click="fnAddTax(vm.tax)">添加</button>
+        <button class="button button-block button-blue" ng-disabled="form.$invalid" ng-click="fnAddTax(vm.tax)">{{vm.costId?'保存':'添加'}}</button>
       </div>
     </form>
   </ion-content>

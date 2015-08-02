@@ -10,7 +10,7 @@ angular.module('starter.services', []).service('ErrorHandle', function($state) {
       $state.go('login');
       return defer.reject(null);
     } else {
-      return defer.reject(res.msg || '未知错误:' + status);
+      return defer.reject((res && res.msg) || '未知错误:' + status);
     }
   };
 }).service('Account', function($http, $q, $timeout, $localStorage, $filter, $cordovaGeolocation, md5, KEY_TOKEN, KEY_ACCOUNT, ErrorHandle) {
@@ -496,6 +496,42 @@ angular.module('starter.services', []).service('ErrorHandle', function($state) {
     var defer;
     defer = $q.defer();
     $http.post('/order/' + id + '/fund', data).success(function(res) {
+      if (res.ret) {
+        return defer.reject(res.message);
+      } else {
+        return defer.resolve(res);
+      }
+    }).error(function(err, status) {
+      return ErrorHandle(status, err, defer);
+    });
+    return defer.promise;
+  };
+
+  /*
+  税费详情
+   */
+  this.detailTax = function(id, data) {
+    var defer;
+    defer = $q.defer();
+    $http.get('/fund/' + id).success(function(res) {
+      if (res.ret) {
+        return defer.reject(res.message);
+      } else {
+        return defer.resolve(res);
+      }
+    }).error(function(err, status) {
+      return ErrorHandle(status, err, defer);
+    });
+    return defer.promise;
+  };
+
+  /*
+  税费修改
+   */
+  this.modifyTax = function(id, data) {
+    var defer;
+    defer = $q.defer();
+    $http.post('/fund/' + id, data).success(function(res) {
       if (res.ret) {
         return defer.reject(res.message);
       } else {

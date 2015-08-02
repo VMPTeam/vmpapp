@@ -1,4 +1,4 @@
-<ion-view view-title="慧管车" hide-back-button="true" class="bg-default">
+<ion-view view-title="行车日志" cache-view="false" class="bg-default">
   <ion-nav-buttons side="left">
     <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
   </ion-nav-buttons>
@@ -14,7 +14,8 @@
     </div>
 
     <div class="list mini">
-      <div class="item" ng-repeat="tax in vm.taxList">
+      <a class="item" ng-repeat="tax in vm.taxList" 
+      ui-sref="editTax({taxId: vm.taxId, costId: tax.costUid})">
         <span ng-switch="tax.costType">
           <span ng-switch-when="1">高速公路收费</span>
           <span ng-switch-when="2">加油费</span>
@@ -23,7 +24,7 @@
         <span class="item-note">{{tax.costAmount || 0}}元
           <i class="icon ion-chevron-right"></i>
         </span>
-      </div>
+      </a>
     </div>
   </ion-content>
 </ion-view>

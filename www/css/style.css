@@ -953,3 +953,36 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+.new-home a {
+  color: #fff;
+}
+.new-home .row {
+  margin: 0;
+  padding: 0;
+}
+.new-home .row .col {
+  margin: 0;
+  padding: 0;
+  border: 2px solid #fff;
+  text-align: center;
+  padding-top: 8%;
+}
+.new-home .row .col.sub {
+  padding-top: 0;
+}
+.new-home .row .col.sub .col {
+  border-left: none;
+  border-right: none;
+}
+.new-home .row .col.sub .col p {
+  margin: 0;
+}
+.new-home .row .col.sub .col img {
+  width: 40%;
+}
+.new-home .row .col p {
+  text-align: center;
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: bold;
+}

@@ -27,6 +27,13 @@
         <i class="icon ion-ios-arrow-right"></i>
       </a>
     </ul>
+
+    <ul class="list" ng-show="fnGetPermission('vehicle_manager')" ng-cloak>
+      <ion-toggle ng-model="vm.newHome"   ng-checked="vm.newHome"
+                  ng-change="fnSettingNewHome(vm.newHome)">
+        新首页
+      </ion-toggle>
+    </ul>
     <div class="row">
       <div class="col padding">
         <button class="button button-full button-assertive" ng-click="fnLogout()">
