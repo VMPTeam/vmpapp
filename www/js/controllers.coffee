@@ -445,7 +445,10 @@ CLIENT_TYPE
       if Account.permission 'vehicle_manager'
         # open timer
         $scope.$emit 'message.open'
-        $state.go 'allot'
+        if $localStorage['newHome']
+          $state.go 'newHome'
+        else  
+          $state.go 'allot'
       else if Account.permission 'driver'
         # open timer
         $scope.$emit 'message.open'

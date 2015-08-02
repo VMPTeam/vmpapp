@@ -475,7 +475,11 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       vm.userInfo = res;
       if (Account.permission('vehicle_manager')) {
         $scope.$emit('message.open');
-        return $state.go('allot');
+        if ($localStorage['newHome']) {
+          return $state.go('newHome');
+        } else {
+          return $state.go('allot');
+        }
       } else if (Account.permission('driver')) {
         $scope.$emit('message.open');
         return $state.go('mission');
