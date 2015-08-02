@@ -1,5 +1,5 @@
 <ion-view hide-nav-bar="true" class="bg">
-  <ion-content class="company-content">
+  <ion-content class="company-content" scroll="false">
     <div class="text-center">
       <img class="logo" src="img/logo.png" alt="皖通科技"/>
       <div class="app-name">
@@ -7,7 +7,7 @@
         <span>HUIGUANCHE</span>
       </div>
     </div>
-    <form name="companyForm">
+    <form name="companyForm" style="position: absolute; width: 100%; bottom: 15vh;">
       <div class="list list-inset" style="border-radius: 8px;">
         <label class="item item-input">
           <input type="text" ng-model="vm.code" placeholder="首次登录请输入机构号" required style="padding: 0;">

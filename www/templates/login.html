@@ -1,14 +1,14 @@
 <ion-view hide-nav-bar="true" class="bg">
-  <ion-content class="login-content">
+  <ion-content class="login-content" scroll="false">
     <div class="text-center">
       <!-- <img class="logo" src="img/logo.png" alt="皖通科技"/>
       <div class="app-name">
         <h2>慧管车</h2>
         <span>HUIGUANCHE</span>
       </div> -->
-      <img src="img/wantong.png" class="logo" alt="" style="width: 90vw;" />
+      <img ng-src="{{vm.companyInfo.orgLogo || 'img/wantong.png'}}" class="logo" alt="" style="width: 90vw;" />
     </div>
-    <form name="loginForm">
+    <form name="loginForm" style="position: absolute; width: 100%; bottom: 15vh;">
       <div class="list list-inset">
         <label class="item item-icon-left item-input" style="padding-left: 50px;">
           <i class="icon-custom icon-user"></i>
