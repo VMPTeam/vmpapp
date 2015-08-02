@@ -737,13 +737,11 @@ angular.module('starter.services', []).service('ErrorHandle', function($state) {
     });
     return defer.promise;
   };
-  this.list = function(type) {
+  this.list = function(param) {
     var defer;
     defer = $q.defer();
     $http.get('/message/list', {
-      params: {
-        messageType: type
-      }
+      params: param
     }).success(function(res) {
       if (res.ret) {
         return defer.reject(res.message);

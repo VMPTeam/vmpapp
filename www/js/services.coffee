@@ -600,11 +600,11 @@ ErrorHandle
     return defer.promise
 
   # 获取消息列表
-  @.list = (type) ->
+  @.list = (param) ->
     defer = $q.defer()
     $http.get '/message/list',
-      params: 
-        messageType: type
+      params: param
+
     .success (res) ->
       if res.ret then defer.reject res.message else defer.resolve res
     .error (err, status) ->

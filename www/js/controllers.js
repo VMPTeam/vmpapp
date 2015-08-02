@@ -559,6 +559,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
    * 获取消息列表
    */
   $scope.fnGetMsgList = function(tab, concat) {
+    var data;
     if (concat == null) {
       concat = false;
     }
@@ -569,8 +570,33 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       vm.pageStart = 1;
       vm.list = [];
     }
-    return Message.list(vm.currentTab).then(function(res) {
-      return vm.list = res.rows;
+    data = {
+      messageType: tab,
+      pageCount: vm.pageCount,
+      pageStart: concat === true ? ++vm.pageStart : vm.pageStart
+    };
+    $ionicLoading.show();
+    return Message.list(data).then(function(res) {
+      $ionicLoading.hide();
+      if (concat === true) {
+        vm.list = vm.list.concat(res.rows);
+      } else {
+        vm.list = res.rows;
+      }
+      if (res.total < vm.pageCount) {
+        return vm.hasMore = false;
+      } else {
+        return vm.hasMore = true;
+      }
+    }, function(msg) {
+      $ionicLoading.hide();
+      vm.hasMore = false;
+      if (msg == null) {
+        return;
+      }
+      return $ionicPopup.alert({
+        title: msg
+      });
     })["finally"](function() {
       $scope.$broadcast('scroll.refreshComplete');
       return $scope.$broadcast('scroll.infiniteScrollComplete');

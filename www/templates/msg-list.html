@@ -26,6 +26,11 @@
         <i class="icon ion-ios-arrow-right" style="color: grey;"></i>
       </div>
     </div>
+    <ion-infinite-scroll
+      ng-if="vm.hasMore"
+      on-infinite="fnGetMsgList(vm.currentTab,true)"
+      immediate-check="false">
+    </ion-infinite-scroll>
     <div class="empty-list" ng-hide="vm.list.length">
       暂无数据
     </div>

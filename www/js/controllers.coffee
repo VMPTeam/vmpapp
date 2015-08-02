@@ -531,14 +531,28 @@ CLIENT_TYPE
     if concat is false
       vm.pageStart = 1
       vm.list = []
-    # data =
-    #   pageCount: vm.pageCount
-    #   pageStart: if concat is true then ++vm.pageStart else vm.pageStart
-    #   matchName: vm.search
-    #   matchStaffId: vm.search
-    Message.list vm.currentTab
+    data =
+      messageType: tab
+      pageCount: vm.pageCount
+      pageStart: if concat is true then ++vm.pageStart else vm.pageStart
+    $ionicLoading.show()
+    Message.list data
     .then (res) ->
-      vm.list = res.rows
+      $ionicLoading.hide()
+
+      if concat is true
+        vm.list = vm.list.concat res.rows
+      else
+        vm.list = res.rows
+      if res.total < vm.pageCount then vm.hasMore = false else vm.hasMore = true
+
+    , (msg) ->
+      $ionicLoading.hide()
+
+      vm.hasMore = false
+      return unless msg?
+      $ionicPopup.alert
+        title: msg
     .finally ->
       $scope.$broadcast 'scroll.refreshComplete'
       $scope.$broadcast 'scroll.infiniteScrollComplete'
