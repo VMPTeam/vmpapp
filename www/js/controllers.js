@@ -210,7 +210,7 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         results = [];
         for (j = 0, len = list.length; j < len; j++) {
           item = list[j];
-          if (item.location != null) {
+          if ((item.location != null) && item.location.lo) {
             results.push($scope.fnCreateMarker(item));
           }
         }
@@ -2397,25 +2397,54 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       return obj = indexOf.call($localStorage['selectedCar'], id) >= 0;
     }
   };
-}).controller('User.PeopleCtrl', function($scope, $filter, $localStorage, $ionicLoading, $ionicPopup, $ionicModal, People) {
+}).controller('User.PeopleCtrl', function($scope, $filter, $localStorage, $ionicLoading, $ionicPopup, $ionicModal, People, Account) {
   var vm;
   vm = $scope.vm = {
-    list: []
+    list: [],
+    tempList: $localStorage['peoples'],
+    pageStart: 1,
+    pageCount: 20,
+    hasMore: true,
+    search: ''
   };
-  $scope.fnGetList = function() {
-    return People.list().then(function(res) {
-      $scope.$broadcast('scroll.refreshComplete');
-      $scope.$broadcast('scroll.infiniteScrollComplete');
-      return vm.list = res.rows;
+  $scope.fnGetList = function(concat) {
+    var data;
+    if (concat == null) {
+      concat = false;
+    }
+    $ionicLoading.show();
+    if (concat === false) {
+      vm.pageStart = 1;
+    }
+    data = {
+      pageCount: vm.pageCount,
+      pageStart: concat === true ? ++vm.pageStart : vm.pageStart,
+      realName: vm.search
+    };
+    return Account.userList(data).then(function(res) {
+      $ionicLoading.hide();
+      if (concat === true) {
+        vm.list = vm.list.concat(res.rows);
+      } else {
+        vm.list = res.rows;
+      }
+      if (res.total < vm.pageCount) {
+        return vm.hasMore = false;
+      } else {
+        return vm.hasMore = true;
+      }
     }, function(msg) {
-      $scope.$broadcast('scroll.refreshComplete');
-      $scope.$broadcast('scroll.infiniteScrollComplete');
+      $ionicLoading.hide();
+      vm.hasMore = false;
       if (msg == null) {
         return;
       }
       return $ionicPopup.alert({
         title: msg
       });
+    })["finally"](function() {
+      $scope.$broadcast('scroll.refreshComplete');
+      return $scope.$broadcast('scroll.infiniteScrollComplete');
     });
   };
   $ionicModal.fromTemplateUrl('people-modal.html', {
@@ -2430,26 +2459,49 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
   $scope.fnCloseModal = function() {
     return vm.modal.hide();
   };
-  $scope.fnAddPassenger = function(form) {
-    $ionicLoading.show();
-    return People.create(form).then(function() {
-      $ionicLoading.hide();
-      $scope.fnGetList();
-      return $scope.fnCloseModal;
-    }, function(msg) {
-      $ionicLoading.hide();
-      if (msg == null) {
-        return;
+  $scope.fnDelete = function(item, index) {
+    var confirmPopup;
+    confirmPopup = $ionicPopup.confirm({
+      title: "是否删除 " + item.realName + " 的信息?"
+    });
+    return confirmPopup.then(function(res) {
+      if (res) {
+        return vm.tempList.splice(index, 1);
       }
-      return $ionicPopup.alert({
-        title: msg
-      });
     });
   };
-  return $scope.$watch('vm.list', function(list) {
-    $localStorage['selectedPeople'] = $filter('filter')(list, {
+  $scope.fnAddPassenger = function(form) {
+    $ionicLoading.show();
+    if (!vm.tempList || !angular.isArray(vm.tempList)) {
+      vm.tempList = $localStorage['peoples'] = [];
+    }
+    vm.tempList.push(angular.extend(form, {
+      checked: true
+    }));
+    $ionicLoading.hide();
+    vm.form = {};
+    return $scope.fnCloseModal();
+  };
+  $scope.$watch('vm.list', function() {
+    var arr1, arr2;
+    arr1 = $filter('filter')(vm.list, {
       checked: true
     });
+    arr2 = $filter('filter')(vm.tempList || [], {
+      checked: true
+    });
+    $localStorage['selectedPeople'] = arr1.concat(arr2);
+    return console.log($localStorage['selectedPeople']);
+  }, true);
+  return $scope.$watch('vm.tempList', function() {
+    var arr1, arr2;
+    arr1 = $filter('filter')(vm.list, {
+      checked: true
+    });
+    arr2 = $filter('filter')(vm.tempList || [], {
+      checked: true
+    });
+    $localStorage['selectedPeople'] = arr1.concat(arr2);
     return console.log($localStorage['selectedPeople']);
   }, true);
 }).controller('User.OrderCtrl', function($scope, $ionicLoading, $ionicPopup, $ionicScrollDelegate, $localStorage, Order, KEY_ACCOUNT) {

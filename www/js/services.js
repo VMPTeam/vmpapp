@@ -138,6 +138,26 @@ angular.module('starter.services', []).service('ErrorHandle', function($state) {
   };
 
   /*
+  获取用户列表
+   */
+  this.userList = function(param) {
+    var defer;
+    defer = $q.defer();
+    $http.get('/user/list', {
+      params: param
+    }).success(function(res) {
+      if (res.ret) {
+        return defer.reject(res.message);
+      } else {
+        return defer.resolve(res);
+      }
+    }).error(function(err, status) {
+      return ErrorHandle(status, err, defer);
+    });
+    return defer.promise;
+  };
+
+  /*
   获取提醒设置列表
    */
   this.reminderList = function() {

@@ -128,6 +128,22 @@ ErrorHandle
     return defer.promise
 
   ###
+  获取用户列表
+  ###
+  this.userList = (param) ->
+    defer = $q.defer()
+    $http.get '/user/list',
+      params: param
+    .success (res) ->
+      if res.ret
+        defer.reject res.message
+      else
+        defer.resolve res
+    .error (err, status) ->
+      ErrorHandle(status, err, defer)
+    return defer.promise
+
+  ###
   获取提醒设置列表
   ###
   this.reminderList = () ->

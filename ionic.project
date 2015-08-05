@@ -4,7 +4,7 @@
   "proxies": [
       {
         "path": "/Business",
-        "proxyUrl": "http://220.178.67.250:8080/Business"
+        "proxyUrl": "http://vmp.witgo.cn/Business"
       }
     ]
 }

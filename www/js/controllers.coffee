@@ -196,7 +196,7 @@ $ionicScrollDelegate
   ###
   $scope.fnRefreshMarker = (list) ->
     if list.length > 0 && _CarMap?
-      markers = ($scope.fnCreateMarker item for item in list when item.location?)
+      markers = ($scope.fnCreateMarker item for item in list when item.location? and item.location.lo)
       points = (marker.getPosition() for marker in markers)
       _CarMap.setViewport points
       if _markerClusterer?
@@ -2042,22 +2042,40 @@ $ionicLoading
 $ionicPopup
 $ionicModal
 People
+Account
 ) ->
   vm = $scope.vm =
     list: []
+    tempList: $localStorage['peoples']
+    pageStart: 1
+    pageCount: 20
+    hasMore: true
+    search: ''
 
-  $scope.fnGetList = ->
-    People.list()
+  $scope.fnGetList = (concat=false) ->
+    $ionicLoading.show()
+    vm.pageStart = 1 if concat is false
+    data =
+      pageCount: vm.pageCount
+      pageStart: if concat is true then ++vm.pageStart else vm.pageStart
+      realName: vm.search
+    Account.userList data
     .then (res) ->
-      $scope.$broadcast 'scroll.refreshComplete'
-      $scope.$broadcast 'scroll.infiniteScrollComplete'
-      vm.list = res.rows
+      $ionicLoading.hide()
+      if concat is true
+        vm.list = vm.list.concat res.rows
+      else
+        vm.list = res.rows
+      if res.total < vm.pageCount then vm.hasMore = false else vm.hasMore = true
     , (msg) ->
-      $scope.$broadcast 'scroll.refreshComplete'
-      $scope.$broadcast 'scroll.infiniteScrollComplete'
+      $ionicLoading.hide()
+      vm.hasMore = false
       return unless msg?
       $ionicPopup.alert
         title: msg
+    .finally ->
+      $scope.$broadcast 'scroll.refreshComplete'
+      $scope.$broadcast 'scroll.infiniteScrollComplete'
 
   $ionicModal.fromTemplateUrl 'people-modal.html',
     scope: $scope,
@@ -2071,21 +2089,34 @@ People
   $scope.fnCloseModal = ->
     vm.modal.hide()
 
+  $scope.fnDelete = (item, index)->
+    confirmPopup = $ionicPopup.confirm
+     title: "是否删除 #{item.realName} 的信息?"
+    confirmPopup.then (res) ->
+     if res
+       vm.tempList.splice index, 1
+
   $scope.fnAddPassenger = (form) ->
     $ionicLoading.show()
-    People.create form
-    .then ->
-      $ionicLoading.hide()
-      $scope.fnGetList()
-      $scope.fnCloseModal
-    , (msg) ->
-      $ionicLoading.hide()
-      return unless msg?
-      $ionicPopup.alert
-        title: msg
+    if !vm.tempList or !angular.isArray vm.tempList
+      vm.tempList = $localStorage['peoples'] = []
+    vm.tempList.push angular.extend form,
+      checked: true
+    $ionicLoading.hide()
+    vm.form = {}
+    $scope.fnCloseModal()
 
-  $scope.$watch 'vm.list', (list) ->
-    $localStorage['selectedPeople'] = $filter('filter')(list, {checked: true})
+  $scope.$watch 'vm.list', ->
+    arr1 = $filter('filter')(vm.list, {checked: true})
+    arr2 = $filter('filter')(vm.tempList or [], {checked: true})
+    $localStorage['selectedPeople'] = arr1.concat arr2
+    console.log $localStorage['selectedPeople']
+  , true
+
+  $scope.$watch 'vm.tempList', ->
+    arr1 = $filter('filter')(vm.list, {checked: true})
+    arr2 = $filter('filter')(vm.tempList or [], {checked: true})
+    $localStorage['selectedPeople'] = arr1.concat arr2
     console.log $localStorage['selectedPeople']
   , true
 

@@ -1,26 +1,47 @@
-<ion-view view-title="慧管车">
+<ion-view view-title="慧管车" cache-view="false">
   <ion-nav-buttons side="left">
     <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
   </ion-nav-buttons>
   <ion-nav-buttons side="right">
     <a class="button button-clear" ng-click="fnOpenModal()">添加</a>
   </ion-nav-buttons>
-  <ion-content class="people-list">
+  <div class="bar bar-subheader item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="请输入关键字进行搜索" ng-model="vm.search"
+             ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }" ng-change="fnGetList()">
+    </label>
+    <button class="button button-clear" ng-click="vm.search = '';fnGetList()">
+      取消
+    </button>
+  </div>
+  <ion-content class="people-list has-subheader">
     <ion-refresher
       pulling-text="下拉刷新..."
       on-refresh="fnGetList()">
     </ion-refresher>
     <ul class="list" ng-init="fnGetList()">
-      <li class="item item-checkbox" href="#" collection-repeat="item in vm.list">
+      <li class="item item-checkbox" ng-repeat="item in vm.tempList" on-hold="fnDelete(item, $index)">
         <label class="checkbox">
           <input type="checkbox" ng-model="item.checked">
         </label>
-        <!--<img ng-src="{{item.avatar}}">-->
-        <span ng-bind="::item.name"></span>
-        <span class="item-note" ng-bind="::item.tel"></span>
+        <span ng-bind="::item.realName"></span>
+        <span class="item-note" ng-bind="::item.phone"></span>
+      </li>
+      <li class="item item-checkbox" ng-repeat="item in vm.list">
+        <label class="checkbox">
+          <input type="checkbox" ng-model="item.checked">
+        </label>
+        <span ng-bind="::item.realName"></span>
+        <span class="item-note" ng-bind="::item.phone"></span>
       </li>
     </ul>
-    <div class="empty-list" ng-hide="vm.list.length">
+    <ion-infinite-scroll
+      ng-if="vm.hasMore"
+      on-infinite="fnGetList(true)"
+      immediate-check="false">
+    </ion-infinite-scroll>
+    <div class="empty-list" ng-hide="vm.list.length || vm.tempList.length">
       暂无数据
     </div>
   </ion-content>
@@ -38,7 +59,7 @@
         <div class="list">
           <label class="item item-input">
             <span class="input-label">姓名</span>
-            <input type="text" ng-model="vm.form.name" name="name" required>
+            <input type="text" ng-model="vm.form.realName" name="name" required>
           </label>
           <label class="item item-input">
             <span class="input-label">手机号</span>
@@ -47,7 +68,7 @@
         </div>
         <div class="row">
           <div class="col padding">
-            <button class="button button-block button-balanced" ng-disabled="form.$invalid" ng-click="fnAddPassenger(vm.form)">添加</button>
+            <button class="button button-block button-blue" ng-disabled="form.$invalid" ng-click="fnAddPassenger(vm.form)">添加</button>
           </div>
         </div>
       </form>

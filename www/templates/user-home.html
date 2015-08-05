@@ -53,7 +53,7 @@
         <a class="item item-icon-left" ui-sref="userPeoples">
           <i class="icon-custom icon-passenger"></i>
           <label>随车人员</label>
-          <span class="item-note" ng-bind="vm.passengers | concatName"></span>
+          <span class="item-note truncate" style="width: 70%;text-align: right;" ng-bind="vm.passengers | concatName: 'realName'"></span>
         </a>
 
         <div class="item item-icon-left">
@@ -65,7 +65,7 @@
       </div>
 
       <div class="padding">
-        <button class="button button-block button-positive" style="background-color: #18beea;"
+        <button class="button button-block button-blue" style="background-color: #18beea;"
                 ng-disabled="form.$invalid" ng-click="fnCreateOrder()">提交</button>
       </div>
     </form>

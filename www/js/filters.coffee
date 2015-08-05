@@ -1,9 +1,9 @@
 angular.module 'starter.filters', []
   .filter 'concatName', () ->
-    (peoples) ->
+    (peoples, key='name') ->
       nameArr = []
       if angular.isArray peoples
         peoples.forEach (obj) ->
-          nameArr.push obj.name
+          nameArr.push obj[key]
 
       return nameArr.join ','

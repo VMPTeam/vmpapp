@@ -10,7 +10,7 @@ angular.module 'starter', [
   'ngStorage'
 ]
 
-# .constant 'BASE_URL', '/Business'
+.constant 'BASE_URL', '/Business'
 .constant 'BASE_URL', 'http://220.178.67.250:8080/Business'
 .constant 'CLIENT_TYPE', 'vehicle_manager'
 .constant 'KEY_COMPANY', 'VMP_COMPANY'
