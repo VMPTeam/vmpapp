@@ -15,7 +15,7 @@
     <i class="icon-custom icon-tab-trip"></i>
     行程
   </a>
-  <a class="tab-item" ng-if="::fnGetPermission('vehicle_manager')" ui-sref="car" ui-sref-active="active">
+  <a class="tab-item" ng-if="::fnGetPermission('vehicle_manager')" ui-sref="car({type: 'map'})" ui-sref-active="active">
     <i class="icon-custom icon-tab-car"></i>
     车辆
   </a>
