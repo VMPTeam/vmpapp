@@ -25,16 +25,6 @@ angular.module('starter.controllers', []).controller('NewHomeCtrl', function($sc
     unreadMsg: null,
     orderType: 2
   };
-  $timeout(function() {
-    return $('.allot').offset(function(index, coords) {
-      var temp;
-      temp = {
-        top: coords.top + 80,
-        left: coords.left
-      };
-      return temp;
-    });
-  }, 200);
 
   /*
   获取任务订单

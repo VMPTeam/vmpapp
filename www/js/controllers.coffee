@@ -47,13 +47,13 @@ Map
     # 订单类型
     orderType: 2
   
-  $timeout ->
-    $('.allot').offset (index, coords) ->
-      temp = 
-        top: coords.top + 80
-        left: coords.left
-      return temp
-  , 200
+  # $timeout ->
+  #   $('.allot').offset (index, coords) ->
+  #     temp = 
+  #       top: coords.top + 80
+  #       left: coords.left
+  #     return temp
+  # , 200
 
   ###
   获取任务订单

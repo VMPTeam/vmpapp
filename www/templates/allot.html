@@ -1,60 +1,48 @@
 <ion-view class="bg-default" view-title="慧管车" cache-view="false">
   <!--顶部信息条-->
-  <div class="bar bar-subheader info-bar-header">
-    <div class="row">
-      <!--左侧信息条-->
-      <div class="col left" ng-init="fnGetMsgCount()">
-        <!--上层-->
-        <div class="row up">
-          <div class="col card fix" ui-sref="messages({type: 1})">
-            <p class="label">异常</p>
-            <p class="num" ng-bind="vm.unreadMsg[1]"></p>
-          </div>
-          <div class="col card rule" ui-sref="messages({type: 2})">
-            <p class="label">故障</p>
-            <p class="num" ng-bind="vm.unreadMsg[2]"></p>
-          </div>
-          <div class="col card exception" ui-sref="messages({type: 3})">
-            <p class="label">年审</p>
-            <p class="num" ng-bind="vm.unreadMsg[3]"></p>
-          </div>
-        </div>
-        <!--下层-->
-        <div class="row down">
-          <div class="col card" ng-click="vm.orderType = 2"
-            ng-class="{active: vm.orderType === 2}">
-            <p class="label">待派车</p>
-            <p class="num" ng-bind="vm.unreadMsg[4]"></p>
-          </div>
-          <div class="col card" ng-click="vm.orderType = 3"
-            ng-class="{active: vm.orderType === 3}">
-            <p class="label">已派车</p>
-            <p class="num" ng-bind="vm.unreadMsg[5]"></p>
-          </div>
-          <div class="col card" ng-click="vm.orderType = 4" 
-            ng-class="{active: vm.orderType === 4}">
-            <p class="label">在途中</p>
-            <p class="num" ng-bind="vm.unreadMsg[6]"></p>
-          </div>
-        </div>
-      </div>
-      <!--右侧信息条-->
-      <div class="right" style="background-color: #1cc1f4; width: 121px;" ng-init="fnWeather()">
-        <img alt="" class="img-weather" ng-src="{{vm.weather.pictureUrl || 'img/sun.png'}}"/>
-        <p class="temperature">{{vm.weather.today.temp}}℃</p>
-        <div class="text">
-          <p class="weather">{{vm.weather.today.weather}}</p>
-          <p class="city">{{vm.city}}</p>
-        </div>
-      </div>
-    </div>
-  </div>
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ui-sref="newHome">返回</a>
+  </ion-nav-buttons>
+
   <ion-nav-buttons side="right">
     <a class="button button-icon icon icon-message" ui-sref="messages({type: 1})">
       <span class="badge badge-assertive" ng-if="unreadMsg">{{unreadMsg}}</span>
     </a>
   </ion-nav-buttons>
-  <ion-content class="allot order-content has-subheader has-footer">
+  <div class="tabs-striped tabs-top tabs-background-stable">
+    <div class="tabs tabs-icon-top" ng-init="fnGetMsgList()" style="height:52px;">
+      <!-- <div class="tab-item active-background"
+           ng-repeat="tab in vm.tabs"
+           ng-class="{active: tab.id === vm.currentTab}"
+           ng-click="fnGetMsgList(tab.id)"
+        >
+        <i class="icon-custom small" ng-class="'icon-tab-msg-alert-' + tab.id"></i>
+         <span>{{tab.name}}</span>
+      </div> -->
+      <div class="tab-item active-background"
+           ng-class="{active: vm.orderType === 2}"
+           ng-click="vm.orderType = 2"
+        >
+        <i class="icon-custom small icon-tab-allot-1"></i>
+         <span>待派车</span>
+      </div>
+      <div class="tab-item active-background"
+           ng-class="{active: vm.orderType === 3}"
+           ng-click="vm.orderType = 3"
+        >
+        <i class="icon-custom small icon-tab-allot-2"></i>
+         <span>已派车</span>
+      </div>
+      <div class="tab-item active-background"
+           ng-class="{active: vm.orderType === 4}"
+           ng-click="vm.orderType = 4"
+        >
+        <i class="icon-custom small icon-tab-allot-3"></i>
+         <span>在途中</span>
+      </div>
+    </div>
+  </div>
+  <ion-content class="allot order-content has-tabs-top">
     <ion-refresher on-refresh="fnGetList(vm.orderType)" pulling-text="下拉刷新..."></ion-refresher>
 
     <div class="card mini" ng-repeat="item in vm.list" ui-sref="allotDetail({id: item.serialNum})">
@@ -95,5 +83,5 @@
     </div>
     <ion-infinite-scroll immediate-check="false" ng-if="vm.hasMore" on-infinite="fnGetList(vm.orderType,true)"></ion-infinite-scroll>
   </ion-content>
-  <vmp-tabs></vmp-tabs>
+  <!-- <vmp-tabs></vmp-tabs> -->
 </ion-view>

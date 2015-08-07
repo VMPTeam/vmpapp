@@ -125,6 +125,15 @@
 .icon-tab-msg-alert-3::before {
   background-image: url("../img/msg-alert3.png");
 }
+.icon-tab-allot-1::before {
+  background-image: url("../img/allot1_1.png");
+}
+.icon-tab-allot-2::before {
+  background-image: url("../img/allot2_1.png");
+}
+.icon-tab-allot-3::before {
+  background-image: url("../img/allot3_1.png");
+}
 /*tab-item激活样式*/
 .tab-item.active .icon-tab-home::before {
   background-image: url("../img/1_09.png");
@@ -173,4 +182,13 @@
 }
 .tab-item.active .icon-tab-car-park::before {
   background-image: url("../img/car-detail12_11.png");
+}
+.tab-item.active .icon-tab-allot-1::before {
+  background-image: url("../img/allot1_2.png");
+}
+.tab-item.active .icon-tab-allot-2::before {
+  background-image: url("../img/allot2_2.png");
+}
+.tab-item.active .icon-tab-allot-3::before {
+  background-image: url("../img/allot3_2.png");
 }
