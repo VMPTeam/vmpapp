@@ -1,5 +1,22 @@
 angular.module 'starter.controllers', []
 
+.controller 'NewHomeCtrl', (
+$scope
+Message
+) ->
+  vm = $scope.vm =
+  # 未读消息
+    unreadMsg: null
+    
+  ###
+  # 获取未读消息
+  ###
+  $scope.fnGetMsgCount = ->
+    Message.count()
+    .then (res) ->
+      vm.unreadMsg = res
+
+
 # 首页控制器
 .controller 'AllotCtrl', (
 $scope

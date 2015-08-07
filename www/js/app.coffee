@@ -42,6 +42,12 @@ angular.module 'starter', [
         return
     , 30000
     return
+    
+  Message.count()
+  .then (res) ->
+    count = parseInt(res['1']) + parseInt(res['2']) + parseInt(res['3'])
+    $rootScope.unreadMsg =  if count < 100 then count else '...'
+    return
 
   oToken = $localStorage[KEY_TOKEN]
   companyCode = $localStorage[KEY_COMPANY]
@@ -171,6 +177,7 @@ $httpProvider
   .state 'newHome',
     url: '/newHome'
     templateUrl: 'templates/newHome.html'
+    controller: 'NewHomeCtrl'
     onEnter: ->
       document.addEventListener 'deviceready', ->
         if window.StatusBar

@@ -1,23 +1,27 @@
-<ion-view hide-nav-bar="true" class="bg-default" >
+<ion-view hide-nav-bar="true" class="bg-default" cache-view="false">
   <ion-content class="new-home" scroll="false">
     <div class="row" style="height: 33%;">
       <a ui-sref="driver" class="col" style="background-color: #1cc1f4;">
         <p>驾驶员</p>
         <img src="img/newhome_09.png" alt="">
       </a>
-      <a ui-sref="allot" class="col" style="background-color: #03bc4d;">
-        <p>车辆派遣</p>
-        <img src="img/newhome_11.png" alt="">
+      <a ui-sref="car({type: 'list'})" class="col" style="background-color: #c469bc;">
+        <p>车辆搜索</p>
+        <img src="img/newhome_08.png" alt="">
       </a>
     </div>
     <div class="row" style="height: 34%;">
       <a ui-sref="messages({type: 1})" class="col" style="background-color: #f8b62d;">
         <p>事件提醒</p>
         <img src="img/newhome_10.png" alt="">
+        <br/>
+        <span class="badge badge-assertive unread-msg" ng-if="unreadMsg">{{unreadMsg}}</span>
       </a>
-      <a ui-sref="car({type: 'list'})" class="col" style="background-color: #c469bc;">
-        <p>车辆搜索</p>
-        <img src="img/newhome_08.png" alt="">
+      <a ui-sref="allot" class="col" style="background-color: #03bc4d;" ng-init="fnGetMsgCount()">
+        <p>车辆派遣</p>
+        <img src="img/newhome_11.png" alt="">
+        <br/>
+        <span class="badge badge-assertive unread-msg" style="top: -65px;right: -10px;" ng-if="vm.unreadMsg[4]">{{vm.unreadMsg[4]}}</span>
       </a>
     </div>
     <div class="row" style="height: 33%;">

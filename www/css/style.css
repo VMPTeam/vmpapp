@@ -960,6 +960,10 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
   margin: 0;
   padding: 0;
 }
+.new-home .row img {
+  width: 50%;
+  margin-top: 10%;
+}
 .new-home .row .col {
   margin: 0;
   padding: 0;
@@ -979,10 +983,16 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 }
 .new-home .row .col.sub .col img {
   width: 40%;
+  margin: 0;
 }
 .new-home .row .col p {
   text-align: center;
   font-size: 22px;
   line-height: 1.2;
   font-weight: bold;
+}
+.new-home .unread-msg {
+  position: relative;
+  top: -58px;
+  right: -24px;
 }

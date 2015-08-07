@@ -10,6 +10,11 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
       });
     }, 30000);
   };
+  Message.count().then(function(res) {
+    var count;
+    count = parseInt(res['1']) + parseInt(res['2']) + parseInt(res['3']);
+    $rootScope.unreadMsg = count < 100 ? count : '...';
+  });
   oToken = $localStorage[KEY_TOKEN];
   companyCode = $localStorage[KEY_COMPANY];
   if (!companyCode) {
@@ -132,6 +137,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
   $stateProvider.state('newHome', {
     url: '/newHome',
     templateUrl: 'templates/newHome.html',
+    controller: 'NewHomeCtrl',
     onEnter: function() {
       return document.addEventListener('deviceready', function() {
         if (window.StatusBar) {
