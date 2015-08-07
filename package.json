@@ -25,7 +25,8 @@
         "ACCESS_ID": "2100133203",
         "ACCESS_KEY": "AM46N1TQ31IY"
       }
-    }
+    },
+    "cordova-plugin-whitelist"
   ],
   "cordovaPlatforms": [
     "ios"

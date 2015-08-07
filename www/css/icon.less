@@ -18,6 +18,14 @@
   margin: 0 auto;
   height: 32px;
   font-size: 32px;
+  &.small{
+    height: 26px;
+    & + span{
+      height: 26px;
+      font-size: 14px;
+      line-height: 22px;
+    }
+  }
 }
 .icon-custom::before {
   display: inline-block;
@@ -30,6 +38,12 @@
   width: 24px;
   height: 24px;
   vertical-align: bottom;
+}
+.icon-custom.small::before {
+  height: 24px;
+  width: 24px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .icon-user::before {
   background-image: url("../img/person.png");

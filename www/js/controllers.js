@@ -151,7 +151,9 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
       } else {
         vm.hasMore = true;
       }
-      return $scope.fnRefreshMarker(vm.list);
+      if (vm.mapView) {
+        return $scope.fnRefreshMarker(vm.list);
+      }
     }, function(msg) {
       defer.resolve();
       $ionicLoading.hide();
@@ -226,14 +228,10 @@ angular.module('starter.controllers', []).controller('AllotCtrl', function($scop
         return results;
       })();
       _CarMap.setViewport(points);
-      if (_markerClusterer != null) {
-        _markerClusterer.clearMarkers();
-        return _markerClusterer.addMarkers(markers);
-      } else {
-        return _markerClusterer = new BMapLib.MarkerClusterer(_CarMap, {
-          markers: markers
-        });
-      }
+      _CarMap.clearOverlays();
+      return _markerClusterer = new BMapLib.MarkerClusterer(_CarMap, {
+        markers: markers
+      });
     } else {
       return $timeout(function() {
         return $scope.fnRefreshMarker(vm.list);

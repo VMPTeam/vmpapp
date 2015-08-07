@@ -148,7 +148,7 @@ $ionicScrollDelegate
       else
         vm.list = res.rows
       if res.total < vm.pageCount then vm.hasMore = false else vm.hasMore = true
-      $scope.fnRefreshMarker(vm.list)
+      $scope.fnRefreshMarker(vm.list) if vm.mapView
     , (msg) ->
       defer.resolve()
       $ionicLoading.hide()
@@ -199,12 +199,14 @@ $ionicScrollDelegate
       markers = ($scope.fnCreateMarker item for item in list when item.location? and item.location.lo)
       points = (marker.getPosition() for marker in markers)
       _CarMap.setViewport points
-      if _markerClusterer?
-        _markerClusterer.clearMarkers()
-        _markerClusterer.addMarkers markers
-      else
-        _markerClusterer = new BMapLib.MarkerClusterer _CarMap,
-          markers: markers
+      # if _markerClusterer?
+        # _markerClusterer.clearMarkers()
+        # _markerClusterer.addMarkers markers
+      # else
+      # if !_markerClusterer
+      _CarMap.clearOverlays()
+      _markerClusterer = new BMapLib.MarkerClusterer _CarMap,
+        markers: markers
     else
       $timeout ->
         $scope.fnRefreshMarker(vm.list)

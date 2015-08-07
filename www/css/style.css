@@ -32,7 +32,7 @@ a {
   color: #00a2ff;
 }
 ion-content .icon {
-  color: #1e93c2;
+  color: #ccc;
 }
 .item-avatar > img:first-child {
   border-radius: 0;
@@ -889,12 +889,12 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
 }
 .reports-content .row > .col {
   background-color: #1cc1f4;
-  height: 12vh;
-  text-indent: 18vw;
-  line-height: 12vh;
+  height: 70px;
+  text-indent: 62px;
+  line-height: 62px;
   color: #fff;
   font-size: 16px;
-  background-size: 12vh;
+  background-size: 62px;
   background-repeat: no-repeat;
 }
 .reports-content .row > .col.item-1 {

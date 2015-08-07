@@ -10,8 +10,8 @@ angular.module 'starter', [
   'ngStorage'
 ]
 
-.constant 'BASE_URL', '/Business'
-.constant 'BASE_URL', 'http://220.178.67.250:8080/Business'
+# .constant 'BASE_URL', '/Business'
+.constant 'BASE_URL', 'http://vmp.witgo.cn/Business'
 .constant 'CLIENT_TYPE', 'vehicle_manager'
 .constant 'KEY_COMPANY', 'VMP_COMPANY'
 .constant 'KEY_TOKEN', 'VMP_TOKEN'
@@ -71,6 +71,10 @@ angular.module 'starter', [
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true)
     if (window.StatusBar)
       StatusBar.styleLightContent()
+
+  document.addEventListener 'backbutton', (e)->
+    e.preventDefault()
+    navigator.app.exitApp()
 
   # 滚动功能切换
   $rootScope.$on '$stateChangeStart', (e, state) ->
