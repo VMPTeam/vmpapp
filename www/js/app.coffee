@@ -10,7 +10,7 @@ angular.module 'starter', [
   'ngStorage'
 ]
 
-# .constant 'BASE_URL', '/Business'
+.constant 'BASE_URL', '/Business'
 .constant 'BASE_URL', 'http://vmp.witgo.cn/Business'
 .constant 'CLIENT_TYPE', 'vehicle_manager'
 .constant 'KEY_COMPANY', 'VMP_COMPANY'

