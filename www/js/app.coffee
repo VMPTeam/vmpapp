@@ -42,7 +42,7 @@ angular.module 'starter', [
         return
     , 30000
     return
-    
+
   Message.count()
   .then (res) ->
     count = parseInt(res['1']) + parseInt(res['2']) + parseInt(res['3'])
@@ -58,10 +58,11 @@ angular.module 'starter', [
   else
     if Account.permission 'vehicle_manager'
       $rootScope.fnOpenTimer()
-      if $localStorage['newHome']
-        $location.path '/newHome'
-      else  
-        $location.path '/allots'
+      # if $localStorage['newHome']
+      #   $location.path '/newHome'
+      # else  
+      #   $location.path '/allots'
+      $location.path '/newHome'
     else if Account.permission 'driver'
       $rootScope.fnOpenTimer()
       $location.path '/mission'

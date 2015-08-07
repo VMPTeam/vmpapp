@@ -477,11 +477,7 @@ angular.module('starter.controllers', []).controller('NewHomeCtrl', function($sc
       vm.userInfo = res;
       if (Account.permission('vehicle_manager')) {
         $scope.$emit('message.open');
-        if ($localStorage['newHome']) {
-          return $state.go('newHome');
-        } else {
-          return $state.go('allot');
-        }
+        return $state.go('newHome');
       } else if (Account.permission('driver')) {
         $scope.$emit('message.open');
         return $state.go('mission');

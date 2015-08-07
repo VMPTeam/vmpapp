@@ -1,10 +1,14 @@
 <ion-view view-title="慧管车" class="bg-default" cache-view="false">
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ui-sref="newHome" ng-show="fnGetPermission('vehicle_manager')">返回</a>
+  </ion-nav-buttons>
+
   <ion-nav-buttons side="right">
     <a class="button button-icon icon icon-message" ui-sref="messages({type: 1})" ng-if="!fnGetPermission('leader') && !fnGetPermission('user')">
       <span class="badge badge-assertive" ng-if="unreadMsg">{{unreadMsg}}</span>
     </a>
   </ion-nav-buttons>
-  <ion-content class="has-footer">
+  <ion-content class="has-footer1">
     <ul class="list">
       <li class="item item-avatar" href="#">
         <img src="img/avatar.png">
@@ -28,12 +32,12 @@
       </a>
     </ul>
 
-    <ul class="list" ng-show="fnGetPermission('vehicle_manager')" ng-cloak>
+    <!-- <ul class="list" ng-show="fnGetPermission('vehicle_manager')" ng-cloak>
       <ion-toggle ng-model="vm.newHome"   ng-checked="vm.newHome"
                   ng-change="fnSettingNewHome(vm.newHome)">
         快速导航
       </ion-toggle>
-    </ul>
+    </ul> -->
     <div class="row">
       <div class="col padding">
         <button class="button button-full button-assertive" ng-click="fnLogout()">
@@ -42,5 +46,5 @@
       </div>
     </div>
   </ion-content>
-  <vmp-tabs></vmp-tabs>
+  <!-- <vmp-tabs></vmp-tabs> -->
 </ion-view>

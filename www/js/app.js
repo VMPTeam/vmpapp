@@ -24,11 +24,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
   } else {
     if (Account.permission('vehicle_manager')) {
       $rootScope.fnOpenTimer();
-      if ($localStorage['newHome']) {
-        $location.path('/newHome');
-      } else {
-        $location.path('/allots');
-      }
+      $location.path('/newHome');
     } else if (Account.permission('driver')) {
       $rootScope.fnOpenTimer();
       $location.path('/mission');
