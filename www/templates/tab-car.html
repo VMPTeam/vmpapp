@@ -1,9 +1,13 @@
 <ion-view view-title="慧管车">
-  <ion-nav-buttons side="left">
+  <!-- <ion-nav-buttons side="left">
     <button class="button button-clear" ng-click="fnChangeView()">
       {{vm.mapView ? '列表视图' : '地图视图'}}
     </button>
+  </ion-nav-buttons> -->
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ui-sref="newHome">返回</a>
   </ion-nav-buttons>
+
   <ion-nav-buttons side="right">
     <a class="button button-icon icon icon-message" ui-sref="messages({type: 1})">
     <span class="badge badge-assertive" ng-if="unreadMsg">{{unreadMsg}}</span>
