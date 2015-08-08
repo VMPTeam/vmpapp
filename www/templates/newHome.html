@@ -13,9 +13,9 @@
     <div class="row" style="height: 34%;">
       <a ui-sref="messages({type: 1})" class="col" style="background-color: #f8b62d;">
         <p>事件提醒</p>
-        <img src="img/newhome_10.png" alt="">
+        <img src="img/newhome_10.png" alt="" style="width: 40%; margin-top: 14%;">
         <br/>
-        <span class="badge badge-assertive unread-msg" ng-if="unreadMsg">{{unreadMsg}}</span>
+        <span class="badge badge-assertive unread-msg" ng-if="vm.totalMsg">{{vm.totalMsg}}</span>
       </a>
       <a ui-sref="allot" class="col" style="background-color: #03bc4d;" ng-init="fnGetMsgCount()">
         <p>车辆派遣</p>

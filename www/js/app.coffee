@@ -43,12 +43,6 @@ angular.module 'starter', [
     , 30000
     return
 
-  Message.count()
-  .then (res) ->
-    count = parseInt(res['1']) + parseInt(res['2']) + parseInt(res['3'])
-    $rootScope.unreadMsg =  if count < 100 then count else '...'
-    return
-
   oToken = $localStorage[KEY_TOKEN]
   companyCode = $localStorage[KEY_COMPANY]
   if !companyCode
@@ -76,6 +70,7 @@ angular.module 'starter', [
        window.cordova.plugins and
        window.cordova.plugins.Keyboard
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true)
+      cordova.plugins.Keyboard.disableScroll(true)
     if (window.StatusBar)
       StatusBar.styleLightContent()
 
@@ -102,6 +97,47 @@ angular.module 'starter', [
     console.log 'message.close'
     $interval.cancel $rootScope.timer
 
+  showUpdateConfirm = (app = {})->
+    confirmPopup = $ionicPopup.confirm(
+      title: '版本升级'
+      template: app.content or "发现新版本(#{app.version})"
+      cancelText: '取消',
+      okText: '升级'
+    )
+    .then (res)->
+      if res is true
+        file = ''
+        $cordovaFileTransfer.download app.downloadUrl, file, {}, true
+        .then ()->
+          console.log 'download success'
+          $cordovaFileOpener2.open file, 'application/vnd.android.package-archive'
+          .then ->
+            console.log 'open success'
+          , ()->
+            console.log 'open error'
+          $ionicLoading.hide();
+        , (err)->
+          alert '下载失败'
+        , (progress)->
+          $timeout ()->
+            downloadProgress = (progress.loaded / progress.total) * 100
+            $ionicLoading.show
+              template: "已经下载：" + Math.floor(downloadProgress) + "%"
+            if (downloadProgress > 99)
+              $ionicLoading.hide()
+
+  checkUpdate = ()->
+    Account.checkUpdate()
+    .then (app) ->
+      $cordovaAppVersion.getAppVersion()
+      .then (version)->
+        if (version isnt app.version) 
+          showUpdateConfirm app
+
+  $timeout ()->    
+    if ionic.Platform.isAndroid()
+      checkUpdate()
+  , 5000
 
 .factory 'pathInterceptor', (BASE_URL) ->
   interceptor =
@@ -112,7 +148,7 @@ angular.module 'starter', [
       if (exp1 && exp2)
         config.url = BASE_URL + config.url
         # 设置超时时间
-        config.timeout = 10000
+        config.timeout = 15000
       return config
   return interceptor
 

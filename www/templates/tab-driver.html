@@ -1,17 +1,17 @@
-<ion-view view-title="慧管车">
+<ion-view view-title="驾驶员" cache-view="falseπ">
   <ion-nav-buttons side="left">
     <a class="button icon-left ion-ios-arrow-back button-clear" ui-sref="newHome">返回</a>
   </ion-nav-buttons>
 
-  <ion-nav-buttons side="right">
+  <!-- <ion-nav-buttons side="right">
     <a class="button button-icon icon icon-message" ui-sref="messages({type: 1})">
     <span class="badge badge-assertive" ng-if="unreadMsg">{{unreadMsg}}</span>
     </a>
-  </ion-nav-buttons>
+  </ion-nav-buttons> -->
   <div class="bar bar-subheader item-input-inset">
     <label class="item-input-wrapper">
       <i class="icon ion-ios-search placeholder-icon"></i>
-      <input type="search" placeholder="请输入关键字进行搜索" ng-model="vm.search"
+      <input type="search" placeholder="请输入关键字进行搜索" ng-model="vm.search" autofocus="false"
              ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }" ng-change="fnGetList()">
     </label>
     <button class="button button-clear" ng-click="vm.search = '';fnGetList()">

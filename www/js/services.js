@@ -9,6 +9,8 @@ angular.module('starter.services', []).service('ErrorHandle', function($state) {
     } else if (status === 401) {
       $state.go('login');
       return defer.reject(null);
+    } else if (status === 0) {
+      return defer.reject('连接服务器异常，请检查网络设置后重试。');
     } else {
       return defer.reject((res && res.msg) || '未知错误:' + status);
     }
@@ -238,6 +240,20 @@ angular.module('starter.services', []).service('ErrorHandle', function($state) {
         city: city
       }
     }).success(function(res) {
+      if (res.ret) {
+        return defer.reject(res.message);
+      } else {
+        return defer.resolve(res);
+      }
+    }).error(function(err, status) {
+      return ErrorHandle(status, err, defer);
+    });
+    return defer.promise;
+  };
+  this.checkUpdate = function() {
+    var defer;
+    defer = $q.defer();
+    $http.get('/android/version').success(function(res) {
       if (res.ret) {
         return defer.reject(res.message);
       } else {

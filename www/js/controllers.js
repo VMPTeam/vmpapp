@@ -12,7 +12,10 @@ angular.module('starter.controllers', []).controller('NewHomeCtrl', function($sc
    */
   return $scope.fnGetMsgCount = function() {
     return Message.count().then(function(res) {
-      return vm.unreadMsg = res;
+      var count;
+      vm.unreadMsg = res;
+      count = parseInt(res['1']) + parseInt(res['2']) + parseInt(res['3']);
+      return vm.totalMsg = count < 100 ? count : '...';
     });
   };
 }).controller('AllotCtrl', function($scope, $state, $stateParams, $ionicPopup, $filter, $ionicLoading, $localStorage, $cordovaGeolocation, $timeout, Order, Account, Message, Map) {
@@ -427,7 +430,7 @@ angular.module('starter.controllers', []).controller('NewHomeCtrl', function($sc
     ],
     list: [],
     pageStart: 1,
-    pageCount: 10,
+    pageCount: 20,
     currentTab: parseInt($stateParams.type) || 1,
     newHome: $localStorage['newHome']
   };

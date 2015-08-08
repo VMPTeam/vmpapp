@@ -26,6 +26,12 @@
   <feature name="StatusBar">
     <param name="ios-package" value="CDVStatusBar" onload="true"/>
   </feature>
+  <feature name="XGPlugin">
+    <param name="ios-package" value="XGPlugin" onload="true" />
+  </feature>
+  <feature name="MyPlugin">
+    <param name="ios-package" value="MyPlugin" onload="true" />
+  </feature>
   <icon src="resources/logo.png"/>
   <platform name="android">
     <splash src="resources/launcher.png" density="land-ldpi"/>

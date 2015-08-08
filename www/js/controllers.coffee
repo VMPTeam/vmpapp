@@ -15,6 +15,8 @@ Message
     Message.count()
     .then (res) ->
       vm.unreadMsg = res
+      count = parseInt(res['1']) + parseInt(res['2']) + parseInt(res['3'])
+      vm.totalMsg =  if count < 100 then count else '...'
 
 
 # 首页控制器
@@ -414,7 +416,7 @@ CLIENT_TYPE
     ]
     list: []
     pageStart: 1
-    pageCount: 10
+    pageCount: 20
     currentTab: parseInt($stateParams.type) || 1
     newHome: $localStorage['newHome']
 

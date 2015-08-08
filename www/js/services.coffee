@@ -7,8 +7,8 @@ angular.module 'starter.services', []
     else if status is 401
       $state.go 'login'
       defer.reject null
-    # else if status is 0
-    #   defer.reject '服务器无响应'
+    else if status is 0
+      defer.reject '连接服务器异常，请检查网络设置后重试。'
     else
       defer.reject (res && res.msg) || '未知错误:' + status
 
@@ -210,6 +210,15 @@ ErrorHandle
     $http.get '/weather',
       params:
         city: city
+    .success (res) ->
+      if res.ret then defer.reject res.message else defer.resolve res
+    .error (err, status) ->
+      ErrorHandle(status, err, defer)
+    return defer.promise
+
+  @.checkUpdate = ()->
+    defer = $q.defer()
+    $http.get '/android/version'
     .success (res) ->
       if res.ret then defer.reject res.message else defer.resolve res
     .error (err, status) ->

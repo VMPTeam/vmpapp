@@ -18,15 +18,26 @@
     "com.ionic.keyboard",
     "org.apache.cordova.statusbar",
     "cordova-plugin-splashscreen",
+    "cordova-plugin-whitelist",
     {
       "locator": "/Users/jiangyun/WebstormProjects/car/com.wttech.xgplugin",
       "id": "com.wttech.xgplugin",
       "variables": {
-        "ACCESS_ID": "2100133203",
-        "ACCESS_KEY": "AM46N1TQ31IY"
+        "ACCESS_ID": "2100137716",
+        "ACCESS_KEY": "AS91WP5I93BZ"
       }
     },
-    "cordova-plugin-whitelist"
+    "org.apache.cordova.console",
+    "cordova-plugin-file",
+    {
+      "locator": "https://github.com/whiteoctober/cordova-plugin-app-version.git",
+      "id": "uk.co.whiteoctober.cordova.appversion"
+    },
+    "cordova-plugin-file-transfer",
+    {
+      "locator": "https://github.com/pwlin/cordova-plugin-file-opener2",
+      "id": "io.github.pwlin.cordova.plugins.fileopener2"
+    }
   ],
   "cordovaPlatforms": [
     "ios"

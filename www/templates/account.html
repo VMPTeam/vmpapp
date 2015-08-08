@@ -1,10 +1,10 @@
-<ion-view view-title="慧管车" class="bg-default" cache-view="false">
+<ion-view view-title="系统设置" class="bg-default" cache-view="false">
   <ion-nav-buttons side="left">
-    <a class="button icon-left ion-ios-arrow-back button-clear" ui-sref="newHome" ng-show="fnGetPermission('vehicle_manager')">返回</a>
+    <a class="button icon-left ion-ios-arrow-back button-clear" ui-sref="newHome" ng-show="fnGetPermission('vehicle_manager')" ng-cloak>返回</a>
   </ion-nav-buttons>
 
   <ion-nav-buttons side="right">
-    <a class="button button-icon icon icon-message" ui-sref="messages({type: 1})" ng-if="!fnGetPermission('leader') && !fnGetPermission('user')">
+    <a class="button button-icon icon icon-message" ui-sref="messages({type: 1})" ng-if="!fnGetPermission('leader') && !fnGetPermission('user') && !fnGetPermission('vehicle_manager')">
       <span class="badge badge-assertive" ng-if="unreadMsg">{{unreadMsg}}</span>
     </a>
   </ion-nav-buttons>
