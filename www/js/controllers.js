@@ -2167,7 +2167,7 @@ angular.module('starter.controllers', []).controller('NewHomeCtrl', function($sc
     });
   };
   $scope.fnCreateOrder = function() {
-    var data;
+    var data, obj;
     if ((vm.planEndPlace != null) && (vm.planStartPlace != null) && (vm.planStartTime != null) && (vm.planEndTime != null)) {
       if (vm.planStartTime.valueOf() > vm.planEndTime.valueOf()) {
         $ionicPopup.alert({
@@ -2177,6 +2177,7 @@ angular.module('starter.controllers', []).controller('NewHomeCtrl', function($sc
       }
       $ionicLoading.show();
       data = angular.extend(vm);
+      data.vehicleInfo = vm.carList;
       if (vm.startLocLa != null) {
         data.startLocLa = String(vm.startLocLa);
       }
@@ -2194,6 +2195,19 @@ angular.module('starter.controllers', []).controller('NewHomeCtrl', function($sc
       }
       data.planStartTime = $filter('date')(vm.planStartTime, 'yyyy-MM-dd HH:mm:ss');
       data.planEndTime = $filter('date')(vm.planEndTime, 'yyyy-MM-dd HH:mm:ss');
+      data.passengers = (function() {
+        var j, len, ref, results;
+        ref = vm.passengers;
+        results = [];
+        for (j = 0, len = ref.length; j < len; j++) {
+          obj = ref[j];
+          results.push({
+            phone: obj.phone,
+            name: obj.realName
+          });
+        }
+        return results;
+      })();
       return Order.create(data).then(function() {
         $ionicLoading.hide();
         $ionicPopup.alert({
@@ -2382,9 +2396,18 @@ angular.module('starter.controllers', []).controller('NewHomeCtrl', function($sc
     var obj, ref;
     if (angular.isArray($localStorage['selectedCar'])) {
       if (obj = (ref = car.vehicleUid, indexOf.call($localStorage['selectedCar'], ref) >= 0)) {
-        return $ionicPopup.alert({
-          title: '该车辆已选'
-        });
+        return $localStorage['selectedCar'] = (function() {
+          var j, len, ref1, results;
+          ref1 = $localStorage['selectedCar'];
+          results = [];
+          for (j = 0, len = ref1.length; j < len; j++) {
+            obj = ref1[j];
+            if (obj !== car.vehicleUid) {
+              results.push(obj);
+            }
+          }
+          return results;
+        })();
       } else {
         return $localStorage['selectedCar'].push(car.vehicleUid);
       }
@@ -2757,20 +2780,27 @@ angular.module('starter.controllers', []).controller('NewHomeCtrl', function($sc
     myChart = echarts.init(document.getElementById('main'));
   }
   $scope.fnRefreshChart = function(list, type) {
-    var dates, j, num, option, values;
+    var dates, j, k, key, len, map, num, obj, option, value, values;
     if (type == null) {
       type = "bar";
     }
     myChart.clear();
     values = [];
     dates = [];
-    for (num = j = 1; j <= 31; num = ++j) {
+    map = {};
+    for (j = 0, len = list.length; j < len; j++) {
+      obj = list[j];
+      key = parseInt(obj['CREATE_DATE'].substr(8));
+      value = obj['Y1'];
+      map[key] = value;
+    }
+    for (num = k = 1; k <= 31; num = ++k) {
       dates.push(num);
-      if ((list[num - 1] != null) && num === parseInt(list[num - 1]['CREATE_DATE'].substr(8))) {
+      if (map[num]) {
         if (vm.type === 'c005') {
-          values.push(list[num - 1]['Y1'] / 60);
+          values.push(map[num] / 60);
         } else {
-          values.push(list[num - 1]['Y1']);
+          values.push(map[num]);
         }
       } else {
         values.push(0);
@@ -2825,13 +2855,13 @@ angular.module('starter.controllers', []).controller('NewHomeCtrl', function($sc
     $ionicLoading.show();
     startTime = angular.copy(vm.date);
     startTime.setDate(1);
-    endTime = angular.copy(vm.date);
+    endTime = angular.copy(startTime);
     endTime.setMonth(endTime.getMonth() + 1);
     endTime.setDate(1);
-    endTime.setDate(-1);
+    endTime.setDate(endTime.getDate() - 1);
     data = {
-      startDate: $filter('date')(startTime, 'yyyyMMdd'),
-      endDate: $filter('date')(endTime, 'yyyyMMdd'),
+      startDate: $filter('date')(startTime, 'yyyy-MM-dd'),
+      endDate: $filter('date')(endTime, 'yyyy-MM-dd'),
       unitId: vm.user.dept.deptUid,
       code: $stateParams.type
     };

@@ -10,7 +10,7 @@ angular.module 'starter', [
   'ngStorage'
 ]
 
-.constant 'BASE_URL', '/Business'
+# .constant 'BASE_URL', '/Business'
 .constant 'BASE_URL', 'http://vmp.witgo.cn/Business'
 .constant 'CLIENT_TYPE', 'vehicle_manager'
 .constant 'KEY_COMPANY', 'VMP_COMPANY'
@@ -27,11 +27,19 @@ angular.module 'starter', [
   $localStorage
   $interval
   $timeout
+  $cordovaAppVersion
+  $cordovaFileTransfer
+  $cordovaFileOpener2
+  $ionicPopup
+  $ionicLoading
   KEY_COMPANY
   KEY_TOKEN
   Account
   Message
   ) ->
+
+  window.onerror = (err) ->
+    console.log err
 
   $rootScope.fnOpenTimer = () ->
     $rootScope.timer = $interval () ->
@@ -85,8 +93,6 @@ angular.module 'starter', [
     else
       $ionicScrollDelegate.freezeAllScrolls false
     return
-  return
-
 
   $rootScope.$on 'message.open', ->
     console.log 'message.open'
@@ -138,6 +144,8 @@ angular.module 'starter', [
     if ionic.Platform.isAndroid()
       checkUpdate()
   , 5000
+
+  return
 
 .factory 'pathInterceptor', (BASE_URL) ->
   interceptor =
@@ -197,11 +205,11 @@ $urlRouterProvider
 $ionicConfigProvider
 $httpProvider
 ) ->
-  $ionicConfigProvider.views.maxCache(20)
+  # $ionicConfigProvider.views.maxCache(20)
 
   $ionicConfigProvider.views.transition('none')
 
-  $ionicConfigProvider.views.forwardCache(true)
+  # $ionicConfigProvider.views.forwardCache(true)
 
   $ionicConfigProvider.tabs.position('bottom')
 

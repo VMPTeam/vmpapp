@@ -9,7 +9,7 @@ angular.module('starter.services', []).service('ErrorHandle', function($state) {
     } else if (status === 401) {
       $state.go('login');
       return defer.reject(null);
-    } else if (status === 0) {
+    } else if (status === 0 || status === 502) {
       return defer.reject('连接服务器异常，请检查网络设置后重试。');
     } else {
       return defer.reject((res && res.msg) || '未知错误:' + status);

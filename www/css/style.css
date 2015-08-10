@@ -961,15 +961,24 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
   padding: 0;
 }
 .new-home .row img {
-  width: 50%;
-  margin-top: 10%;
+  width: 40%;
+  margin-top: 20%;
 }
 .new-home .row .col {
   margin: 0;
   padding: 0;
   border: 2px solid #fff;
   text-align: center;
-  padding-top: 8%;
+  padding-top: 10%;
+  position: relative;
+}
+.new-home .row .col.col-45 {
+  flex: 0 0 45%;
+  max-width: 45%;
+}
+.new-home .row .col.col-55 {
+  flex: 0 0 55%;
+  max-width: 55%;
 }
 .new-home .row .col.sub {
   padding-top: 0;
@@ -982,17 +991,21 @@ ion-tabs.tabs-color-active-balanced .tab-item.activated {
   margin: 0;
 }
 .new-home .row .col.sub .col img {
-  width: 40%;
+  width: 30%;
   margin: 0;
 }
 .new-home .row .col p {
   text-align: center;
-  font-size: 22px;
+  font-size: 1.2rem;
   line-height: 1.2;
   font-weight: bold;
 }
 .new-home .unread-msg {
   position: relative;
   top: -58px;
-  right: -24px;
+  right: -18px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  padding: 4px;
 }

@@ -7,7 +7,7 @@ angular.module 'starter.services', []
     else if status is 401
       $state.go 'login'
       defer.reject null
-    else if status is 0
+    else if status is 0 or status is 502
       defer.reject '连接服务器异常，请检查网络设置后重试。'
     else
       defer.reject (res && res.msg) || '未知错误:' + status

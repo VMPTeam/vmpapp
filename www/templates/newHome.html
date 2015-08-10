@@ -1,37 +1,39 @@
 <ion-view hide-nav-bar="true" class="bg-default" cache-view="false">
   <ion-content class="new-home" scroll="false">
-    <div class="row" style="height: 33%;">
-      <a ui-sref="driver" class="col" style="background-color: #1cc1f4;">
+    <div class="row" style="height: 34%;">
+      <a ui-sref="driver" class="col col-45" style="background-color: #1cc1f4;">
         <p>驾驶员</p>
-        <img src="img/newhome_09.png" alt="">
+        <img src="img/newhome_09.png" alt="" style="margin-top: 32%;">
       </a>
-      <a ui-sref="car({type: 'list'})" class="col" style="background-color: #c469bc;">
+      <a ui-sref="car({type: 'list'})" class="col col-55" style="background-color: #03bc4d;">
         <p>车辆搜索</p>
         <img src="img/newhome_08.png" alt="">
       </a>
     </div>
-    <div class="row" style="height: 34%;">
-      <a ui-sref="messages({type: 1})" class="col" style="background-color: #f8b62d;">
+    <div class="row" style="height: 33%;">
+      <a ui-sref="messages({type: 1})" class="col col-45" style="background-color: #f8b62d;">
         <p>事件提醒</p>
-        <img src="img/newhome_10.png" alt="" style="width: 40%; margin-top: 14%;">
+        <img src="img/newhome_10.png" alt="" style="margin-top: 30%;">
         <br/>
         <span class="badge badge-assertive unread-msg" ng-if="vm.totalMsg">{{vm.totalMsg}}</span>
+        <!-- <span class="badge badge-assertive unread-msg">99</span> -->
       </a>
-      <a ui-sref="allot" class="col" style="background-color: #03bc4d;" ng-init="fnGetMsgCount()">
+      <a ui-sref="allot" class="col col-55" style="background-color: #c469bc;" ng-init="fnGetMsgCount()">
         <p>车辆派遣</p>
         <img src="img/newhome_11.png" alt="">
         <br/>
-        <span class="badge badge-assertive unread-msg" style="top: -65px;right: -10px;" ng-if="vm.unreadMsg[4]">{{vm.unreadMsg[4]}}</span>
+        <!-- <span class="badge badge-assertive unread-msg" style="top: -69px;right: -20px;">10</span> -->
+        <span class="badge badge-assertive unread-msg" style="top: -69px;right: -20px;" ng-if="vm.unreadMsg[4] != 0">{{vm.unreadMsg[4]}}</span>
       </a>
     </div>
     <div class="row" style="height: 33%;">
-      <a ui-sref="car({type: 'map'})" class="col" style="background-color: #278aad;">
+      <a ui-sref="car({type: 'map'})" class="col col-45" style="background-color: #278aad;">
         <p>车辆监控</p>
-        <img src="img/newhome_06.png" alt="">
+        <img src="img/newhome_06.png" alt="" style="margin-top: 24%;">
       </a>
-      <div class="col sub" style="height: 100%;">
+      <div class="col sub col-55" style="height: 100%;">
         <div class="row" style="height: 50%;">
-          <a ui-sref="report" class="col" style="background-color: #ff692D;border-top: none;">
+          <a ui-sref="report" class="col" style="background-color: #ff692d;border-top: none;">
             <p>统计分析</p>
             <img src="img/newhome_07.png" alt="">
           </a>

@@ -74,7 +74,7 @@
           <i class="icon ion-ios-arrow-left"></i>
           {{fnOtherDay(vm.today, -1) | date: 'M月d日'}}
           </div>
-          <div class="col" style="color: #3cbd0d;position: relative;" ng-click="fnOpenPicker()">
+          <div class="col" style="color: #7AD1F1;position: relative;" ng-click="fnOpenPicker()">
             {{vm.today | date: 'M月d日'}} <i class="arrow-circle"></i>
           </div>
           <input id="today" type="hidden" readonly mobiscroll-date ng-model="vm.today" mobiscroll-instance="vm.todayInstance"
@@ -138,19 +138,19 @@
         </div>
         <div class="item">
           <span>当前里程</span>
-          <span class="item-note">{{vm.info.displayDistance}}</span>
+          <span class="item-note" ng-show="vm.info.displayDistance">{{vm.info.displayDistance}}公里</span>
         </div>
-        <div class="item">
+<!--         <div class="item">
           <span>保养里程间隔</span>
           <span class="item-note">{{vm.info.displayDistance}}</span>
-        </div>
+        </div> -->
         <div class="item">
           <span>保险日期</span>
-          <span class="item-note">{{vm.info.vehicleAuditTime}}</span>
+          <span class="item-note">{{vm.info.insuranceTime | limitTo: 10}}</span>
         </div>
         <div class="item">
-          <span>年检日期</span>
-          <span class="item-note">{{vm.info.vehicleAuditTime}}</span>
+          <span>年审日期</span>
+          <span class="item-note">{{vm.info.annualTime | limitTo: 10}}</span>
         </div>
       </div>
     </div>

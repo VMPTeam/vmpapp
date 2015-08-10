@@ -1884,6 +1884,7 @@ Map
         return
       $ionicLoading.show()
       data = angular.extend vm
+      data.vehicleInfo = vm.carList
       data.startLocLa = String vm.startLocLa if vm.startLocLa?
       data.startLocLo = String vm.startLocLo if vm.startLocLo
       data.endLocLa = String vm.endLocLa if vm.endLocLa
@@ -1891,6 +1892,7 @@ Map
       data.vehicleCount = String vm.vehicleCount if vm.vehicleCount
       data.planStartTime = $filter('date')(vm.planStartTime, 'yyyy-MM-dd HH:mm:ss')
       data.planEndTime = $filter('date')(vm.planEndTime, 'yyyy-MM-dd HH:mm:ss')
+      data.passengers = ({phone: obj.phone, name: obj.realName} for obj in vm.passengers)
       Order.create data
       .then () ->
         $ionicLoading.hide()
@@ -2044,8 +2046,7 @@ $ionicLoading
     # 判断是否已选
     if angular.isArray $localStorage['selectedCar']
       if obj = car.vehicleUid in $localStorage['selectedCar']
-        $ionicPopup.alert
-          title: '该车辆已选'
+        $localStorage['selectedCar'] = (obj for obj in $localStorage['selectedCar'] when obj isnt car.vehicleUid)
       else
         $localStorage['selectedCar'].push car.vehicleUid
     else
@@ -2386,18 +2387,19 @@ KEY_ACCOUNT
     myChart.clear()
     values = []
     dates = []
-    # for item in list
-    #   #values
-    #   values.push item['Y1']
-    #   #date
-    #   dates.push parseInt item['CREATE_DATE'].substr 8
+    map = {}
+    for obj in list
+      # key = {value: obj.Y1, key: parseInt(obj.CREATE_DATE.substr(8))} for 
+      key = parseInt(obj['CREATE_DATE'].substr(8))
+      value = obj['Y1']
+      map[key] = value
     for num in [1..31]
       dates.push num
-      if list[num - 1]? and num is parseInt list[num - 1]['CREATE_DATE'].substr 8
+      if map[num]
         if vm.type is 'c005'
-          values.push list[num - 1]['Y1']/60
+          values.push map[num]/60
         else
-          values.push list[num - 1]['Y1']
+          values.push map[num]
       else
         values.push 0
         # values.push parseInt Math.random() * 10
@@ -2439,13 +2441,13 @@ KEY_ACCOUNT
     $ionicLoading.show()
     startTime = angular.copy vm.date
     startTime.setDate 1
-    endTime = angular.copy vm.date
+    endTime = angular.copy startTime
     endTime.setMonth endTime.getMonth() + 1
     endTime.setDate 1
-    endTime.setDate -1
+    endTime.setDate(endTime.getDate() - 1)
     data =
-      startDate: $filter('date')(startTime, 'yyyyMMdd')
-      endDate: $filter('date')(endTime, 'yyyyMMdd')
+      startDate: $filter('date')(startTime, 'yyyy-MM-dd')
+      endDate: $filter('date')(endTime, 'yyyy-MM-dd')
       unitId: vm.user.dept.deptUid
       code: $stateParams.type
     Statistic.fuel data
