@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.wttech.vmp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>慧管车</name>
-  <!-- <name>vmp-client</name> -->
+  <!-- <name>慧管车</name> -->
+  <name>vmp-client</name>
   <description>
         An Ionic Framework and Cordova project.
     </description>

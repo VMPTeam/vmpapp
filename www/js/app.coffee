@@ -1,3 +1,6 @@
+###
+入口模块定义
+###
 angular.module 'starter', [
   'ionic'
   'ngCordova'
@@ -9,16 +12,22 @@ angular.module 'starter', [
   'mobiscroll-datetime'
   'ngStorage'
 ]
-
+# 接口baseUrl
 # .constant 'BASE_URL', '/Business'
 .constant 'BASE_URL', 'http://vmp.witgo.cn/Business'
-.constant 'CLIENT_TYPE', 'vehicle_manager'
+
+#机构信息
 .constant 'KEY_COMPANY', 'VMP_COMPANY'
+#Token信息
 .constant 'KEY_TOKEN', 'VMP_TOKEN'
+#帐号信息
 .constant 'KEY_ACCOUNT', 'VMP_ACCOUNT'
+#用户名
 .constant 'KEY_USERNAME', 'VMP_USERNAME'
+#密码
 .constant 'KEY_PASSWORD', 'VMP_PASSWORD'
 
+#starter模块初始化函数
 .run (
   $rootScope
   $ionicPlatform
@@ -38,26 +47,40 @@ angular.module 'starter', [
   Message
   ) ->
 
+  ###
+  js异常捕获
+  ###
   window.onerror = (err) ->
     console.log err
 
+  ###
+  定时器
+  ###
   $rootScope.fnOpenTimer = () ->
     $rootScope.timer = $interval () ->
+      # 获取未读消息数量
       Message.count()
       .then (res) ->
+        # 处理未读消息
         count = parseInt(res['1']) + parseInt(res['2']) + parseInt(res['3'])
         $rootScope.unreadMsg =  if count < 100 then count else '...'
         return
     , 30000
     return
 
+  # 读取缓存
   oToken = $localStorage[KEY_TOKEN]
   companyCode = $localStorage[KEY_COMPANY]
+  #判断是否设置企业号
   if !companyCode
+    #进入企业设置页面
     $location.path('/company')
+  # 是否已登录
   else if(!oToken || !oToken.access_token)
+    #进入登录页面
     $location.path('/login')
   else
+    #用户权限判断跳转页面
     if Account.permission 'vehicle_manager'
       $rootScope.fnOpenTimer()
       # if $localStorage['newHome']
@@ -70,21 +93,30 @@ angular.module 'starter', [
       $location.path '/mission'
     else
       $location.path '/userhome'
-  # location   
+  # 获取GPS信息
   Account.getLocation()
   
+  # ionic监听事件
   $ionicPlatform.ready () ->
     if window.cordova and
        window.cordova.plugins and
        window.cordova.plugins.Keyboard
+      # keyboard配置
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true)
-      cordova.plugins.Keyboard.disableScroll(true)
+      cordova.plugins.Keyboard.disableScroll(false)
     if (window.StatusBar)
+      # statusBar配置
       StatusBar.styleLightContent()
+    # fullScreen配置
+    ionic.Platform.isFullScreen = true;
 
+  # handle hardware backbutton
   document.addEventListener 'backbutton', (e)->
-    e.preventDefault()
-    navigator.app.exitApp()
+    if $location.path() is '/newHome' or
+       $location.path() is '/login' or
+       $location.path() is '/company' 
+      e.preventDefault()
+      navigator.app.exitApp()
 
   # 滚动功能切换
   $rootScope.$on '$stateChangeStart', (e, state) ->
@@ -96,14 +128,20 @@ angular.module 'starter', [
 
   $rootScope.$on 'message.open', ->
     console.log 'message.open'
+    # 开启定时器
     $rootScope.fnOpenTimer()
     return
      
   $rootScope.$on 'message.close', ->
     console.log 'message.close'
+    # 关闭定时器
     $interval.cancel $rootScope.timer
 
+  ###
+  安卓升级提示
+  ###
   showUpdateConfirm = (app = {})->
+    # 弹出提示框
     confirmPopup = $ionicPopup.confirm(
       title: '版本升级'
       template: app.content or "发现新版本(#{app.version})"
@@ -112,41 +150,53 @@ angular.module 'starter', [
     )
     .then (res)->
       if res is true
-        file = ''
+        # 设置存放路径
+        file = "file:///storage/sdcard0/Download/vmp-app_#{Date.now()}.apk"
+        # 下载apk
         $cordovaFileTransfer.download app.downloadUrl, file, {}, true
         .then ()->
+          # 打开下载完成的apk
           console.log 'download success'
           $cordovaFileOpener2.open file, 'application/vnd.android.package-archive'
           .then ->
             console.log 'open success'
           , ()->
             console.log 'open error'
+          #关闭弹窗
           $ionicLoading.hide();
         , (err)->
-          alert '下载失败'
+          # 提示下载失败信息
+          alert '下载失败' + JSON.stringify err
         , (progress)->
           $timeout ()->
+            #显示下载进度
             downloadProgress = (progress.loaded / progress.total) * 100
             $ionicLoading.show
               template: "已经下载：" + Math.floor(downloadProgress) + "%"
             if (downloadProgress > 99)
               $ionicLoading.hide()
 
+  ###
+  检查更新
+  ###
   checkUpdate = ()->
     Account.checkUpdate()
     .then (app) ->
+      #获取当前APP版本
       $cordovaAppVersion.getAppVersion()
       .then (version)->
+        # 比较版本
         if (version isnt app.version) 
           showUpdateConfirm app
 
-  $timeout ()->    
+  $timeout ()->  
+    # 判断是否为Android系统  
     if ionic.Platform.isAndroid()
       checkUpdate()
   , 5000
 
   return
-
+#路径拦截器
 .factory 'pathInterceptor', (BASE_URL) ->
   interceptor =
     request: (config) ->
@@ -159,7 +209,7 @@ angular.module 'starter', [
         config.timeout = 15000
       return config
   return interceptor
-
+# Token拦截器
 .factory 'tokenInterceptor', ($q, $location, $localStorage, KEY_TOKEN) ->
   interceptor =
     request: (config) ->
@@ -167,19 +217,23 @@ angular.module 'starter', [
       token_type = if oToken? then oToken.token_type else ''
       access_token = if oToken? then oToken.access_token else ''
       if oToken?
+        # 添加Token
         config.headers['Authorization'] = token_type + access_token
       return config
     responseError: (rejection) ->
       switch rejection.status
+        # Token失效拦截
         when 401
           delete $localStorage[KEY_TOKEN]
           $location.url '/login'
       return $q.reject rejection
   return interceptor
 
+#日志拦截器
 .factory 'logInterceptor', ($q, $log) ->
   interceptor =
     request: (config) ->
+      #输出接口请求日志
       if !/.+(?=\.html$)/.test(config.url)
         $log.debug '开始请求接口.接口地址=' +
         config.url +
@@ -187,6 +241,7 @@ angular.module 'starter', [
         angular.toJson config.data
       return config
     response: (response) ->
+      #输出接口请求成功日志
       if !/.+(?=\.html$)/.test(response.config.url)
         $log.debug '接口请求成功.接口地址=' +
         response.config.url +
@@ -194,41 +249,52 @@ angular.module 'starter', [
         angular.toJson response.data
       return response
     responseError: (rejection) ->
+      #输出接口请求失败日志
       if !/.+(?=\.html$)/.test(rejection.config.url)
         $log.debug '接口请求失败.接口地址=' + rejection.config.url
       return $q.reject rejection
   return interceptor
 
+# starter模块配置 
 .config (
 $stateProvider
 $urlRouterProvider
 $ionicConfigProvider
 $httpProvider
 ) ->
+  ###
+  ionic通用配置
+  ###
   # $ionicConfigProvider.views.maxCache(20)
-
+  #设置过场动画
   $ionicConfigProvider.views.transition('none')
 
   # $ionicConfigProvider.views.forwardCache(true)
-
+  #设置tab位置
   $ionicConfigProvider.tabs.position('bottom')
-
+  #设置文本位置
   $ionicConfigProvider.navBar.alignTitle('center')
-
+  #设置滑动返回
   $ionicConfigProvider.views.swipeBackEnabled(false);
+  
+  if ionic.Platform.isAndroid()
+    #设置滚动效果
+    $ionicConfigProvider.scrolling.jsScrolling false
 
   $stateProvider
-
+  # 首页
   .state 'newHome',
     url: '/newHome'
     templateUrl: 'templates/newHome.html'
     controller: 'NewHomeCtrl'
     onEnter: ->
+      # 路由进入事件
       document.addEventListener 'deviceready', ->
         if window.StatusBar
           window.StatusBar.overlaysWebView(false)
       , false
     onExit: ->
+      # 路由离开事件
       document.addEventListener 'deviceready', ->
         if window.StatusBar
           window.StatusBar.overlaysWebView(true)
@@ -454,13 +520,13 @@ $httpProvider
     controller: 'User.OrderDetailCtrl'
 
 
-
+  # 默认路由
   $urlRouterProvider.otherwise '/'
-
+  # 添加拦截器
   $httpProvider.interceptors.push 'pathInterceptor'
   $httpProvider.interceptors.push 'tokenInterceptor'
   $httpProvider.interceptors.push 'logInterceptor'
-
+  # 参数转换
   fnTransParam = (data, headersGetter) ->
     ct = headersGetter()['Content-Type']
     if (ct and ct.match('application/x-www-form-urlencoded'))

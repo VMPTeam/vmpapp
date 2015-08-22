@@ -1,6 +1,6 @@
 <ion-view view-title="{{vm.mapView? '车辆监控':'车辆搜索'}}" cache-view="false">
   <ion-nav-buttons side="right">
-    <button class="button button-clear" ng-click="fnChangeView()">
+    <button class="button button-clear" ui-sref="car({type: vm.mapView ? 'list':'map'})">
       {{vm.mapView ? '列表视图' : '地图视图'}}
     </button>
   </ion-nav-buttons>
@@ -78,11 +78,11 @@
           </div>
         </div>
         <div class="action-bar">
-          <div class="detail" ui-sref="carInfo({id: vm.selectedCar.vehicleUid, type: 1})"><i class="icon-detail"></i>车辆档案</div>
-          <div class="line" ui-sref="carInfo({id: vm.selectedCar.vehicleUid, type: 2})"><i class="icon-line"></i>行车记录</div>
-          <div class="trace" ui-sref="carInfo({id: vm.selectedCar.vehicleUid, type: 3})"><i class="icon-trace"></i>车辆跟踪</div>
-          <div class="area" ui-sref="carInfo({id: vm.selectedCar.vehicleUid, type: 4})"><i class="icon-area"></i>车辆状况</div>
-          <div class="park" ui-sref="carInfo({id: vm.selectedCar.vehicleUid, type: 5})"><i class="icon-park"></i>历史停靠</div>
+          <a class="detail" ui-sref="carInfo({id: vm.selectedCar.vehicleUid, type: 1})"><i class="icon-detail"></i>车辆档案</a>
+          <a class="line" ui-sref="carInfo({id: vm.selectedCar.vehicleUid, type: 2})"><i class="icon-line"></i>行车记录</a>
+          <a class="trace" ui-sref="carInfo({id: vm.selectedCar.vehicleUid, type: 3})"><i class="icon-trace"></i>车辆跟踪</a>
+          <a class="area" ui-sref="carInfo({id: vm.selectedCar.vehicleUid, type: 4})"><i class="icon-area"></i>车辆状况</a>
+          <a class="park" ui-sref="carInfo({id: vm.selectedCar.vehicleUid, type: 5})"><i class="icon-park"></i>历史停靠</a>
         </div>
         <div class="arrow-down"></div>
       </div>

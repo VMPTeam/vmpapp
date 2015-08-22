@@ -1,5 +1,9 @@
+###
+控制器模块
+###
 angular.module 'starter.controllers', []
 
+#首页控制器
 .controller 'NewHomeCtrl', (
 $scope
 Message
@@ -15,6 +19,7 @@ Message
     Message.count()
     .then (res) ->
       vm.unreadMsg = res
+      # 消息处理
       count = parseInt(res['1']) + parseInt(res['2']) + parseInt(res['3'])
       vm.totalMsg =  if count < 100 then count else '...'
 
@@ -127,18 +132,31 @@ $ionicLoading
 $ionicScrollDelegate
 ) ->
   vm = $scope.vm =
+    #列表
     list: []
+    #页数
     pageStart: 1
+    #每页大小
     pageCount: 10
+    #搜索文本
     search: ''
+    #是否加载更多
     hasMore: true
+    #订单ID
     order: $localStorage[$stateParams.oid]
+    #开始时间
     startTime: $stateParams.startTime
+    #结束时间
     endTime: $stateParams.endTime
+    #地图视图
     mapView: $stateParams.type is 'map'
+    # 选择车辆
     selectedCar: null
+  # 车辆地图
   _CarMap = null
+  # 聚合物
   _markerClusterer = null
+  # 信息窗口
   _lastInfoWindow = null
 
   ###
@@ -158,6 +176,7 @@ $ionicScrollDelegate
         pageStart: if concat is true then ++vm.pageStart else vm.pageStart
         matchLic: vm.search
         matchNick: vm.search
+    # 获取车辆列表
     Car.list data
     .then (res) ->
       defer.resolve()
@@ -215,7 +234,9 @@ $ionicScrollDelegate
   ###
   $scope.fnRefreshMarker = (list) ->
     if list.length > 0 && _CarMap?
+      #创建标注物
       markers = ($scope.fnCreateMarker item for item in list when item.location? and item.location.lo)
+      #创建坐标点
       points = (marker.getPosition() for marker in markers)
       _CarMap.setViewport points
       # if _markerClusterer?
@@ -240,10 +261,12 @@ $ionicScrollDelegate
       # point = new BMap.Point 117.229985 + Math.random()*0.1,31.82957 + Math.random()*0.1
     point = new BMap.Point location.lo, location.la
     icon = new BMap.Icon 'img/car' + status + '.png', new BMap.Size 18, 38
+    # 创建标注物
     marker = new BMap.Marker point,
       icon: icon
       rotation: location.dir || parseInt(Math.random() * 360)
     marker.vehicleUid = data.vehicleUid
+    # 添加点击事件
     marker.addEventListener 'click', ->
       _CarMap.removeEventListener 'movestart', $scope.fnCloseInfoBox
       height = 195
@@ -262,6 +285,9 @@ $ionicScrollDelegate
         $scope.fnSelectCar id
     return marker
 
+  ###
+  关闭窗口
+  ###
   $scope.fnCloseInfoBox = ->
     $('#carInfoBox').hide()
     _CarMap.removeEventListener 'movestart', $scope.fnCloseInfoBox
@@ -313,6 +339,7 @@ $ionicScrollDelegate
         vm.selectedCar.address = res.sematic_description if vm.selectedCar?
 
   $scope.$watch 'vm.mapView', (val) ->
+    #冻结滚动
     $ionicScrollDelegate.freezeAllScrolls val
 
 # 驾驶员控制器
@@ -326,11 +353,17 @@ $localStorage
 $ionicLoading
 ) ->
   vm = $scope.vm =
+    #列表
     list: []
+    #页码
     pageStart: 1
+    #每页大小
     pageCount: 15
+    #搜索内容
     search: ''
+    #是否加载更多
     hasMore: true
+    # ID
     id: $stateParams.id
 
   # 获取驾驶员列表
@@ -360,6 +393,9 @@ $ionicLoading
       $scope.$broadcast 'scroll.refreshComplete'
       $scope.$broadcast 'scroll.infiniteScrollComplete'
 
+  ###
+  获取驾驶人详情
+  ###
   $scope.fnDetail = (id) ->
     $ionicLoading.show()
     Driver.detail id
@@ -393,11 +429,17 @@ KEY_ACCOUNT
 CLIENT_TYPE
 ) ->
   vm = $scope.vm =
+    #用户名
     username: $localStorage[KEY_USERNAME]
+    #密码
     password: $localStorage[KEY_PASSWORD]
+    #机构信息
     companyInfo: $localStorage[KEY_COMPANY]
+    #帐号信息
     account: $localStorage[KEY_ACCOUNT]
+    #记住列表
     reminderList: []
+    #信息
     msg: null
     # tabs
     tabs: [
@@ -414,10 +456,15 @@ CLIENT_TYPE
         name: '保险年检处理'
       }
     ]
+    #列表
     list: []
+    #页码
     pageStart: 1
+    #每页大小
     pageCount: 20
+    #当前标签
     currentTab: parseInt($stateParams.type) || 1
+    #新版首页
     newHome: $localStorage['newHome']
 
 
@@ -457,12 +504,14 @@ CLIENT_TYPE
       if window.cordova and
          window.cordova.plugins and
          window.cordova.plugins.XGPlugin
+        #注册信鸽
         cordova.plugins.XGPlugin.register (res) ->
           console.log res
         , (err) ->
           console.log err
         , username + '@' + vm.companyInfo.orgCode
       vm.userInfo = res
+      #页面跳转
       if Account.permission 'vehicle_manager'
         # open timer
         $scope.$emit 'message.open'
@@ -523,6 +572,7 @@ CLIENT_TYPE
         title: '请检查你的网络'
       item.checked = !item.checked
 
+  #设置新版首页
   $scope.fnSettingNewHome = (status) ->
     console.log status
     $localStorage['newHome'] = status
@@ -545,6 +595,7 @@ CLIENT_TYPE
       $ionicPopup.alert
         title: '两次密码输入不一致'
 
+  #获取权限
   $scope.fnGetPermission = (role) ->
     return Account.permission role
 
@@ -610,16 +661,27 @@ Account
 KEY_ACCOUNT
 ) ->
   vm = $scope.vm =
+    # ID
     id: $stateParams.id
+    # 下一个ID
     nextId: ''
+    #列表
     list: []
+    #页码
     pageStart: 1
+    #每页大小
     pageCount: 10
+    #搜索内容
     search: ''
+    #订单列表
     orderList: []
+    #订单对象
     order: {}
+    #子订单
     subOrder: $localStorage[$stateParams.oid]
+    #帐号信息
     account: $localStorage[KEY_ACCOUNT]
+    #tabs
     tabs: [
       {
         id: 1,
@@ -638,10 +700,15 @@ KEY_ACCOUNT
         name: '历史'
       }
     ]
+    #当前yab
     currentTab: $stateParams.id
+    #起始时间
     startTime: $stateParams.startTime
+    #终止事件
     endTime: $stateParams.endTime
+    #地理信息
     location: null
+    #重试次数
     retryTime: 3
 
   ###
@@ -657,6 +724,9 @@ KEY_ACCOUNT
           vm.retryTime--;
           $scope.fnGetLocation()
 
+  ###
+  获取距离
+  ###
   $scope.fnGetDistance = (location) ->
     if vm.location? and location?
       distance = Account.getDistance vm.location.lat, vm.location.lng, parseInt(location.la), parseInt(location.lo)
@@ -815,6 +885,7 @@ KEY_ACCOUNT
   进入驾驶员列表
   ###
   $scope.fnGotoDriverList = (order) ->
+    return unless vm.order.status == 2
     # 缓存订单号
     $localStorage[order.orderUid] = angular.extend order, {serialNum: vm.id}
     $state.go 'drivers',
@@ -890,7 +961,9 @@ Car
 Map
 ) ->
   vm = $scope.vm =
+    # id
     id: $stateParams.id
+    # tab
     tabList: [
       '车辆档案'
       '行车记录'
@@ -898,11 +971,17 @@ Map
       '车辆状况'
       '停车分布'
     ]
+    # 车辆信息
     info: {}
+    # 行车记录
     journals: {}
+    #今天日期
     today: new Date()
+    #开始时间
     beginTime: new Date()
+    #结束事件
     endTime: new Date()
+    #当前位置
     currentLocation: {}
   $scope.today = new Date()
   _traceMap = null
@@ -919,11 +998,13 @@ Map
         return temp
     , 800
 
+  # 初始化tab
   $scope.fnInitTab = ->
     if $stateParams.type?
       vm.tab = vm.tabList[$stateParams.type - 1]
     else
       vm.tab = vm.tabList[0]
+
   # 打开日期选择器
   $scope.fnOpenPicker = ()->
     vm.todayInstance.show()
@@ -971,7 +1052,7 @@ Map
 
   # 刷新仪表盘
   $scope.fnRefreshDashboard = (location) ->
-    # chart option  
+    # 速度选项  
     speedOption =
       name: '时速'
       type: 'gauge'
@@ -1012,6 +1093,7 @@ Map
           name: 'km/h'
         }
       ]
+    # 转速选项  
     rpmOption =
       name: '转速'
       type: 'gauge'
@@ -1054,6 +1136,7 @@ Map
           name: 'x1000 r/min'
         }
       ]
+    #电压选项
     voltageOption =
       name: '电压'
       type: 'gauge'
@@ -1094,6 +1177,7 @@ Map
           value: parseFloat(location.voltage || 0)
         }
       ]
+    #水温选项
     waterOption =
       name: '水温'
       type: 'gauge'
@@ -1193,6 +1277,7 @@ Map
     _parkMap.setViewport points
     _parkMap.addOverlay($scope.fnCreateLabelMarker(item.point)) for item in vm.parks
 
+  #创建历史记录标签
   $scope.fnCreateLabelMarker = (point) ->
     marker = new BMap.Marker(point)
     geoc = new BMap.Geocoder()
@@ -1272,16 +1357,19 @@ Map
     else
       return minutes + '分钟'
 
+  #获取油耗
   $scope.fnGetFuel = ->
     result = 0
     (result += parseFloat item.fuel for item in vm.journals)
     return result
 
+  #获取里程
   $scope.fnGetMile = ->
     result = 0
     (result += parseFloat item.miles for item in vm.journals)
     return result/1000
 
+  #获取平均油耗
   $scope.fnGetAvgFuel = ->
     fuel = 0
     mile = 0
@@ -1303,6 +1391,7 @@ Map
       return if ($scope.today.valueOf() - date.valueOf()) < 1*24*60*60*1000
     vm.today.setDate(date.getDate() + day)
 
+  # 是否可以选择明天
   $scope.fnCanNextDay = ->
     return if ($scope.today.valueOf() - vm.today.valueOf()) > 1*24*60*60*1000
 
@@ -1610,11 +1699,13 @@ KEY_ACCOUNT
       costTime: new Date()
   $scope.today = new Date()
 
+  #连接人民
   $scope.fnConcatPeople = (list) ->
     return '' unless angular.isArray list
     _arr = (people.name for people in list)
     return _arr.join(',')
 
+  #获取税费
   $scope.fnGetTaxInfo = ->
     if vm.costId?
       Order.detailTax vm.costId
@@ -1732,7 +1823,7 @@ KEY_ACCOUNT
         $ionicPopup.alert
           title: msg
 
-
+  #获取当前位置
   $scope.fnGetLocation = ->
     Account.getLocation()
     .then (res) ->
@@ -1770,10 +1861,9 @@ KEY_ACCOUNT
         , (msg) ->
           $ionicPopup.alert
             title: msg
-
-
   return
 
+#驾驶员控制器
 .controller 'Driver.OrderCtrl', (
 $scope
 $state
@@ -1790,6 +1880,9 @@ KEY_ACCOUNT
     order: {}
     account: $localStorage[KEY_ACCOUNT]
 
+  ###
+  获取列表
+  ###
   $scope.fnGetList = ->
     $ionicLoading.show()
     Order.list()
@@ -1800,6 +1893,9 @@ KEY_ACCOUNT
       $scope.$broadcast 'scroll.refreshComplete'
       $scope.$broadcast 'scroll.infiniteScrollComplete'
 
+  ###
+  获取详情
+  ###
   $scope.fnDetail = (id) ->
     $ionicLoading.show()
     Order.detail id
@@ -1807,6 +1903,9 @@ KEY_ACCOUNT
       vm.order = data
       $ionicLoading.hide()
 
+  ###
+  名字过滤
+  ###
   $scope.nameFilter = (list) ->
     res = []
     return [] unless angular.isArray list
@@ -1876,6 +1975,7 @@ Map
     $ionicPopup.alert
       title: msg
 
+  # 创建订单
   $scope.fnCreateOrder = () ->
     if vm.planEndPlace? and vm.planStartPlace? and vm.planStartTime? and vm.planEndTime?
       if vm.planStartTime.valueOf() > vm.planEndTime.valueOf()
@@ -1920,6 +2020,9 @@ Map
     delete vm.endLocLa
     delete vm.endLocLo
 
+  ###
+  搜索
+  ###
   $scope.fnSearch = ->
     return unless vm.searchText
     data =
@@ -1932,6 +2035,9 @@ Map
       return unless msg?
       vm.errorText = msg
 
+  ###
+  获取位置信息
+  ###
   $scope.fnGetLocation = () ->
     planStartPlace = $localStorage['planStartPlace']
     planEndPlace = $localStorage['planEndPlace']
@@ -1946,18 +2052,27 @@ Map
       vm.endLocLo = planEndPlace.lng
       delete $localStorage['planEndPlace']
 
+  ###
+  刷新选择车列表
+  ###
   $scope.fnResetCarList = ->
     delete $localStorage['selectedCar']
     vm.carList = $localStorage['selectedCar']
     vm.vehicleCount = vm.carList.length if angular.isArray vm.carList
 
+  ###
+  刷新已选人
+  ###
   $scope.fnGetSelectedPeople = () ->
     list = $localStorage['selectedPeople']
     if angular.isArray(list) && list.length > 0
       vm.passengers = list
     else
       vm.passengers = []
-
+  
+  ###
+  确认提交
+  ###
   $scope.fnConfirm = ->
     if (!vm.lat || !vm.lng)
       $ionicPopup.alert
@@ -1996,6 +2111,9 @@ $ionicLoading
     location: null
     retryTime: 3
 
+  ###
+  获取坐标
+  ###
   $scope.fnGetLocation = ->
     if !vm.location
       Account.getLocation()
@@ -2006,13 +2124,19 @@ $ionicLoading
           vm.retryTime--;
           $scope.fnGetLocation()
 
+
+  ###
+  获取距离
+  ###
   $scope.fnGetDistance = (location) ->
     if vm.location? and location?
       distance = Account.getDistance vm.location.lat, vm.location.lng, parseInt(location.la), parseInt(location.lo)
       return distance + 'km' if distance?
 
 
-
+  ###
+  获取列表
+  ###
   $scope.fnGetList = (concat=false) ->
     $ionicLoading.show()
     vm.pageStart = 1 if concat is false
@@ -2075,6 +2199,9 @@ Account
     hasMore: true
     search: ''
 
+  ###
+  获取列表
+  ###
   $scope.fnGetList = (concat=false) ->
     $ionicLoading.show()
     vm.pageStart = 1 if concat is false
@@ -2106,12 +2233,21 @@ Account
   .then (modal) ->
     vm.modal = modal
 
+  ###
+  打开弹窗
+  ###
   $scope.fnOpenModal = ->
     vm.modal.show()
 
+  ###
+  关闭弹窗
+  ###
   $scope.fnCloseModal = ->
     vm.modal.hide()
 
+  ###
+  删除帐号信息
+  ###
   $scope.fnDelete = (item, index)->
     confirmPopup = $ionicPopup.confirm
      title: "是否删除 #{item.realName} 的信息?"
@@ -2119,6 +2255,9 @@ Account
      if res
        vm.tempList.splice index, 1
 
+  ###
+  添加乘客
+  ###
   $scope.fnAddPassenger = (form) ->
     $ionicLoading.show()
     if !vm.tempList or !angular.isArray vm.tempList
@@ -2179,6 +2318,9 @@ KEY_ACCOUNT
     currentTab: 1
     hasMore: true
 
+  ###
+  获取状态
+  ###
   getStatusArray = ->
     status = []
     switch vm.currentTab
@@ -2192,15 +2334,24 @@ KEY_ACCOUNT
       when 4 then status.push 5 # 历史
     return status.join ','
 
+  ###
+  改变tab
+  ###
   $scope.fnChangeTab = (id) ->
     vm.currentTab = id
     $ionicScrollDelegate.scrollTop()
     $scope.fnGetList()
 
+  ###
+  是否领导
+  ###
   $scope.fnIsLeader = ->
     role = 'leader' in vm.account.roles
 
 
+  ###
+  获取列表
+  ###
   $scope.fnGetList = (concat=false) ->
     $ionicLoading.show()
     vm.pageStart = 1 if concat is false
@@ -2226,6 +2377,9 @@ KEY_ACCOUNT
       $scope.$broadcast 'scroll.refreshComplete'
       $scope.$broadcast 'scroll.infiniteScrollComplete'
 
+  ###
+  同意
+  ###
   $scope.fnAgree = (item, event) ->
     Order.approve item.serialNum, '同意用车'
     .then ->
@@ -2258,10 +2412,15 @@ KEY_ACCOUNT
   .then (modal) ->
     vm.modal = modal
 
+  ###
+  是否领导
+  ###
   $scope.fnIsLeader = ->
     role = 'leader' in vm.account.roles
 
-
+  ###
+  查看详情
+  ###
   $scope.fnDetail = () ->
     $ionicLoading.show()
     Order.detail vm.id
@@ -2269,6 +2428,9 @@ KEY_ACCOUNT
       vm.order = data
       $ionicLoading.hide()
 
+  ###
+  意见反馈
+  ###
   $scope.fnFeedback = (content) ->
     if content.trim()
       $ionicLoading.show()
@@ -2277,7 +2439,10 @@ KEY_ACCOUNT
         $ionicLoading.hide()
         $scope.fnCloseModal()
         vm.order.isFeedback = 1
-
+ 
+  ###
+  打开弹窗
+  ###
   $scope.fnOpenPopup = (type) ->
     if type is 'approve'
       vm.comment = '同意用车'
@@ -2316,6 +2481,9 @@ KEY_ACCOUNT
           $ionicPopup.alert
             title: msg
 
+  ###
+  分配
+  ###
   $scope.fnApprove = ->
     $ionicLoading.show()
     Order.approve vm.id, vm.comment
@@ -2328,6 +2496,9 @@ KEY_ACCOUNT
       $ionicPopup.alert
         title: msg
 
+  ###
+   拒绝
+  ###
   $scope.fnReject = ->
     $ionicLoading.show()
     Order.reject vm.id, vm.comment
@@ -2340,9 +2511,15 @@ KEY_ACCOUNT
       $ionicPopup.alert
         title: msg
 
+  ###
+  打开弹窗
+  ###
   $scope.fnOpenModal = () ->
     vm.modal.show()
 
+  ###
+  关闭弹窗
+  ###
   $scope.fnCloseModal = () ->
     vm.modal.hide()
 
@@ -2350,6 +2527,7 @@ KEY_ACCOUNT
   $scope.$on '$destroy', () ->
     vm.modal.remove()
 
+# 统计控制器
 .controller 'ReportCtrl',
 (
   $scope
