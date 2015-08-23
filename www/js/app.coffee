@@ -13,9 +13,8 @@ angular.module 'starter', [
   'ngStorage'
 ]
 # 接口baseUrl
-# .constant 'BASE_URL', '/Business'
-.constant 'BASE_URL', 'http://vmp.witgo.cn/Business'
-
+.constant 'BASE_URL', '/Business'
+# .constant 'BASE_URL', 'http://vmp.witgo.cn/Business'
 #机构信息
 .constant 'KEY_COMPANY', 'VMP_COMPANY'
 #Token信息

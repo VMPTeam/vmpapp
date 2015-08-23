@@ -3,7 +3,7 @@
 /*
 入口模块定义
  */
-angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.services', 'starter.directives', 'starter.filters', 'angular-md5', 'mobiscroll-datetime', 'ngStorage']).constant('BASE_URL', 'http://vmp.witgo.cn/Business').constant('KEY_COMPANY', 'VMP_COMPANY').constant('KEY_TOKEN', 'VMP_TOKEN').constant('KEY_ACCOUNT', 'VMP_ACCOUNT').constant('KEY_USERNAME', 'VMP_USERNAME').constant('KEY_PASSWORD', 'VMP_PASSWORD').run(function($rootScope, $ionicPlatform, $ionicScrollDelegate, $location, $localStorage, $interval, $timeout, $cordovaAppVersion, $cordovaFileTransfer, $cordovaFileOpener2, $ionicPopup, $ionicLoading, KEY_COMPANY, KEY_TOKEN, Account, Message) {
+angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.services', 'starter.directives', 'starter.filters', 'angular-md5', 'mobiscroll-datetime', 'ngStorage']).constant('BASE_URL', '/Business').constant('KEY_COMPANY', 'VMP_COMPANY').constant('KEY_TOKEN', 'VMP_TOKEN').constant('KEY_ACCOUNT', 'VMP_ACCOUNT').constant('KEY_USERNAME', 'VMP_USERNAME').constant('KEY_PASSWORD', 'VMP_PASSWORD').run(function($rootScope, $ionicPlatform, $ionicScrollDelegate, $location, $localStorage, $interval, $timeout, $cordovaAppVersion, $cordovaFileTransfer, $cordovaFileOpener2, $ionicPopup, $ionicLoading, KEY_COMPANY, KEY_TOKEN, Account, Message) {
 
   /*
   js异常捕获

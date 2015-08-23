@@ -419,7 +419,7 @@ angular.module('starter.controllers', []).controller('NewHomeCtrl', function($sc
       });
     });
   };
-}).controller('AccountCtrl', function($scope, $state, $stateParams, $ionicLoading, $ionicPopup, $localStorage, $cordovaGeolocation, Account, Message, KEY_COMPANY, KEY_TOKEN, KEY_USERNAME, KEY_PASSWORD, KEY_ACCOUNT, CLIENT_TYPE) {
+}).controller('AccountCtrl', function($scope, $state, $stateParams, $ionicLoading, $ionicPopup, $localStorage, $cordovaGeolocation, Account, Message, KEY_COMPANY, KEY_TOKEN, KEY_USERNAME, KEY_PASSWORD, KEY_ACCOUNT) {
   var vm;
   vm = $scope.vm = {
     username: $localStorage[KEY_USERNAME],

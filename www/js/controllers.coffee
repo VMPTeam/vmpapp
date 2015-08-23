@@ -426,7 +426,6 @@ KEY_TOKEN
 KEY_USERNAME
 KEY_PASSWORD
 KEY_ACCOUNT
-CLIENT_TYPE
 ) ->
   vm = $scope.vm =
     #用户名
