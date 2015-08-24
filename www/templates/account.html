@@ -32,6 +32,13 @@
       </a>
     </ul>
 
+    <ul class="list" ng-hide="::fnGetPermission('user')">
+      <a class="item item-icon-right" ui-sref="organization-info">
+        企业信息
+        <i class="icon ion-ios-arrow-right"></i>
+      </a>
+    </ul>
+
     <!-- <ul class="list" ng-show="fnGetPermission('vehicle_manager')" ng-cloak>
       <ion-toggle ng-model="vm.newHome"   ng-checked="vm.newHome"
                   ng-change="fnSettingNewHome(vm.newHome)">
