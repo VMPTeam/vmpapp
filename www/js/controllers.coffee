@@ -482,6 +482,13 @@ KEY_ACCOUNT
       $ionicPopup.alert
         title: msg
 
+  #获取企业信息
+  $scope.fnOrganizationInfo = ->
+    code = vm.companyInfo.orgCode
+    Account.getCompany code
+    .then (data) ->
+        vm.companyInfo =  $localStorage[KEY_COMPANY] = data
+
   # 登录
   $scope.fnLogin = (username, password) ->
     vm.companyInfo = $localStorage[KEY_COMPANY]

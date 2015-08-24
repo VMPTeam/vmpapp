@@ -518,6 +518,11 @@ $httpProvider
     templateUrl: 'templates/user-order-detail.html',
     controller: 'User.OrderDetailCtrl'
 
+  # 企业信息
+  .state 'organization-info',
+    url: '/organization/info',
+    templateUrl: 'templates/organization-info.html',
+    controller: 'AccountCtrl'
 
   # 默认路由
   $urlRouterProvider.otherwise '/'
