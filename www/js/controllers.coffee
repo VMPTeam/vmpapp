@@ -11,7 +11,7 @@ Message
   vm = $scope.vm =
   # 未读消息
     unreadMsg: null
-    
+
   ###
   # 获取未读消息
   ###
@@ -53,10 +53,10 @@ Map
     unreadMsg: null
     # 订单类型
     orderType: 2
-  
+
   # $timeout ->
   #   $('.allot').offset (index, coords) ->
-  #     temp = 
+  #     temp =
   #       top: coords.top + 80
   #       left: coords.left
   #     return temp
@@ -167,10 +167,10 @@ $ionicScrollDelegate
     $ionicLoading.show()
     vm.pageStart = 1 if concat is false
     if all
-      data = 
+      data =
         pageCount: 999999
         pageStart: 1
-    else   
+    else
       data =
         pageCount: vm.pageCount
         pageStart: if concat is true then ++vm.pageStart else vm.pageStart
@@ -271,9 +271,9 @@ $ionicScrollDelegate
       _CarMap.removeEventListener 'movestart', $scope.fnCloseInfoBox
       height = 195
       width = 256
-      offset = 
+      offset =
         top: window.innerHeight / 2 - height - 50
-        left: (window.innerWidth - width) / 2 
+        left: (window.innerWidth - width) / 2
       $('.custom-info-box').css offset
       $('#carInfoBox').show()
       _CarMap.panTo marker.getPosition(), noAnimation:true
@@ -523,7 +523,7 @@ KEY_ACCOUNT
         $scope.$emit 'message.open'
         # if $localStorage['newHome']
         #   $state.go 'newHome'
-        # else  
+        # else
         #   $state.go 'allot'
         $state.go 'newHome'
       else if Account.permission 'driver'
@@ -998,7 +998,7 @@ Map
   if ionic.Platform.isIOS()
     $timeout ->
       $('.car-info-content').offset (index, coords) ->
-        temp = 
+        temp =
           top: coords.top + 20
           left: coords.left
         return temp
@@ -1058,7 +1058,7 @@ Map
 
   # 刷新仪表盘
   $scope.fnRefreshDashboard = (location) ->
-    # 速度选项  
+    # 速度选项
     speedOption =
       name: '时速'
       type: 'gauge'
@@ -1099,7 +1099,7 @@ Map
           name: 'km/h'
         }
       ]
-    # 转速选项  
+    # 转速选项
     rpmOption =
       name: '转速'
       type: 'gauge'
@@ -1227,7 +1227,7 @@ Map
         }
       ]
 
-    option = 
+    option =
       series: [
         speedOption
         rpmOption
@@ -1508,7 +1508,7 @@ Car
       Area.detail vm.id
       .then (res) ->
         angular.extend vm.formData, res
-        $localStorage['points_' + res.areaUid] = 
+        $localStorage['points_' + res.areaUid] =
           type: res.type
           radius: res.radius
           points: res.points
@@ -1820,7 +1820,7 @@ KEY_ACCOUNT
         return unless msg?
         $ionicPopup.alert
           title: msg
-    else  
+    else
       Order.addTax vm.taxId, data
       .then ->
         $ionicHistory.goBack -1
@@ -1853,7 +1853,7 @@ KEY_ACCOUNT
       title: '是否确认?'
     .then (flag) ->
       if flag
-        data = 
+        data =
           location: vm.location
           locLo: vm.locLo
           locLa: vm.locLa
@@ -1963,11 +1963,13 @@ $ionicHistory
 $stateParams
 Order
 Map
+KEY_COMPANY
 ) ->
   vm = $scope.vm =
     planStartTime: new Date()
     planEndTime: new Date()
     carList: $localStorage['selectedCar']
+    flowId: ''
 
   $scope.today = new Date()
 
@@ -1999,11 +2001,32 @@ Map
       data.planStartTime = $filter('date')(vm.planStartTime, 'yyyy-MM-dd HH:mm:ss')
       data.planEndTime = $filter('date')(vm.planEndTime, 'yyyy-MM-dd HH:mm:ss')
       data.passengers = ({phone: obj.phone, name: obj.realName} for obj in vm.passengers)
-      Order.create data
-      .then () ->
+      Order.getFlowId()
+      .then (res) ->
+        vm.flowId = res.flowId
+      , (msg) ->
+        return unless msg?
         $ionicLoading.hide()
         $ionicPopup.alert
-          title: '提交成功！'
+          title: msg
+      Order.create data
+      .then (res) ->
+        $ionicLoading.hide()
+        flowEng =
+          target: vm.selectApprovers[0].loginId + '@' + $localStorage[KEY_COMPANY].orgCode
+          instanceId: '-1'
+          opinionId: '-1'
+          flowId: vm.flowId
+          extMsg: "\"orderUid\":\""+ res.orderUid + "\""
+        Order.saveFlowEng flowEng
+        .then (res) ->
+          $ionicPopup.alert
+            title: '提交成功！'
+        , (msg) ->
+         return unless msg?
+          $ionicLoading.hide()
+          $ionicPopup.alert
+            title: msg
         $scope.fnResetForm()
       , (msg) ->
         return unless msg?
@@ -2019,6 +2042,7 @@ Map
   $scope.fnResetForm = ->
     delete $localStorage['selectedPeople']
     delete $localStorage['selectedCar']
+    delete $localStorage['selectApprovers']
     delete vm.passengers
     delete vm.vehicleCount
     delete vm.description
@@ -2075,7 +2099,17 @@ Map
       vm.passengers = list
     else
       vm.passengers = []
-  
+
+  ###
+  刷新已选审批人
+  ###
+  $scope.fnGetSelectedApprovers = () ->
+    list = $localStorage['selectApprovers']
+    if angular.isArray(list) && list.length > 0
+      vm.selectApprovers = list
+    else
+      vm.selectApprovers = []
+
   ###
   确认提交
   ###
@@ -2095,6 +2129,7 @@ Map
   $scope.$on '$ionicView.enter', ->
     $scope.fnGetLocation()
     $scope.fnGetSelectedPeople()
+    $scope.fnGetSelectedApprovers()
     vm.carList = $localStorage['selectedCar']
     vm.vehicleCount = vm.carList.length if angular.isArray vm.carList
 
@@ -2196,6 +2231,8 @@ $ionicPopup
 $ionicModal
 People
 Account
+KEY_COMPANY
+$q
 ) ->
   vm = $scope.vm =
     list: []
@@ -2204,11 +2241,15 @@ Account
     pageCount: 20
     hasMore: true
     search: ''
+    companyInfo: $localStorage[KEY_COMPANY]
+    approverList: []
+    tempApprovers: []
 
   ###
   获取列表
   ###
   $scope.fnGetList = (concat=false) ->
+    defer = $q.defer()
     $ionicLoading.show()
     vm.pageStart = 1 if concat is false
     data =
@@ -2217,6 +2258,7 @@ Account
       realName: vm.search
     Account.userList data
     .then (res) ->
+      defer.resolve()
       $ionicLoading.hide()
       if concat is true
         vm.list = vm.list.concat res.rows
@@ -2224,12 +2266,50 @@ Account
         vm.list = res.rows
       if res.total < vm.pageCount then vm.hasMore = false else vm.hasMore = true
     , (msg) ->
+      defer.resolve()
       $ionicLoading.hide()
       vm.hasMore = false
       return unless msg?
       $ionicPopup.alert
         title: msg
     .finally ->
+      defer.resolve()
+      $scope.$broadcast 'scroll.refreshComplete'
+      $scope.$broadcast 'scroll.infiniteScrollComplete'
+
+
+  ###
+    获取审批人列表
+    ###
+  $scope.fnGetApprovers = (concat=false) ->
+    defer = $q.defer()
+    $ionicLoading.show()
+    vm.pageStart = 1 if concat is false
+    data =
+      pageCount: vm.pageCount
+      pageStart: if concat is true then ++vm.pageStart else vm.pageStart
+      realName: vm.search
+      deptCode: vm.companyInfo.orgCode
+      role: 'leader'
+
+    Account.userList data
+    .then (res) ->
+      defer.resolve()
+      $ionicLoading.hide()
+      if concat is true
+        vm.approverList = vm.approverList.concat res.rows
+      else
+        vm.approverList = res.rows
+      if res.total < vm.pageCount then vm.hasMore = false else vm.hasMore = true
+    , (msg) ->
+      defer.resolve()
+      $ionicLoading.hide()
+      vm.hasMore = false
+      return unless msg?
+      $ionicPopup.alert
+        title: msg
+    .finally ->
+      defer.resolve()
       $scope.$broadcast 'scroll.refreshComplete'
       $scope.$broadcast 'scroll.infiniteScrollComplete'
 
@@ -2286,6 +2366,12 @@ Account
     arr2 = $filter('filter')(vm.tempList or [], {checked: true})
     $localStorage['selectedPeople'] = arr1.concat arr2
     console.log $localStorage['selectedPeople']
+  , true
+
+  $scope.$watch 'vm.approverList', ->
+    arr1 = $filter('filter')(vm.approverList, {checked: true})
+    $localStorage['selectApprovers'] = arr1
+    console.log $localStorage['selectApprovers']
   , true
 
 # 用户订单列表控制器
@@ -2445,7 +2531,7 @@ KEY_ACCOUNT
         $ionicLoading.hide()
         $scope.fnCloseModal()
         vm.order.isFeedback = 1
- 
+
   ###
   打开弹窗
   ###
@@ -2546,7 +2632,7 @@ KEY_ACCOUNT
   Statistic
   KEY_ACCOUNT
 ) ->
-  vm = $scope.vm = 
+  vm = $scope.vm =
     user: $localStorage[KEY_ACCOUNT]
     date: new Date()
     labels:
@@ -2564,7 +2650,7 @@ KEY_ACCOUNT
     type: $stateParams.type
   $scope.today = new Date()
   myChart = echarts.init(document.getElementById('main')) if document.getElementById('main')?
-    
+
   # 刷新图表
   $scope.fnRefreshChart = (list, type="bar") ->
     # 基于准备好的dom，初始化echarts图表
@@ -2573,7 +2659,7 @@ KEY_ACCOUNT
     dates = []
     map = {}
     for obj in list
-      # key = {value: obj.Y1, key: parseInt(obj.CREATE_DATE.substr(8))} for 
+      # key = {value: obj.Y1, key: parseInt(obj.CREATE_DATE.substr(8))} for
       key = parseInt(obj['CREATE_DATE'].substr(8))
       value = obj['Y1']
       map[key] = value
@@ -2597,15 +2683,15 @@ KEY_ACCOUNT
         show : true
         y:'top'
         itemSize: 26
-        feature: 
-          magicType: 
+        feature:
+          magicType:
             show: true
             type: ['line', 'bar']
       grid:
         x: 50
         x2: 50
         y: 40
-      xAxis: 
+      xAxis:
         name: '日期(日)'
         data: dates
         axisLabel:
@@ -2651,7 +2737,7 @@ KEY_ACCOUNT
     return if flag > 0 and vm.date.valueOf() > (new Date()).valueOf() - duration
     vm.date.setMonth vm.date.getMonth() + flag
     vm.dateInstance.setVal vm.date
-  
+
   $scope.$watch 'vm.date', (val) ->
     if $state.is 'reportDtail'
       $scope.fnLoadData()

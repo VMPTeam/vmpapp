@@ -13,6 +13,7 @@ angular.module 'starter', [
   'ngStorage'
 ]
 # 接口baseUrl
+# .constant 'BASE_URL', 'http://localhost:8100/Business'
 # .constant 'BASE_URL', '/Business'
 .constant 'BASE_URL', 'http://vmp.witgo.cn/Business'
 #机构信息
@@ -504,6 +505,12 @@ $httpProvider
   .state 'userPeoples',
     url: '/userPeoples',
     templateUrl: 'templates/people-list.html',
+    controller: 'User.PeopleCtrl'
+
+  # 选择审批人
+  .state 'approvers',
+    url: '/approvers',
+    templateUrl: 'templates/approver-list.html',
     controller: 'User.PeopleCtrl'
 
   # 用户订单列表

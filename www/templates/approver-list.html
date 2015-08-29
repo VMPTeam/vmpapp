@@ -1,0 +1,48 @@
+<ion-view view-title="慧管车" cache-view="false">
+  <ion-nav-buttons side="left">
+    <a class="button icon-left ion-ios-arrow-back button-clear" ng-click="$ionicGoBack()">返回</a>
+  </ion-nav-buttons>
+  <div class="bar bar-subheader item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="请输入关键字进行搜索测试" ng-model="vm.search"
+             ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }" ng-change="fnGetApprovers()">
+    </label>
+    <button class="button button-clear" ng-click="vm.search = '';fnGetApprovers()">
+      取消
+    </button>
+  </div>
+  <ion-content class="people-list has-subheader">
+    <ion-refresher
+      pulling-text="下拉刷新..."
+      on-refresh="fnGetApprovers()">
+    </ion-refresher>
+    <ul class="list" ng-init="fnGetApprovers()">
+      <li class="item item-checkbox" ng-repeat="item in vm.approverList">
+        <label class="checkbox">
+          <input type="checkbox" ng-model="item.checked">
+        </label>
+        <span ng-bind="::item.realName"></span>
+        <span class="item-note" ng-bind="::item.phone"></span>
+      </li>
+      <!--<label class="item item-radio" ng-repeat="item in vm.approverList">-->
+        <!--<input type="radio" name="group" ng-model="item.checked">-->
+        <!--<div class="item-content">-->
+          <!--<span ng-bind="::item.realName"></span>-->
+          <!--<span class="item-note" ng-bind="::item.phone"></span>-->
+        <!--</div>-->
+        <!--<i class="radio-icon ion-checkmark"></i>-->
+      <!--</label>-->
+    </ul>
+    <ion-infinite-scroll
+      ng-if="vm.hasMore"
+      on-infinite="fnGetApprovers(true)"
+      immediate-check="false">
+    </ion-infinite-scroll>
+    <div class="empty-list" ng-hide="vm.approverList.length">
+      暂无数据
+    </div>
+  </ion-content>
+</ion-view>
+<script id="people-modal.html" type="text/ng-template">
+</script>

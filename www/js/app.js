@@ -365,6 +365,10 @@
       url: '/userPeoples',
       templateUrl: 'templates/people-list.html',
       controller: 'User.PeopleCtrl'
+    }).state('approvers', {
+      url: '/approvers',
+      templateUrl: 'templates/approver-list.html',
+      controller: 'User.PeopleCtrl'
     }).state('userOrders', {
       url: '/userorders',
       templateUrl: 'templates/user-orders.html',

@@ -63,6 +63,13 @@
                  placeholder="请输入用车需求"/>
         </div>
       </div>
+      <div class="list mini">
+        <a class="item item-icon-left" ui-sref="approvers">
+          <i class="icon-custom icon-passenger"></i>
+          <label>审批人</label>
+          <span class="item-note truncate" style="width: 70%;text-align: right;" ng-bind="vm.selectApprovers | concatName: 'realName'"></span>
+        </a>
+      </div>
 
       <div class="padding">
         <button class="button button-block button-blue" style="background-color: #18beea;"

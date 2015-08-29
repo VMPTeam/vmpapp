@@ -40,7 +40,8 @@
     }
   ],
   "cordovaPlatforms": [
-    "ios"
+    "ios",
+    "android"
   ],
   "coffeelintConfig": {
     "max_line_length": {

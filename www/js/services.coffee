@@ -421,6 +421,34 @@ ErrorHandle
     return defer.promise
 
   ###
+  获取流程id
+  ###
+  this.getFlowId = () ->
+    defer = $q.defer()
+
+    $http.get '/order/getFlowId'
+    .success (res) ->
+      if res.ret then defer.reject res.message else defer.resolve res
+    .error (err, status) ->
+      ErrorHandle(status, err, defer)
+
+    return defer.promise
+
+  ###
+  获取流程id
+  ###
+  this.saveFlowEng = (flowEng) ->
+    defer = $q.defer()
+    console.log(flowEng)
+    $http.get '/wf/saveFlowEng', params: flowEng
+    .success (res) ->
+      if res.ret then defer.reject res.message else defer.resolve res
+    .error (err, status) ->
+      ErrorHandle(status, err, defer)
+
+    return defer.promise
+
+  ###
   开始发车
   ###
   this.begin = (id) ->

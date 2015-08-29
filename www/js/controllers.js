@@ -2177,12 +2177,13 @@
         }
       });
     };
-  }).controller('User.HomeCtrl', function($scope, $ionicPopup, $filter, $ionicLoading, $localStorage, $cordovaDatePicker, $cordovaGeolocation, $ionicHistory, $stateParams, Order, Map) {
+  }).controller('User.HomeCtrl', function($scope, $ionicPopup, $filter, $ionicLoading, $localStorage, $cordovaDatePicker, $cordovaGeolocation, $ionicHistory, $stateParams, Order, Map, KEY_COMPANY) {
     var validate, vm;
     vm = $scope.vm = {
       planStartTime: new Date(),
       planEndTime: new Date(),
-      carList: $localStorage['selectedCar']
+      carList: $localStorage['selectedCar'],
+      flowId: ''
     };
     $scope.today = new Date();
     validate = function() {
@@ -2248,10 +2249,38 @@
           }
           return results;
         })();
-        return Order.create(data).then(function() {
+        Order.getFlowId().then(function(res) {
+          return vm.flowId = res.flowId;
+        }, function(msg) {
+          if (msg == null) {
+            return;
+          }
           $ionicLoading.hide();
-          $ionicPopup.alert({
-            title: '提交成功！'
+          return $ionicPopup.alert({
+            title: msg
+          });
+        });
+        return Order.create(data).then(function(res) {
+          var flowEng;
+          $ionicLoading.hide();
+          flowEng = {
+            target: vm.selectApprovers[0].loginId + '@' + $localStorage[KEY_COMPANY].orgCode,
+            instanceId: '-1',
+            opinionId: '-1',
+            flowId: vm.flowId,
+            extMsg: "\"orderUid\":\"" + res.orderUid + "\""
+          };
+          Order.saveFlowEng(flowEng).then(function(res) {
+            return $ionicPopup.alert({
+              title: '提交成功！'
+            });
+          }, function(msg) {
+            if (msg == null) {
+              $ionicLoading.hide();
+              return $ionicPopup.alert({
+                title: msg
+              });
+            }
           });
           return $scope.fnResetForm();
         }, function(msg) {
@@ -2274,6 +2303,7 @@
     $scope.fnResetForm = function() {
       delete $localStorage['selectedPeople'];
       delete $localStorage['selectedCar'];
+      delete $localStorage['selectApprovers'];
       delete vm.passengers;
       delete vm.vehicleCount;
       delete vm.description;
@@ -2350,6 +2380,19 @@
     };
 
     /*
+    刷新已选审批人
+     */
+    $scope.fnGetSelectedApprovers = function() {
+      var list;
+      list = $localStorage['selectApprovers'];
+      if (angular.isArray(list) && list.length > 0) {
+        return vm.selectApprovers = list;
+      } else {
+        return vm.selectApprovers = [];
+      }
+    };
+
+    /*
     确认提交
      */
     $scope.fnConfirm = function() {
@@ -2370,6 +2413,7 @@
     return $scope.$on('$ionicView.enter', function() {
       $scope.fnGetLocation();
       $scope.fnGetSelectedPeople();
+      $scope.fnGetSelectedApprovers();
       vm.carList = $localStorage['selectedCar'];
       if (angular.isArray(vm.carList)) {
         return vm.vehicleCount = vm.carList.length;
@@ -2493,7 +2537,7 @@
         return obj = indexOf.call($localStorage['selectedCar'], id) >= 0;
       }
     };
-  }).controller('User.PeopleCtrl', function($scope, $filter, $localStorage, $ionicLoading, $ionicPopup, $ionicModal, People, Account) {
+  }).controller('User.PeopleCtrl', function($scope, $filter, $localStorage, $ionicLoading, $ionicPopup, $ionicModal, People, Account, KEY_COMPANY, $q) {
     var vm;
     vm = $scope.vm = {
       list: [],
@@ -2501,17 +2545,21 @@
       pageStart: 1,
       pageCount: 20,
       hasMore: true,
-      search: ''
+      search: '',
+      companyInfo: $localStorage[KEY_COMPANY],
+      approverList: [],
+      tempApprovers: []
     };
 
     /*
     获取列表
      */
     $scope.fnGetList = function(concat) {
-      var data;
+      var data, defer;
       if (concat == null) {
         concat = false;
       }
+      defer = $q.defer();
       $ionicLoading.show();
       if (concat === false) {
         vm.pageStart = 1;
@@ -2522,6 +2570,7 @@
         realName: vm.search
       };
       return Account.userList(data).then(function(res) {
+        defer.resolve();
         $ionicLoading.hide();
         if (concat === true) {
           vm.list = vm.list.concat(res.rows);
@@ -2534,6 +2583,7 @@
           return vm.hasMore = true;
         }
       }, function(msg) {
+        defer.resolve();
         $ionicLoading.hide();
         vm.hasMore = false;
         if (msg == null) {
@@ -2543,6 +2593,57 @@
           title: msg
         });
       })["finally"](function() {
+        defer.resolve();
+        $scope.$broadcast('scroll.refreshComplete');
+        return $scope.$broadcast('scroll.infiniteScrollComplete');
+      });
+    };
+
+    /*
+      获取审批人列表
+     */
+    $scope.fnGetApprovers = function(concat) {
+      var data, defer;
+      if (concat == null) {
+        concat = false;
+      }
+      defer = $q.defer();
+      $ionicLoading.show();
+      if (concat === false) {
+        vm.pageStart = 1;
+      }
+      data = {
+        pageCount: vm.pageCount,
+        pageStart: concat === true ? ++vm.pageStart : vm.pageStart,
+        realName: vm.search,
+        deptCode: vm.companyInfo.orgCode,
+        role: 'leader'
+      };
+      return Account.userList(data).then(function(res) {
+        defer.resolve();
+        $ionicLoading.hide();
+        if (concat === true) {
+          vm.approverList = vm.approverList.concat(res.rows);
+        } else {
+          vm.approverList = res.rows;
+        }
+        if (res.total < vm.pageCount) {
+          return vm.hasMore = false;
+        } else {
+          return vm.hasMore = true;
+        }
+      }, function(msg) {
+        defer.resolve();
+        $ionicLoading.hide();
+        vm.hasMore = false;
+        if (msg == null) {
+          return;
+        }
+        return $ionicPopup.alert({
+          title: msg
+        });
+      })["finally"](function() {
+        defer.resolve();
         $scope.$broadcast('scroll.refreshComplete');
         return $scope.$broadcast('scroll.infiniteScrollComplete');
       });
@@ -2609,7 +2710,7 @@
       $localStorage['selectedPeople'] = arr1.concat(arr2);
       return console.log($localStorage['selectedPeople']);
     }, true);
-    return $scope.$watch('vm.tempList', function() {
+    $scope.$watch('vm.tempList', function() {
       var arr1, arr2;
       arr1 = $filter('filter')(vm.list, {
         checked: true
@@ -2619,6 +2720,14 @@
       });
       $localStorage['selectedPeople'] = arr1.concat(arr2);
       return console.log($localStorage['selectedPeople']);
+    }, true);
+    return $scope.$watch('vm.approverList', function() {
+      var arr1;
+      arr1 = $filter('filter')(vm.approverList, {
+        checked: true
+      });
+      $localStorage['selectApprovers'] = arr1;
+      return console.log($localStorage['selectApprovers']);
     }, true);
   }).controller('User.OrderCtrl', function($scope, $ionicLoading, $ionicPopup, $ionicScrollDelegate, $localStorage, Order, KEY_ACCOUNT) {
     var getStatusArray, vm;
