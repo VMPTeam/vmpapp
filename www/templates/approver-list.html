@@ -18,21 +18,14 @@
       on-refresh="fnGetApprovers()">
     </ion-refresher>
     <ul class="list" ng-init="fnGetApprovers()">
-      <li class="item item-checkbox" ng-repeat="item in vm.approverList">
-        <label class="checkbox">
-          <input type="checkbox" ng-model="item.checked">
-        </label>
-        <span ng-bind="::item.realName"></span>
-        <span class="item-note" ng-bind="::item.phone"></span>
-      </li>
-      <!--<label class="item item-radio" ng-repeat="item in vm.approverList">-->
-        <!--<input type="radio" name="group" ng-model="item.checked">-->
-        <!--<div class="item-content">-->
-          <!--<span ng-bind="::item.realName"></span>-->
-          <!--<span class="item-note" ng-bind="::item.phone"></span>-->
-        <!--</div>-->
-        <!--<i class="radio-icon ion-checkmark"></i>-->
-      <!--</label>-->
+      <label class="item item-radio" ng-repeat="item in vm.approverList">
+        <input type="radio" name="group" ng-model="vm.selectApprovers"  ng-click="fnApproverSelect()" ng-value="item">
+        <div class="item-content">
+          <span ng-bind="::item.realName"></span>
+          <span class="item-note" ng-bind="::item.phone"></span>
+        </div>
+        <i class="radio-icon ion-checkmark"></i>
+      </label>
     </ul>
     <ion-infinite-scroll
       ng-if="vm.hasMore"

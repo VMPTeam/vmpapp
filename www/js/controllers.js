@@ -2264,7 +2264,7 @@
           var flowEng;
           $ionicLoading.hide();
           flowEng = {
-            target: vm.selectApprovers[0].loginId + '@' + $localStorage[KEY_COMPANY].orgCode,
+            target: vm.selectApprovers.loginId + '@' + $localStorage[KEY_COMPANY].orgCode,
             instanceId: '-1',
             opinionId: '-1',
             flowId: vm.flowId,
@@ -2301,9 +2301,17 @@
     重置表单
      */
     $scope.fnResetForm = function() {
+      var j, len, obj, ref;
       delete $localStorage['selectedPeople'];
       delete $localStorage['selectedCar'];
       delete $localStorage['selectApprovers'];
+      if ($localStorage['peoples']) {
+        ref = $localStorage['peoples'];
+        for (j = 0, len = ref.length; j < len; j++) {
+          obj = ref[j];
+          obj.checked = false;
+        }
+      }
       delete vm.passengers;
       delete vm.vehicleCount;
       delete vm.description;
@@ -2383,13 +2391,7 @@
     刷新已选审批人
      */
     $scope.fnGetSelectedApprovers = function() {
-      var list;
-      list = $localStorage['selectApprovers'];
-      if (angular.isArray(list) && list.length > 0) {
-        return vm.selectApprovers = list;
-      } else {
-        return vm.selectApprovers = [];
-      }
+      return vm.selectApprovers = $localStorage['selectApprovers'];
     };
 
     /*
@@ -2548,7 +2550,8 @@
       search: '',
       companyInfo: $localStorage[KEY_COMPANY],
       approverList: [],
-      tempApprovers: []
+      tempApprovers: [],
+      selectApprovers: {}
     };
 
     /*
@@ -2570,12 +2573,26 @@
         realName: vm.search
       };
       return Account.userList(data).then(function(res) {
+        var j, k, len, len1, obj, peopleObj, ref, ref1;
         defer.resolve();
         $ionicLoading.hide();
         if (concat === true) {
           vm.list = vm.list.concat(res.rows);
         } else {
           vm.list = res.rows;
+        }
+        ref = vm.list;
+        for (j = 0, len = ref.length; j < len; j++) {
+          obj = ref[j];
+          if ($localStorage['selectedPeople']) {
+            ref1 = $localStorage['selectedPeople'];
+            for (k = 0, len1 = ref1.length; k < len1; k++) {
+              peopleObj = ref1[k];
+              if (obj.loginId === peopleObj.loginId) {
+                obj.checked = true;
+              }
+            }
+          }
         }
         if (res.total < vm.pageCount) {
           return vm.hasMore = false;
@@ -2620,12 +2637,20 @@
         role: 'leader'
       };
       return Account.userList(data).then(function(res) {
+        var j, len, obj, ref;
         defer.resolve();
         $ionicLoading.hide();
         if (concat === true) {
           vm.approverList = vm.approverList.concat(res.rows);
         } else {
           vm.approverList = res.rows;
+        }
+        ref = vm.approverList;
+        for (j = 0, len = ref.length; j < len; j++) {
+          obj = ref[j];
+          if (obj.loginId === $localStorage['selectApprovers'].loginId) {
+            vm.selectApprovers = obj;
+          }
         }
         if (res.total < vm.pageCount) {
           return vm.hasMore = false;
@@ -2654,6 +2679,50 @@
     }).then(function(modal) {
       return vm.modal = modal;
     });
+
+    /*
+    存储选择的审批人
+     */
+    $scope.fnApproverSelect = function() {
+      return $localStorage['selectApprovers'] = vm.selectApprovers;
+    };
+
+    /*
+    存储选择的人员
+     */
+    $scope.fnPeopleSelect = function(item) {
+      var index;
+      if (!$localStorage['selectedPeople']) {
+        $localStorage['selectedPeople'] = [];
+      }
+      if (item.checked) {
+        index = $scope.getIndex(item, $localStorage['selectedPeople']);
+        if (index < 0) {
+          return $localStorage['selectedPeople'].push(item);
+        }
+      } else {
+        index = $scope.getIndex(item, $localStorage['selectedPeople']);
+        if (index > -1) {
+          return $localStorage['selectedPeople'].splice(index, 1);
+        }
+      }
+    };
+
+    /*
+    获取选择人员是否在存储列表中，如果在返回位置
+     */
+    $scope.getIndex = function(item, list) {
+      var i, index, j, len, obj;
+      index = -1;
+      for (i = j = 0, len = list.length; j < len; i = ++j) {
+        obj = list[i];
+        if (obj.loginId === item.loginId) {
+          index = i;
+          return index;
+        }
+      }
+      return index;
+    };
 
     /*
     打开弹窗
@@ -2687,7 +2756,7 @@
     /*
     添加乘客
      */
-    $scope.fnAddPassenger = function(form) {
+    return $scope.fnAddPassenger = function(form) {
       $ionicLoading.show();
       if (!vm.tempList || !angular.isArray(vm.tempList)) {
         vm.tempList = $localStorage['peoples'] = [];
@@ -2699,36 +2768,6 @@
       vm.form = {};
       return $scope.fnCloseModal();
     };
-    $scope.$watch('vm.list', function() {
-      var arr1, arr2;
-      arr1 = $filter('filter')(vm.list, {
-        checked: true
-      });
-      arr2 = $filter('filter')(vm.tempList || [], {
-        checked: true
-      });
-      $localStorage['selectedPeople'] = arr1.concat(arr2);
-      return console.log($localStorage['selectedPeople']);
-    }, true);
-    $scope.$watch('vm.tempList', function() {
-      var arr1, arr2;
-      arr1 = $filter('filter')(vm.list, {
-        checked: true
-      });
-      arr2 = $filter('filter')(vm.tempList || [], {
-        checked: true
-      });
-      $localStorage['selectedPeople'] = arr1.concat(arr2);
-      return console.log($localStorage['selectedPeople']);
-    }, true);
-    return $scope.$watch('vm.approverList', function() {
-      var arr1;
-      arr1 = $filter('filter')(vm.approverList, {
-        checked: true
-      });
-      $localStorage['selectApprovers'] = arr1;
-      return console.log($localStorage['selectApprovers']);
-    }, true);
   }).controller('User.OrderCtrl', function($scope, $ionicLoading, $ionicPopup, $ionicScrollDelegate, $localStorage, Order, KEY_ACCOUNT) {
     var getStatusArray, vm;
     vm = $scope.vm = {

@@ -23,14 +23,14 @@
     <ul class="list" ng-init="fnGetList()">
       <li class="item item-checkbox" ng-repeat="item in vm.tempList" on-hold="fnDelete(item, $index)">
         <label class="checkbox">
-          <input type="checkbox" ng-model="item.checked">
+          <input type="checkbox" ng-model="item.checked" ng-checked="item.checked" ng-change="fnPeopleSelect(item)">
         </label>
         <span ng-bind="::item.realName"></span>
         <span class="item-note" ng-bind="::item.phone"></span>
       </li>
       <li class="item item-checkbox" ng-repeat="item in vm.list">
         <label class="checkbox">
-          <input type="checkbox" ng-model="item.checked">
+          <input type="checkbox" ng-model="item.checked" ng-checked="item.checked" ng-change="fnPeopleSelect(item)">
         </label>
         <span ng-bind="::item.realName"></span>
         <span class="item-note" ng-bind="::item.phone"></span>

@@ -2013,7 +2013,7 @@ KEY_COMPANY
       .then (res) ->
         $ionicLoading.hide()
         flowEng =
-          target: vm.selectApprovers[0].loginId + '@' + $localStorage[KEY_COMPANY].orgCode
+          target: vm.selectApprovers.loginId + '@' +  $localStorage[KEY_COMPANY].orgCode
           instanceId: '-1'
           opinionId: '-1'
           flowId: vm.flowId
@@ -2043,6 +2043,9 @@ KEY_COMPANY
     delete $localStorage['selectedPeople']
     delete $localStorage['selectedCar']
     delete $localStorage['selectApprovers']
+    if $localStorage['peoples']
+      for obj in  $localStorage['peoples']
+        obj.checked = false
     delete vm.passengers
     delete vm.vehicleCount
     delete vm.description
@@ -2104,11 +2107,8 @@ KEY_COMPANY
   刷新已选审批人
   ###
   $scope.fnGetSelectedApprovers = () ->
-    list = $localStorage['selectApprovers']
-    if angular.isArray(list) && list.length > 0
-      vm.selectApprovers = list
-    else
-      vm.selectApprovers = []
+    vm.selectApprovers = $localStorage['selectApprovers']
+
 
   ###
   确认提交
@@ -2244,6 +2244,7 @@ $q
     companyInfo: $localStorage[KEY_COMPANY]
     approverList: []
     tempApprovers: []
+    selectApprovers:  {}
 
   ###
   获取列表
@@ -2264,6 +2265,11 @@ $q
         vm.list = vm.list.concat res.rows
       else
         vm.list = res.rows
+      for obj in vm.list
+        if $localStorage['selectedPeople']
+          for peopleObj in $localStorage['selectedPeople']
+            if obj.loginId == peopleObj.loginId
+              obj.checked = true
       if res.total < vm.pageCount then vm.hasMore = false else vm.hasMore = true
     , (msg) ->
       defer.resolve()
@@ -2300,6 +2306,9 @@ $q
         vm.approverList = vm.approverList.concat res.rows
       else
         vm.approverList = res.rows
+      for obj in vm.approverList
+        if obj.loginId == $localStorage['selectApprovers'].loginId
+          vm.selectApprovers=obj
       if res.total < vm.pageCount then vm.hasMore = false else vm.hasMore = true
     , (msg) ->
       defer.resolve()
@@ -2318,7 +2327,37 @@ $q
     animation: 'slide-in-up'
   .then (modal) ->
     vm.modal = modal
+  ###
+  存储选择的审批人
+  ###
+  $scope.fnApproverSelect = () ->
+    $localStorage['selectApprovers'] = vm.selectApprovers
 
+  ###
+  存储选择的人员
+  ###
+  $scope.fnPeopleSelect = (item) ->
+    if !$localStorage['selectedPeople']
+      $localStorage['selectedPeople'] = []
+    if item.checked
+      index = $scope.getIndex(item, $localStorage['selectedPeople'])
+      if index < 0
+        $localStorage['selectedPeople'].push(item)
+    else
+      index = $scope.getIndex(item, $localStorage['selectedPeople'])
+      if index > -1
+        $localStorage['selectedPeople'].splice(index,1)
+
+  ###
+  获取选择人员是否在存储列表中，如果在返回位置
+  ###
+  $scope.getIndex = (item, list) ->
+    index = -1
+    for obj,i in list
+      if obj.loginId == item.loginId
+        index = i
+        return index
+    return index
   ###
   打开弹窗
   ###
@@ -2354,25 +2393,25 @@ $q
     vm.form = {}
     $scope.fnCloseModal()
 
-  $scope.$watch 'vm.list', ->
-    arr1 = $filter('filter')(vm.list, {checked: true})
-    arr2 = $filter('filter')(vm.tempList or [], {checked: true})
-    $localStorage['selectedPeople'] = arr1.concat arr2
-    console.log $localStorage['selectedPeople']
-  , true
+#  $scope.$watch 'vm.list', ->
+#    arr1 = $filter('filter')(vm.list, {checked: true})
+#    arr2 = $filter('filter')(vm.tempList or [], {checked: true})
+#    $localStorage['selectedPeople'] = arr1.concat arr2
+#    console.log $localStorage['selectedPeople']
+#  , true
+#
+#  $scope.$watch 'vm.tempList', ->
+#    arr1 = $filter('filter')(vm.list, {checked: true})
+#    arr2 = $filter('filter')(vm.tempList or [], {checked: true})
+#    $localStorage['selectedPeople'] = arr1.concat arr2
+#    console.log $localStorage['selectedPeople']
+#  , true
 
-  $scope.$watch 'vm.tempList', ->
-    arr1 = $filter('filter')(vm.list, {checked: true})
-    arr2 = $filter('filter')(vm.tempList or [], {checked: true})
-    $localStorage['selectedPeople'] = arr1.concat arr2
-    console.log $localStorage['selectedPeople']
-  , true
-
-  $scope.$watch 'vm.approverList', ->
-    arr1 = $filter('filter')(vm.approverList, {checked: true})
-    $localStorage['selectApprovers'] = arr1
-    console.log $localStorage['selectApprovers']
-  , true
+#  $scope.$watch 'vm.approverList', ->
+#    arr1 = $filter('filter')(vm.approverList, {checked: true})
+#    $localStorage['selectApprovers'] = arr1
+#    console.log $localStorage['selectApprovers']
+#  , true
 
 # 用户订单列表控制器
 .controller 'User.OrderCtrl', (
